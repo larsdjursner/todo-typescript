@@ -5,18 +5,18 @@ import BathtubIcon from "@material-ui/icons/Bathtub";
 import React from "react";
 
 interface ITodo {
+    id: number;
     todo: any;
-    index: number;
-    deleteTodo(index: number): void;
-    completeTodo(index: number): void;
+    deleteTodo(id: number): void;
+    completeTodo(id: number): void;
   }
   
-export const Todo: React.FC<ITodo> = ({ todo, index, deleteTodo, completeTodo }) => {
+export const Todo: React.FC<ITodo> = ({ id, todo, deleteTodo, completeTodo }) => {
     return (
       <li className="todo">
         <p
           className="todo-content"
-          onClick={() => completeTodo(index)}
+          onClick={() => completeTodo(id)}
           style={{
             textDecoration: todo.completed ? "line-through" : "",
             color: todo.completed ? "gray" : "",
@@ -31,7 +31,7 @@ export const Todo: React.FC<ITodo> = ({ todo, index, deleteTodo, completeTodo })
             </IconButton>
           </div>
   
-          <div onClick={() => deleteTodo(index)}>
+          <div onClick={() => deleteTodo(id)}>
             <IconButton aria-label="delete" disabled color="primary">
               <DeleteIcon />
             </IconButton>
