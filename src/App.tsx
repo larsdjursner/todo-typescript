@@ -9,12 +9,14 @@ const initialValues = [
   { id: 1, content: "learn about react hooks", completed: false },
   { id: 2, content: "add more functionality", completed: true },
   { id: 3, content: "add more functionality", completed: false },
+  { id: 4, content: "add more functionality", completed: true },
+  { id: 5, content: "add more functionality", completed: false },
+  { id: 6, content: "add more functionality", completed: true },
+  { id: 7, content: "add more functionality", completed: false },
 ]
 
 const App: React.FC = () => {
   const [todos, setTodos] = useState(initialValues);
-
-
 
 
   const createTodo = (id: number, content: string) => {
