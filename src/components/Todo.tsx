@@ -1,6 +1,6 @@
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
-import BathtubIcon from "@material-ui/icons/Bathtub";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 import React from "react";
 import { useModal } from "../hooks/useModal";
@@ -35,11 +35,10 @@ export const Todo: React.FC<ITodo> = ({
 				{todo.content}
 			</p>
 			<div className="todo-buttons">
-				<div>
-				<button onClick={toggle}>Open modal</button>
-     			<Modal headerText={todo.content} isShown={isShown} hide={toggle} modalContent={todo.content} />
+				<div onClick={toggle}> 
+     			<Modal headerText={todo.id} isShown={isShown} hide={toggle} modalContent={todo.content} />
 					<IconButton aria-label="delete" disabled color="primary">
-						<BathtubIcon />
+						<MoreVertIcon />
 					</IconButton>
 				</div>
 
