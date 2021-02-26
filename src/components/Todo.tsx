@@ -6,7 +6,6 @@ import React from "react";
 import { useModal } from "../hooks/useModal";
 import { Modal } from "./Modal";
 
-
 interface ITodo {
 	id: number;
 	todo: any;
@@ -21,7 +20,7 @@ export const Todo: React.FC<ITodo> = ({
 	completeTodo,
 }) => {
 	const { isShown, toggle } = useModal();
-	
+
 	return (
 		<li className="todo">
 			<p
@@ -35,15 +34,20 @@ export const Todo: React.FC<ITodo> = ({
 				{todo.content}
 			</p>
 			<div className="todo-buttons">
-				<div onClick={toggle}> 
-     			<Modal headerText={todo.id} isShown={isShown} hide={toggle} modalContent={todo.content} />
-					<IconButton aria-label="delete" disabled color="primary">
+				<div onClick={toggle}>
+					<Modal
+						headerText={todo.id}
+						isShown={isShown}
+						hide={toggle}
+						modalContent={todo.content}
+					/>
+					<IconButton className="IconButton">
 						<MoreVertIcon />
 					</IconButton>
 				</div>
 
 				<div onClick={() => deleteTodo(id)}>
-					<IconButton aria-label="delete" disabled color="primary">
+					<IconButton className="IconButton">
 						<DeleteIcon />
 					</IconButton>
 				</div>
