@@ -1,9 +1,9 @@
-
 import React, { useState } from "react";
 import "./App.css";
-import { Todo } from "./Todo";
-import { TodoForm } from "./TodoForm";
-import Modal from "react-modal";
+import { Todo } from "./components/Todo";
+import { TodoForm } from "./components/TodoForm";
+
+
 
 const initialValues = [
   { id: 1, content: "learn about react hooks", completed: false },
@@ -13,6 +13,9 @@ const initialValues = [
 
 const App: React.FC = () => {
   const [todos, setTodos] = useState(initialValues);
+
+
+
 
   const createTodo = (id: number, content: string) => {
     const newTodo =  { id, content, completed: false };
