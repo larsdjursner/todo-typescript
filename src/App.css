@@ -1,13 +1,19 @@
 body {
 	background-color: rgb(154, 192, 192);
 }
+
 .app {
+	display: block;
+}
+
+.parent-todo {
 	display: flex;
 	justify-content: center;
 	text-overflow: clip;
 }
 
-.apptodo {
+
+.child-todo {
 	margin: 25px;
 	width: 50em;
 	display: inline-block;
@@ -19,14 +25,23 @@ body {
 .IconButton :hover {
 	cursor: pointer;
 }
-
+/* 
 .todoform {
 	padding: 0px 0px 10px 0px;
-}
+} */
 
 input {
 	width: 100%;
 	box-sizing: border-box;
+}
+
+.Nav {
+  background-color: rgb(40, 54, 94);
+  height: 40px;
+}
+
+.Nav > * {
+  margin: 0;
 }
 
 li.todo {

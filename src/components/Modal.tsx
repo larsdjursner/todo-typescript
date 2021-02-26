@@ -12,13 +12,13 @@ import {
 	Backdrop,
 } from "./modal.style";
 
-export interface ModalProps {
+export interface IModal {
 	isShown: boolean;
 	hide: () => void;
 	modalContent: JSX.Element;
 	headerText: string;
 }
-export const Modal: FC<ModalProps> = ({
+export const Modal: FC<IModal> = ({
 	isShown,
 	hide,
 	modalContent,
