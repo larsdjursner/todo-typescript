@@ -30,13 +30,8 @@ const TodoList: React.FC = () => {
 
 		newTodos[index].completed = !newTodos[index].completed;
 		setTodos(newTodos);
-		console.log(countComplete());
 	};
 
-	const countComplete = () => {
-		const count = todos.filter((t) => t.completed).length
-		return(`${count} / ${todos.length}`);
-	}
 
 	return (
 		<div className="parent-todo">
