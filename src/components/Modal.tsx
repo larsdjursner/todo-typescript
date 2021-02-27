@@ -32,7 +32,7 @@ export const Modal: FC<IModal> = ({
 					<Header>
 						<HeaderText>{headerText}</HeaderText>
 						<IconButton className="IconButton">
-							<CloseIcon onClick={hide} />
+							<CloseIcon onClick={hide}/>
 						</IconButton>
 					</Header>
 					<Content>{modalContent}</Content>

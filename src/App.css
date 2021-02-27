@@ -1,5 +1,5 @@
 body {
-	background-color: rgb(154, 192, 192);
+	background-color: rgb(237, 245, 245);
 }
 
 .app {
@@ -11,7 +11,6 @@ body {
 	justify-content: center;
 	text-overflow: clip;
 }
-
 
 .child-todo {
 	margin: 25px;
@@ -36,13 +35,14 @@ input {
 }
 
 .Nav {
-  background-color: rgb(40, 54, 94);
+  background-color: rgb(32, 42, 70);
   height: 40px;
 }
 
 .Nav > * {
   margin: 0;
 }
+
 
 li.todo {
 	list-style-type: none;

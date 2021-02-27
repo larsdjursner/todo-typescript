@@ -6,7 +6,7 @@ import React from "react";
 import { useModal } from "../hooks/useModal";
 import { Modal } from "./Modal";
 
-interface ITodo {
+export interface ITodo {
 	id: number;
 	todo: any;
 	deleteTodo(id: number): void;

@@ -1,20 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { Todo } from "./Todo";
 import { TodoForm } from "./TodoForm";
+import { TodoContext } from '../TodoContext'
 import "../App.css";
 
-const initialValues = [
-	{ id: 1, content: "learn about react hooks", completed: false },
-	{ id: 2, content: "add more functionality", completed: true },
-	{ id: 3, content: "add more functionality", completed: false },
-	{ id: 4, content: "add more functionality", completed: true },
-	{ id: 5, content: "add more functionality", completed: false },
-	{ id: 6, content: "add more functionality", completed: true },
-	{ id: 7, content: "add more functionality", completed: false },
-];
+
 
 const TodoList: React.FC = () => {
-	const [todos, setTodos] = useState(initialValues);
+
+	const [todos, setTodos] = useContext(TodoContext);
 
 	const createTodo = (id: number, content: string) => {
 		const newTodo = { id, content, completed: false };
@@ -36,7 +30,13 @@ const TodoList: React.FC = () => {
 
 		newTodos[index].completed = !newTodos[index].completed;
 		setTodos(newTodos);
+		console.log(countComplete());
 	};
+
+	const countComplete = () => {
+		const count = todos.filter((t) => t.completed).length
+		return(`${count} / ${todos.length}`);
+	}
 
 	return (
 		<div className="parent-todo">
