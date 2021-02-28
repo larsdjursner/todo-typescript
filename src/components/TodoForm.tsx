@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
-import getCurrentDate from '../utils/currentdate'
+import { getCurrentDate } from '../utils/currentdate'
 
 interface ITodoForm {
 	createTodo(id: number, value: string): void;
@@ -30,7 +30,7 @@ export const TodoForm: React.FC<ITodoForm> = ({ createTodo }) => {
 		<div className="todoform">
 			<div className="todo-header">
 				<h2>Todo Today</h2>
-				<p className="date"> {getCurrentDate} </p>
+				<p className="date"> {getCurrentDate()} </p>
 			</div>
 
 			<form id="submit-form" action="/" onSubmit={(e) => handleSubmit(e)}>

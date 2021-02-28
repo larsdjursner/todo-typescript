@@ -1,24 +1,31 @@
-
-
-
-const getCurrentDate = (separator = "") => {
+export const getCurrentDate = () => {
     const newDate = new Date();
     const date = newDate.getDate();
     const day = Day.get(newDate.getDay());
     const month = Month.get(newDate.getMonth()+1);
+    const year = newDate.getFullYear();
 
-    return `${day} ${date} ${month}`;
-    // return `${year}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${date}`
+    return `${day} ${date} ${month} ${year}`;
+}
+
+
+export const getDate = (_date : Date) => {
+    const date = _date.getDate();
+    const day = Day.get(_date.getDay());
+    const month = Month.get(_date.getMonth()+1);
+    const year = _date.getFullYear();
+
+    return `${day} ${date} ${month} ${year}`;
 }
 
 const Day : Map<number, string> = new Map([
+    [0, "Sunday"],
     [1, "Monday"],
     [2, "Tuesday"],
     [3, "Wednesday"],
     [4, "Thursday"],
     [5, "Friday"],
     [6, "Saturday"],
-    [7, "Sunday"],
 ]);
 
 
@@ -37,5 +44,3 @@ const Month : Map<number, string> = new Map([
     [12, "December"],
 
 ])
-
-export default getCurrentDate()

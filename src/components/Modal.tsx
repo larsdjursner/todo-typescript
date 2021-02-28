@@ -15,14 +15,16 @@ import {
 export interface IModal {
 	isShown: boolean;
 	hide: () => void;
-	modalContent: JSX.Element;
+	modalContent: JSX.Element | string;
 	headerText: string;
+	date: string;
 }
 export const Modal: FC<IModal> = ({
 	isShown,
 	hide,
 	modalContent,
 	headerText,
+	date
 }) => {
 	const modal = (
 		<React.Fragment>
@@ -35,6 +37,7 @@ export const Modal: FC<IModal> = ({
 							<CloseIcon onClick={hide}/>
 						</IconButton>
 					</Header>
+					<Content>{date}</Content>
 					<Content>{modalContent}</Content>
 				</StyledModal>
 			</Wrapper>
