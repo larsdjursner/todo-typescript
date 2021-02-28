@@ -1,55 +1,93 @@
 body {
-  background-color: rgb(154, 192, 192);
+	background-color: rgb(237, 245, 245);
 }
+
 .app {
-  display: flex;
-  justify-content: center;
-  text-overflow: clip;
+	display: block;
 }
 
-.apptodo {
-  margin: 25px;
-  width: 450px;
-  max-width: 450px;
-  display: inline-block;
-  background-color: rgb(255, 255, 255);
-  padding: 0px 20px 20px 20px;
+.parent-todo {
+	display: flex;
+	justify-content: center;
+	text-overflow: clip;
 }
 
-.todoform {
-  padding: 0px 0px 10px 0px;
+.child-todo {
+	margin: 25px;
+	width: 50em;
+	display: inline-block;
+	background-color: rgb(255, 255, 255);
+	padding: 0px 20px 20px 20px;
+	border-radius: 4px;
 }
 
-input{
-  width: 100%;
-  box-sizing:border-box;
-} 
+.IconButton :hover {
+	cursor: pointer;
+}
 
+input {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.Nav {
+	background-color: rgb(32, 42, 70);
+	color: white;
+	height: 40px;
+	display: flex;
+	justify-content: space-around;
+}
+
+.Nav > * {
+	margin: 0;
+}
 
 li.todo {
-  list-style-type: none;
-  user-select: none;
-  padding: 0px 10px 0px 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  box-sizing:border-box;
-
+	list-style-type: none;
+	user-select: none;
+	padding: 0px 10px 0px 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	box-sizing: border-box;
+	border-bottom: 1px solid rgb(221, 218, 218);
 }
 
+.todo-content-parent {
+	width: 80%;
+}
 p.todo-content {
-  max-width: 70%;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
+	width: 80%;
+	max-width: 80%;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+}
+
+.input {
+	height: 40px;
+}
+
+.todoform > * {
+	margin-bottom: 10px;
+}
+
+.todoform-buttons > :first-child {
+	margin-right: 10px;
 }
 
 .todo-buttons {
-  display: flex;
+	display: flex;
+}
+
+.date {
+	color: gray;
+	font-size: small;
 }
 
 li:nth-child(odd) {
-  background: rgb(241, 240, 240);
+	background: rgb(250, 250, 250);
 }
+
 li:hover {
-  background-color: rgb(222, 234, 243)
+	background-color: rgb(222, 234, 243);
 }
