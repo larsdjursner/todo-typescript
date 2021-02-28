@@ -5,7 +5,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import React from "react";
 import { useModal } from "../hooks/useModal";
 import { ITodo } from "../TodoContext";
-import { getDate } from "../utils/currentdate";
+import { getDate, getFullDate } from "../utils/dateFunctions";
 import { Modal } from "./Modal";
 
 interface ITodoFunctions extends ITodo {
@@ -25,6 +25,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
 
 	return (
 		<li className="todo">
+			<div className="todo-content-parent">
 			<p
 				className="todo-content"
 				onClick={() => completeTodo(id)}
@@ -34,16 +35,19 @@ export const Todo: React.FC<ITodoFunctions> = ({
 				}}
 			>
 				{content}
+				
 			</p>
+			<p className="date">{getDate(date)}</p>
+			</div>
 			<div className="todo-buttons">
+				<Modal
+					headerText={content}
+					isShown={isShown}
+					hide={toggle}
+					modalContent={completed ? 'completed' : 'not completed'}
+					date={getFullDate(date)}
+				/>
 				<div onClick={toggle}>
-					<Modal
-						headerText={content}
-						isShown={isShown}
-						hide={toggle}
-						modalContent={completed ? 'completed' : 'not completed'}
-						date={getDate(date)}
-					/>
 					<IconButton className="IconButton">
 						<MoreVertIcon />
 					</IconButton>

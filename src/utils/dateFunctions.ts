@@ -8,14 +8,21 @@ export const getCurrentDate = () => {
     return `${day} ${date} ${month} ${year}`;
 }
 
-
-export const getDate = (_date : Date) => {
+export const getFullDate = (_date : Date) => {
     const date = _date.getDate();
     const day = Day.get(_date.getDay());
     const month = Month.get(_date.getMonth()+1);
     const year = _date.getFullYear();
 
     return `${day} ${date} ${month} ${year}`;
+}
+
+export const getDate = (_date : Date) => {
+    const date = _date.getDate();
+    const month = Month.get(_date.getMonth()+1);
+    const year = _date.getFullYear();
+
+    return `${date} ${month} ${year}`;
 }
 
 const Day : Map<number, string> = new Map([

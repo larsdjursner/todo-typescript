@@ -19,6 +19,8 @@ export interface IModal {
 	headerText: string;
 	date: string;
 }
+
+
 export const Modal: FC<IModal> = ({
 	isShown,
 	hide,
@@ -28,7 +30,7 @@ export const Modal: FC<IModal> = ({
 }) => {
 	const modal = (
 		<React.Fragment>
-			<Backdrop/>
+			<Backdrop onClick={hide}/>
 			<Wrapper>
 				<StyledModal>
 					<Header>

@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { TodoContext } from "../TodoContext";
-import { getDate } from "../utils/currentdate";
+import { getFullDate } from "../utils/dateFunctions";
 
 const Nav: React.FC = () => {
 	const [todos, setTodos] = useContext(TodoContext);
@@ -15,12 +15,13 @@ const Nav: React.FC = () => {
 		const today = new Date(Date.now());
 		const count = todos
 			.filter((t) => !t.completed)
-			.filter((t) => getDate(t.date) !== getDate(today)).length;
+			.filter((t) => getFullDate(t.date) !== getFullDate(today)).length;
 		return count;
 	};
 
 	return (
 		<div className="Nav">
+            <p> User Userson </p>
 			<p> {countComplete()} </p>
 			<p> {countOldTodos() + " todos are missing from previous days"} </p>
 		</div>

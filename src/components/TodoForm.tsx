@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
-import { getCurrentDate } from '../utils/currentdate'
+import { getCurrentDate } from '../utils/dateFunctions'
 
 interface ITodoForm {
 	createTodo(id: number, value: string): void;
