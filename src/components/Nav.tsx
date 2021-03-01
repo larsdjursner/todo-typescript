@@ -18,7 +18,7 @@ const Nav: React.FC = () => {
 			.filter((t) => getFullDate(t.date) !== getFullDate(today)).length;
 
 		return count > 0
-			? count + " unfinished todos from before today"
+			? count + " old unfinished todos"
 			: "All old todos are done!";
 	};
 
