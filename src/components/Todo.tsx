@@ -1,16 +1,19 @@
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 
 import React from "react";
 import { useModal } from "../hooks/useModal";
 import { ITodo } from "../TodoContext";
 import { getDate, getFullDate } from "../utils/dateFunctions";
 import { Modal } from "./Modal";
+import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 
 interface ITodoFunctions extends ITodo {
-	deleteTodo(id: number) : void;
+	deleteTodo(id: number): void;
 	completeTodo(id: number): void;
+	dragHandle: DraggableProvidedDragHandleProps | undefined;
 }
 
 export const Todo: React.FC<ITodoFunctions> = ({
@@ -20,24 +23,28 @@ export const Todo: React.FC<ITodoFunctions> = ({
 	date,
 	deleteTodo,
 	completeTodo,
+	dragHandle
 }) => {
 	const { isShown, toggle } = useModal();
 
 	return (
 		<li className="todo">
+			<IconButton className="todo-draghandle" {...dragHandle} >
+				<DragIndicatorIcon />
+			</IconButton>
 			<div className="todo-content-parent">
-			<p
-				className="todo-content"
-				onClick={() => completeTodo(id)}
-				style={{
-					textDecoration: completed ? "line-through" : "",
-					color: completed ? "gray" : "",
-				}}
-			>
-				{content}
-				
-			</p>
-			<p className="date">{getDate(date)}</p>
+				<p
+					className="todo-content"
+					onClick={() => completeTodo(id)}
+					style={{
+						textDecoration: completed ? "line-through" : "",
+						color: completed ? "gray" : "",
+					}}
+				>
+					{content}
+
+				</p>
+				<p className="date">{getDate(date)}</p>
 			</div>
 			<div className="todo-buttons">
 				<Modal
