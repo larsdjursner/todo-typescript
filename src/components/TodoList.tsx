@@ -4,8 +4,7 @@ import { TodoContext } from '../TodoContext'
 import "../App.css";
 import { Todo } from "./Todo";
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
-import IconButton from "@material-ui/core/IconButton";
-import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
+
 
 
 const TodoList: React.FC = () => {
