@@ -1,127 +1,118 @@
 body {
-	background-color: rgb(237, 245, 245);
+  background-color: rgb(237, 245, 245);
 }
 
 .app {
-	display: block;
+  display: block;
 }
 
 .parent-todo {
-	display: flex;
-	justify-content: center;
-	text-overflow: clip;
+  display: flex;
+  justify-content: center;
+  text-overflow: clip;
 }
 
 .child-todo {
-	margin: 25px;
-	width: 50em;
-	display: inline-block;
-	background-color: rgb(255, 255, 255);
-	padding: 0px 20px 20px 20px;
-	border-radius: 4px;
-	box-shadow: 0px 0px 0.3em #666;
+  margin: 25px;
+  width: 50em;
+  display: inline-block;
+  background-color: rgb(255, 255, 255);
+  padding: 0px 20px 20px 20px;
+  border-radius: 4px;
+  box-shadow: 0px 0px 0.3em #666;
 }
 
 .IconButton :hover {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 input {
-	width: 100%;
-	box-sizing: border-box;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-
-
 li.todo {
-	list-style-type: none;
-	user-select: none;
-	padding: 0px 10px 0px 10px;
-	display: flex;
-	justify-content: space-between;
-	align-items: baseline;
-	box-sizing: border-box;
-	border-bottom: 1px solid rgb(221, 218, 218);
+  list-style-type: none;
+  user-select: none;
+  padding: 0px 10px 0px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgb(221, 218, 218);
 }
 
 .todo-draghandle {
-	color:gray;
+  color: gray;
+  display: flex;
 }
 
 .todo-content-parent {
-	width: 80%;
+  width: 80%;
 }
 p.todo-content {
-	width: 80%;
-	max-width: 80%;
-	overflow-wrap: break-word;
-	word-wrap: break-word;
+  width: 80%;
+  max-width: 80%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .todo-buttons {
-	display: flex;
+  display: flex;
 }
 
 .date {
-	color: gray;
-	font-size: small;
+  color: gray;
+  font-size: small;
 }
-
-
 
 li:hover {
-	background-color: rgb(245, 245, 245);
+  background-color: rgb(245, 245, 245);
 }
-
-
 
 .todoform-input {
-	height: 40px;
+  height: 40px;
 }
 .todoform {
-	border-bottom: 1px solid rgb(221, 218, 218);
+  border-bottom: 1px solid rgb(221, 218, 218);
 }
 .todoform > * {
-	margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .todoform-content > * {
-	margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .todoform-content-noform > * {
-	margin-bottom: 10px;
-	display: inline-block;
-	white-space: nowrap;
-	font-size: small;
-	cursor: pointer;
-	color: gray;
+  margin-bottom: 10px;
+  display: inline-block;
+  white-space: nowrap;
+  font-size: small;
+  cursor: pointer;
+  color: gray;
 }
 
 .todoform-content-noform:hover #todoform-content-addicon {
-	color: rgb(32, 42, 70);
+  color: rgb(32, 42, 70);
 }
 
-.todoform-content-noform:hover #todoform-content-text{
-	color:rgb(32, 42, 70);
+.todoform-content-noform:hover #todoform-content-text {
+  color: rgb(32, 42, 70);
 }
 
 .todoform-buttons > :first-child {
-	margin-right: 10px;
+  margin-right: 10px;
 }
 
-
 .Nav {
-	background-color: rgb(32, 42, 70);
-	color: white;
-	height: 40px;
-	display: flex;
-	justify-content: space-around;
+  background-color: rgb(32, 42, 70);
+  color: white;
+  height: 40px;
+  display: flex;
+  justify-content: space-around;
 }
 
 .Nav > * {
-	margin: 0;
+  margin: 0;
 }
-
-
-
