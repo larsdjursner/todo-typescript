@@ -68,11 +68,11 @@ export const TodoForm: React.FC<ITodoForm> = ({ createTodo }) => {
           </div>
         </div>
       ) : (
-        <div className="todoform-content-noform" onClick={toggleForm}>
-          <IconButton id="todoform-content-addicon">
+        <div className="noform-content" onClick={toggleForm}>
+          <IconButton id="noform-content-addicon">
             <AddIcon />
           </IconButton>
-          <p id="todoform-content-text">Add todo</p>
+          <p id="noform-content-text">Add todo</p>
         </div>
       )}
     </div>

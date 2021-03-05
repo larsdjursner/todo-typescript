@@ -8,7 +8,9 @@ const Nav: React.FC = () => {
 
   const countComplete = () => {
     const count = todos.filter((t) => t.completed).length;
-    return `${count} / ${todos.length} tasks done!`;
+    return todos.length > 0
+      ? `${count} / ${todos.length} tasks done!`
+      : "Done!";
   };
 
   const countOldTodos = () => {
@@ -17,9 +19,7 @@ const Nav: React.FC = () => {
       .filter((t) => !t.completed)
       .filter((t) => getFullDate(t.date) !== getFullDate(today)).length;
 
-    return count > 0
-      ? count + " old unfinished todos"
-      : "All old todos are done!";
+    return count > 0 ? count + " overdue todos" : "";
   };
 
   return (

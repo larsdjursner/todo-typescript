@@ -9,6 +9,9 @@ import {
   Draggable,
   DropResult,
 } from "react-beautiful-dnd";
+import { IconButton } from "@material-ui/core";
+import CheckIcon from "@material-ui/icons/Check";
+import ClearIcon from '@material-ui/icons/Clear';
 
 const TodoList: React.FC = () => {
   const [todos, setTodos] = useContext(TodoContext);
@@ -32,6 +35,12 @@ const TodoList: React.FC = () => {
     setTodos(newTodos);
   };
 
+  const deleteCompletedTodos = () => {
+    const newTodos = [...todos];
+    const filtered = newTodos.filter((t) => !t.completed);
+    setTodos(filtered);
+  };
+
   const completeTodo = (id: number) => {
     const newTodos = [...todos];
     const index = newTodos.findIndex((t) => t.id === id);
@@ -40,34 +49,53 @@ const TodoList: React.FC = () => {
     setTodos(newTodos);
   };
 
-  const rearrangeTodo = (param: DropResult) => {
-    const destIndex = param.destination?.index;
-    const srcIndex = param.source.index;
+  const completeAllTodos = () => {
+    const newTodos = [...todos];
+    newTodos.forEach((t) => (t.completed = true));
 
-    const moved = todos[srcIndex];
-    if (destIndex) {
-      const remaining = todos.filter((t) => t.id !== moved.id);
+    setTodos(newTodos);
+  };
 
-      const reorderedItems = [
-        ...remaining.slice(0, destIndex),
-        moved,
-        ...remaining.slice(destIndex),
-      ];
+  const handleOnDragEnd = (res: DropResult) => {
+    if (!res.destination) return;
 
-      setTodos(reorderedItems);
-    }
+    const newTodos = [...todos];
+    const [reorderedTodos] = newTodos.splice(res.source.index, 1);
+    newTodos.splice(res.destination.index, 0, reorderedTodos);
+
+    setTodos(newTodos);
   };
 
   return (
     <div className="parent-todo">
       <div className="child-todo">
+        <TodoForm createTodo={createTodo} />
+        {todos.length > 0 ? (
+          <div className="completion-button-parent">
+             <div className="completion-button" onClick={completeAllTodos}>
+              <IconButton>
+                <CheckIcon />
+              </IconButton>
+              <p>Mark all as complete</p>
+            </div>
+            <div className="completion-button" onClick={deleteCompletedTodos}>
+              <IconButton>
+                <ClearIcon />
+              </IconButton>
+              <p>Clear completed</p>
+            </div>
+           
+          </div>
+        ) : (
+          <div></div>
+        )}
+
         <DragDropContext
-          onDragEnd={(param) => {
-            rearrangeTodo(param);
+          onDragEnd={(res) => {
+            handleOnDragEnd(res);
           }}
         >
-          <div className="todolist">
-            <TodoForm createTodo={createTodo} />
+          <ul className="todolist">
             <Droppable droppableId="droppable-1">
               {(provided, _) => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
@@ -106,7 +134,7 @@ const TodoList: React.FC = () => {
                 </div>
               )}
             </Droppable>
-          </div>
+          </ul>
         </DragDropContext>
       </div>
     </div>
