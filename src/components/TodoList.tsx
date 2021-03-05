@@ -11,7 +11,7 @@ import {
 } from "react-beautiful-dnd";
 import { IconButton } from "@material-ui/core";
 import CheckIcon from "@material-ui/icons/Check";
-import ClearIcon from '@material-ui/icons/Clear';
+import ClearIcon from "@material-ui/icons/Clear";
 
 const TodoList: React.FC = () => {
   const [todos, setTodos] = useContext(TodoContext);
@@ -72,7 +72,7 @@ const TodoList: React.FC = () => {
         <TodoForm createTodo={createTodo} />
         {todos.length > 0 ? (
           <div className="completion-button-parent">
-             <div className="completion-button" onClick={completeAllTodos}>
+            <div className="completion-button" onClick={completeAllTodos}>
               <IconButton>
                 <CheckIcon />
               </IconButton>
@@ -84,18 +84,17 @@ const TodoList: React.FC = () => {
               </IconButton>
               <p>Clear completed</p>
             </div>
-           
           </div>
         ) : (
           <div></div>
         )}
 
-        <DragDropContext
-          onDragEnd={(res) => {
-            handleOnDragEnd(res);
-          }}
-        >
-          <ul className="todolist">
+        <ul className="todolist">
+          <DragDropContext
+            onDragEnd={(res) => {
+              handleOnDragEnd(res);
+            }}
+          >
             <Droppable droppableId="droppable-1">
               {(provided, _) => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
@@ -125,7 +124,7 @@ const TodoList: React.FC = () => {
                             completeTodo={completeTodo}
                             deleteTodo={deleteTodo}
                             dragHandle={provided.dragHandleProps}
-                          />
+                           />
                         </div>
                       )}
                     </Draggable>
@@ -134,8 +133,8 @@ const TodoList: React.FC = () => {
                 </div>
               )}
             </Droppable>
-          </ul>
-        </DragDropContext>
+          </DragDropContext>
+        </ul>
       </div>
     </div>
   );
