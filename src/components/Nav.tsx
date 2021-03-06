@@ -1,10 +1,9 @@
 import React, { useContext } from "react";
 import { TodoContext } from "../TodoContext";
 import { getFullDate } from "../utils/dateFunctions";
-import { Icon } from "@material-ui/core";
 
 const Nav: React.FC = () => {
-  const [todos, setTodos] = useContext(TodoContext);
+  const {todos} = useContext(TodoContext);
 
   const countComplete = () => {
     const count = todos.filter((t) => t.completed).length;

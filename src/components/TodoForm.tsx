@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Button from "@material-ui/core/Button";
 import { getCurrentDate } from "../utils/dateFunctions";
 import { IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
+import { TodoContext } from "../TodoContext";
 
 interface ITodoForm {
   createTodo(id: number, value: string): void;
 }
 
-export const TodoForm: React.FC<ITodoForm> = ({ createTodo }) => {
+export const TodoForm: React.FC<ITodoForm> = () => {
   const [value, setValue] = useState("");
   const [currentId, setCurrentId] = useState(10); //hacky id assign until an api can be called
   const [showForm, setShowForm] = useState(true);
 
+  const { createTodo } = useContext(TodoContext);
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!value) return;

@@ -3,35 +3,33 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 
-import React from "react";
+import React, { useContext } from "react";
 import { useModal } from "../hooks/useModal";
-import { ITodo } from "../TodoContext";
+import { ITodo, TodoContext } from "../TodoContext";
 import { getDate, getFullDate } from "../utils/dateFunctions";
 import { Modal } from "./Modal";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 
 interface ITodoFunctions extends ITodo {
-  deleteTodo(id: number): void;
-  completeTodo(id: number): void;
   dragHandle: DraggableProvidedDragHandleProps | undefined;
 }
 
+//TODO: move the draghandle out from Todo or clean up the interface
 export const Todo: React.FC<ITodoFunctions> = ({
   id,
   completed,
   content,
   date,
-  deleteTodo,
-  completeTodo,
   dragHandle,
 }) => {
+  const { completeTodo, deleteTodo } = useContext(TodoContext);
   const { isShown, toggle } = useModal();
 
   return (
     <li className="todo">
       <div>
         <IconButton className="todo-draghandle" {...dragHandle}>
-          <DragIndicatorIcon id="drag"/>
+          <DragIndicatorIcon id="drag" />
         </IconButton>
       </div>
 

@@ -1,39 +1,6 @@
-import React, { useState, createContext } from "react";
-
-const initialValues = [
-  {
-    id: 1,
-    content: "learn about react hooks",
-    completed: false,
-    date: new Date("1988-03-21"),
-  },
-  {
-    id: 2,
-    content: "take out the trash",
-    completed: true,
-    date: new Date("1994-02-18"),
-  },
-  {
-    id: 3,
-    content: "wash the dishes",
-    completed: false,
-    date: new Date("2021-02-28"),
-  },
-  {
-    id: 4,
-    content: "endure specific lectures",
-    completed: true,
-    date: new Date("2011-03-21"),
-  },
-  { id: 5, content: "sleep", completed: false, date: new Date("2012-03-21") },
-  { id: 6, content: "eat", completed: true, date: new Date("2015-12-28") },
-  {
-    id: 7,
-    content: "sleep & eat",
-    completed: false,
-    date: new Date("2021-01-21"),
-  },
-];
+import React, { createContext, useState } from "react";
+import { DropResult } from "react-beautiful-dnd";
+import { InitialValues } from "./utils/InitialValues";
 
 export interface ITodo {
   id: number;
@@ -42,16 +9,157 @@ export interface ITodo {
   date: Date;
 }
 
-type ITodoContext = [ITodo[], React.Dispatch<React.SetStateAction<ITodo[]>>];
+type Context = {
+  todos: ITodo[];
+  deleteTodo(id: number): void;
+  completeTodo(id: number): void;
+  createTodo(id: number, content: string): void;
+  handleOnDragEnd(res: DropResult) : void;
+};
 
-export const TodoContext = createContext<ITodoContext>([[], () => null]);
+export const TodoContext = createContext<Context>({
+  todos: [],
+  deleteTodo: () => {},
+  completeTodo: () => {},
+  createTodo: () => {},
+  handleOnDragEnd: () => {},
+});
 
 export const TodoProvider = (props: { children: any }) => {
-  const [todos, setTodos] = useState<ITodo[]>(initialValues);
-
+  const [todos, setTodos] = useState<ITodo[]>(InitialValues);
+  // const [state, dispatch] = useReducer(reducer, InitialValues);
   return (
-    <TodoContext.Provider value={[todos, setTodos]}>
+    <TodoContext.Provider
+      value={{
+        todos,
+        deleteTodo: (id: number) => {
+          const newTodos = [...todos];
+          const index = newTodos.findIndex((t) => t.id === id);
+
+          newTodos.splice(index, 1);
+          setTodos(newTodos);
+        },
+        completeTodo: (id: number) => {
+          const newTodos = [...todos];
+          const index = newTodos.findIndex((t) => t.id === id);
+
+          newTodos[index].completed = !newTodos[index].completed;
+          setTodos(newTodos);
+        },
+        createTodo: (id: number, content: string) => {
+          const newTodo = {
+            id,
+            content,
+            completed: false,
+            date: new Date(Date.now()),
+          };
+          const newTodos = [...todos, newTodo];
+          setTodos(newTodos);
+        },
+        handleOnDragEnd: (res: DropResult) => {
+          if (!res.destination) return;
+
+          const newTodos = [...todos];
+          const [reorderedTodos] = newTodos.splice(res.source.index, 1);
+          newTodos.splice(res.destination.index, 0, reorderedTodos);
+        
+          setTodos(newTodos);
+        }
+      }}
+    >
       {props.children}
     </TodoContext.Provider>
   );
 };
+
+// import React, {
+//   Reducer,
+//   useState,
+//   createContext,
+//   useReducer,
+//   useContext,
+// } from "react";
+// // import { InitialValues } from "./utils/InitialValues";
+
+// export interface ITodo {
+//   id: number;
+//   content: string;
+//   completed: boolean;
+//   date: Date;
+// }
+
+// interface ITodos extends Array<ITodo> {
+//   todos: ITodo[];
+// }
+
+// type State = {
+//   todos: ITodos;
+// };
+
+// type DeleteTodo = {
+//   readonly type: "DeleteTodo";
+//   readonly payload: ITodo;
+// };
+
+// type CompleteTodo = {
+//   readonly type: "CompleteTodo";
+//   readonly payload: ITodo;
+// };
+
+// type Action =  
+//  | DeleteTodo 
+//  | CompleteTodo
+
+
+
+// const InitialValues = {
+//   todos: [],
+//   DeleteTodo: () => {},
+//   CompleteTodo: () => {}
+// }
+
+// // function reducer(state: State, action:Action)  {
+// export const reducer: Reducer<State, Action> = (state, action): State => {
+//   switch (action.type) {
+//     case 'DeleteTodo': {
+//       const newTodos = { ...state.todos };
+//       const { id } = action.payload;
+//       newTodos.filter((t) => t.id !== id);
+//       return { ...(state.todos = newTodos) };
+//     }
+//     case 'CompleteTodo': 
+//     {
+//       const newTodos = { ...state.todos };
+//       const { id } = action.payload;
+//       const index = newTodos.findIndex((t) => t.id === id);
+//       newTodos[index].completed = !newTodos[index].completed;
+//       return { ...(state.todos = newTodos) };
+//     }
+//     default:
+//       return state;
+//   }
+// };
+
+// type ITodoContext = {
+//   todos: ITodos;
+//   DeleteTodo: () => void;
+//   CompleteTodo: () => void;
+// };
+
+// export const TodoContext = createContext<ITodoContext>(InitialValues);
+
+// export const TodoProvider = (props: { children: any }) => {
+//   // const [todos, setTodos] = useState<ITodo[]>(InitialValues);
+//   const [state, dispatch] = useReducer(reducer, InitialValues);
+//   return (
+//     <TodoContext.Provider
+//       value={{
+//         todos: state.todos,
+//         DeleteTodo: () => dispatch({type: 'DeleteTodo'}),
+//         CompleteTodo: () => dispatch({type: 'CompleteTodo'})
+//       }}
+//     >
+//       {props.children}
+//     </TodoContext.Provider>
+//   );
+// };
