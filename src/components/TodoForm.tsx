@@ -15,7 +15,7 @@ export const TodoForm: React.FC = () => {
     e.preventDefault();
     if (!value) return;
 
-    // dispatch({ type: "createTodo", payload: { content: value }});
+    dispatch({ type: "createTodo", payload: { content: value }});
     setValue("");
   };
 

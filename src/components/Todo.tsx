@@ -27,15 +27,6 @@ export const Todo: React.FC<ITodoFunctions> = ({
   const {state, dispatch} = useContext(TodoContext);
   const { isShown, toggle } = useModal();
 
-  // const toggleComplete = () => {
-
-  //   if(completed) {
-  //     dispatch({type : 'completeTodo', payload: {}})
-  //   } else {
-
-  //   }
-  // }
-
   return (
     <li className="todo">
       <div>
@@ -47,7 +38,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
       <div className="todo-content-parent">
         <p
           className="todo-content"
-          // onClick={dispatch({type: 'completeTodo', payload :{id: id}})}
+          onClick={ () => dispatch({type: 'completeTodo', payload :{id: id}})}
           style={{
             textDecoration: completed ? "line-through" : "",
             color: completed ? "gray" : "",
@@ -55,7 +46,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
         >
           {content}
         </p>
-        {/* <p className="date">{getDate(date)}</p> */}
+        <p className="date">{getDate(date)}</p>
       </div>
       <div className="todo-buttons">
         <Modal

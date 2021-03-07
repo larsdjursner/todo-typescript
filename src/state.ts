@@ -1,5 +1,6 @@
 import { createContext } from "react";
 import { DropResult } from "react-beautiful-dnd";
+import { Todo } from "./components/Todo";
 import { InitialValues } from "./utils/InitialValues";
 
 export interface ITodo {
@@ -24,7 +25,6 @@ export const initialState: Context = {
 };
 
 export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
-
   switch (action.type) {
     case "deleteTodo":
       return {
@@ -33,9 +33,27 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       };
 
     case "completeTodo":
-      // return {...state, todos: state.todos.map( t => (t.id === action.payload.id) ? t.completed = !t.completed : t)};
+      return {
+        ...state,
+        todos: state.todos.map((t) =>
+          t.id === action.payload.id
+            ? { ...t, completed: !t.completed }
+            : { ...t }
+        ),
+      };
 
     case "createTodo":
+      return {
+        todos: [
+          ...state.todos,
+          {
+            id: state.todos.length,
+            content: action.payload.content,
+            completed: false,
+            date: new Date(Date.now()),
+          },
+        ],
+      };
     case "handleOnDragEnd":
     default:
       return {
@@ -55,28 +73,6 @@ export const TodoContext = createContext<{
 
 export const TodoProvider = TodoContext.Provider;
 
-// case "completeTodo": {
-//   return [
-//     state,
-// todos: state.todos.map((t) =>
-//   t.id === action.payload.id
-//     ? t.completed = !t.completed
-//     : t.completed
-// ),
-// ]
-// }
-// case "createTodo":
-//   {
-//     return [
-//         ...state.todos,
-//         {
-//           id: state.todos.length,
-//           content : action.payload.content,
-//           completed: false,
-//           date: new Date(Date.now())
-//         }
-//       ];
-//   }
 // export const TodoContext = createContext<ITodoContext>(InitialValues);
 
 // export const TodoProvider = (props: { children: any }) => {
