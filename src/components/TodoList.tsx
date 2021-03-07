@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React, { useContext, useReducer } from "react";
 import { TodoForm } from "./TodoForm";
-import { TodoContext } from "../TodoContext";
 import "../App.css";
 import { Todo } from "./Todo";
 import {
@@ -11,29 +10,18 @@ import {
 import { IconButton } from "@material-ui/core";
 import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
+import { TodoContext} from "../state";
 
 const TodoList: React.FC = () => {
-  const {todos, createTodo, handleOnDragEnd} = useContext(TodoContext);
-
-  
-  // const deleteCompletedTodos = () => {
-  //   const newTodos = [...todos];
-  //   const filtered = newTodos.filter((t) => !t.completed);
-  //   setTodos(filtered);
-  // };
+  const {state, dispatch} = useContext(TodoContext);
+  const todos = state.todos;
 
 
-  // const completeAllTodos = () => {
-  //   const newTodos = [...todos];
-  //   newTodos.forEach((t) => (t.completed = true));
-
-  //   setTodos(newTodos);
-  // };
 
   return (
     <div className="parent-todo">
       <div className="child-todo">
-        <TodoForm createTodo={createTodo} />
+        <TodoForm />
         {todos.length > 0 ? (
           <div className="completion-button-parent">
             {/* <div className="completion-button" onClick={completeAllTodos}> */}
@@ -58,7 +46,7 @@ const TodoList: React.FC = () => {
         <ul className="todolist">
           <DragDropContext
             onDragEnd={(res) => {
-              handleOnDragEnd(res);
+              // dispatch({type: "handleOnDragEnd", payload: {res : res}})
             }}
           >
             <Droppable droppableId="droppable-1">
@@ -105,3 +93,5 @@ const TodoList: React.FC = () => {
 };
 
 export default TodoList;
+
+

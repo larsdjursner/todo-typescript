@@ -3,12 +3,13 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 
-import React, { useContext } from "react";
+import React, { useContext, useReducer } from "react";
 import { useModal } from "../hooks/useModal";
-import { ITodo, TodoContext } from "../TodoContext";
+import { initialState, ITodo, TodoContext, TodoReducer } from "../state";
 import { getDate, getFullDate } from "../utils/dateFunctions";
 import { Modal } from "./Modal";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
+// import { TodoContext } from "../TodoContext";
 
 interface ITodoFunctions extends ITodo {
   dragHandle: DraggableProvidedDragHandleProps | undefined;
@@ -22,8 +23,18 @@ export const Todo: React.FC<ITodoFunctions> = ({
   date,
   dragHandle,
 }) => {
-  const { completeTodo, deleteTodo } = useContext(TodoContext);
+
+  const {state, dispatch} = useContext(TodoContext);
   const { isShown, toggle } = useModal();
+
+  // const toggleComplete = () => {
+
+  //   if(completed) {
+  //     dispatch({type : 'completeTodo', payload: {}})
+  //   } else {
+
+  //   }
+  // }
 
   return (
     <li className="todo">
@@ -36,7 +47,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
       <div className="todo-content-parent">
         <p
           className="todo-content"
-          onClick={() => completeTodo(id)}
+          // onClick={dispatch({type: 'completeTodo', payload :{id: id}})}
           style={{
             textDecoration: completed ? "line-through" : "",
             color: completed ? "gray" : "",
@@ -61,7 +72,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
           </IconButton>
         </div>
 
-        <div onClick={() => deleteTodo(id)}>
+        <div onClick={() => dispatch({type : 'deleteTodo',payload: {id: id}})}>
           <IconButton className="IconButton">
             <DeleteIcon />
           </IconButton>

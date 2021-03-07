@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
-import { TodoContext } from "../TodoContext";
+import { TodoContext } from "../state";
 import { getFullDate } from "../utils/dateFunctions";
 
 const Nav: React.FC = () => {
-  const {todos} = useContext(TodoContext);
-
+  const {state, dispatch} = useContext(TodoContext);
+  const { todos } = state;
+  
   const countComplete = () => {
     const count = todos.filter((t) => t.completed).length;
     return todos.length > 0
