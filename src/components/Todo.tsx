@@ -3,13 +3,12 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 
-import React, { useContext, useReducer } from "react";
+import React, { useContext,} from "react";
 import { useModal } from "../hooks/useModal";
-import { initialState, ITodo, TodoContext, TodoReducer } from "../state";
+import { ITodo, TodoContext, } from "../state";
 import { getDate, getFullDate } from "../utils/dateFunctions";
 import { Modal } from "./Modal";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
-// import { TodoContext } from "../TodoContext";
 
 interface ITodoFunctions extends ITodo {
   dragHandle: DraggableProvidedDragHandleProps | undefined;

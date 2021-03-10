@@ -1,9 +1,8 @@
-import React, { useContext, useReducer } from "react";
+import React, { useReducer } from "react";
 import "./App.css";
 import Nav from "./components/Nav";
 import TodoList from "./components/TodoList";
-// import { TodoProvider } from "./TodoCtx";
-import { TodoReducer, initialState, TodoProvider, TodoContext} from "./state";
+import { TodoReducer, initialState, TodoProvider,} from "./state";
 
 const App: React.FC = () => {
 

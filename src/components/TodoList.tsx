@@ -24,15 +24,13 @@ const TodoList: React.FC = () => {
         <TodoForm />
         {todos.length > 0 ? (
           <div className="completion-button-parent">
-            {/* <div className="completion-button" onClick={completeAllTodos}> */}
-            <div className="completion-button">
+            <div className="completion-button" onClick={() => dispatch({type: "completeAllTodos"}) }>
               <IconButton>
                 <CheckIcon />
               </IconButton>
               <p>Mark all as complete</p>
             </div>
-            {/* <div className="completion-button" onClick={deleteCompletedTodos}> */}
-            <div className="completion-button">
+            <div className="completion-button" onClick={() => dispatch({type: "deleteCompleteTodos"}) }>
               <IconButton>
                 <ClearIcon />
               </IconButton>
@@ -46,7 +44,7 @@ const TodoList: React.FC = () => {
         <ul className="todolist">
           <DragDropContext
             onDragEnd={(res) => {
-              // dispatch({type: "handleOnDragEnd", payload: {res : res}})
+              dispatch({type: "handleOnDragEnd", payload: {res : res}})
             }}
           >
             <Droppable droppableId="droppable-1">
