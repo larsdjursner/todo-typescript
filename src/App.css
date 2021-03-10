@@ -27,6 +27,7 @@ input {
   box-sizing: border-box;
 }
 
+
 ul.todolist {
   padding: 0;
   margin-bottom: 0;
@@ -54,7 +55,6 @@ li.todo {
 p.todo-content {
   width: 80%;
   max-width: 80%;
-  overflow-wrap: break-word;
   word-wrap: break-word;
 }
 
@@ -84,6 +84,8 @@ li:hover {
 
 .todoform-content > * {
   margin-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .todoform-buttons {

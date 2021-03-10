@@ -21,6 +21,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
   content,
   date,
   dragHandle,
+  subTodos
 }) => {
 
   const {state, dispatch} = useContext(TodoContext);
@@ -45,14 +46,21 @@ export const Todo: React.FC<ITodoFunctions> = ({
         >
           {content}
         </p>
-        <p className="date">{getDate(date)}</p>
+        <div style={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "200px"
+        }}>
+          <p className="date">{getDate(date)}</p>
+          <p className="date">{subTodos.length + " subtodos"}</p>
+        </div>
       </div>
       <div className="todo-buttons">
         <Modal
           headerText={content}
           isShown={isShown}
           hide={toggle}
-          modalContent={completed ? "completed" : "not completed"}
+          modalContent={subTodos}
           date={getFullDate(date)}
         />
 

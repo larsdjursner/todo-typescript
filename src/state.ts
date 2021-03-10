@@ -7,6 +7,14 @@ export interface ITodo {
   content: string;
   completed: boolean;
   date: Date;
+  subTodos: ISubTodo[]
+}
+
+export interface ISubTodo {
+  parentId: number;
+  id: number;
+  content: string;
+  completed: boolean;
 }
 
 export type Context = {
@@ -55,6 +63,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
             content: content,
             completed: false,
             date: new Date(Date.now()),
+            subTodos: []
           },
         ],
       };

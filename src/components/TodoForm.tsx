@@ -1,21 +1,24 @@
 import React, { useContext, useReducer, useState } from "react";
 import Button from "@material-ui/core/Button";
-import { getCurrentDate } from "../utils/dateFunctions";
 import { IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import { initialState, TodoContext, TodoReducer } from "../state";
+import {TodoContext} from "../state";
+
+enum FormType {
+  
+}
 
 export const TodoForm: React.FC = () => {
   const [value, setValue] = useState("");
   const [showForm, setShowForm] = useState(true);
 
-  const {state, dispatch} = useContext(TodoContext);
+  const { state, dispatch } = useContext(TodoContext);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!value) return;
 
-    dispatch({ type: "createTodo", payload: { content: value }});
+    dispatch({ type: "createTodo", payload: { content: value } });
     setValue("");
   };
 
@@ -25,12 +28,7 @@ export const TodoForm: React.FC = () => {
   };
 
   return (
-    <div className="todoform">
-      <div className="todoform-header">
-        <h2>Todo Today</h2>
-        <p className="date"> {getCurrentDate()} </p>
-      </div>
-
+    <>
       {showForm ? (
         <div className="todoform-content">
           <form id="submit-form" action="/" onSubmit={(e) => handleSubmit(e)}>
@@ -70,6 +68,6 @@ export const TodoForm: React.FC = () => {
           <p id="noform-content-text">Add todo</p>
         </div>
       )}
-    </div>
+    </>
   );
 };

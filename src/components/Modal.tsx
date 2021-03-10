@@ -3,11 +3,13 @@ import ReactDOM from "react-dom";
 import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
 import "./modal.style.css";
+import { ISubTodo, ITodo } from "../state";
+import { TodoForm } from "./TodoForm";
 
 export interface IModal {
   isShown: boolean;
   hide: () => void;
-  modalContent: JSX.Element | string;
+  modalContent: ISubTodo[];
   headerText: string;
   date: string;
 }
@@ -30,8 +32,18 @@ export const Modal: FC<IModal> = ({
               <CloseIcon />
             </IconButton>
           </div>
+
+          <TodoForm />
           <div className="Content-Date Content">{date}</div>
-          <div className="Content">{modalContent}</div>
+          <div className="Content">
+            <ul className="todolist">
+              {modalContent.map((sub, i) => (
+                <li className="todo" key={sub.id}>
+                  <p>{sub.content}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
