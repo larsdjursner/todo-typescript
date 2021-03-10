@@ -1,84 +1,36 @@
-import React, { useContext } from "react";
+import React, { useContext, useReducer } from "react";
 import { TodoForm } from "./TodoForm";
-import { TodoContext } from "../TodoContext";
 import "../App.css";
 import { Todo } from "./Todo";
 import {
   DragDropContext,
   Droppable,
   Draggable,
-  DropResult,
 } from "react-beautiful-dnd";
 import { IconButton } from "@material-ui/core";
 import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
+import { TodoContext} from "../state";
 
 const TodoList: React.FC = () => {
-  const [todos, setTodos] = useContext(TodoContext);
+  const {state, dispatch} = useContext(TodoContext);
+  const todos = state.todos;
 
-  const createTodo = (id: number, content: string) => {
-    const newTodo = {
-      id,
-      content,
-      completed: false,
-      date: new Date(Date.now()),
-    };
-    const newTodos = [...todos, newTodo];
-    setTodos(newTodos);
-  };
 
-  const deleteTodo = (id: number) => {
-    const newTodos = [...todos];
-    const index = newTodos.findIndex((t) => t.id === id);
-
-    newTodos.splice(index, 1);
-    setTodos(newTodos);
-  };
-
-  const deleteCompletedTodos = () => {
-    const newTodos = [...todos];
-    const filtered = newTodos.filter((t) => !t.completed);
-    setTodos(filtered);
-  };
-
-  const completeTodo = (id: number) => {
-    const newTodos = [...todos];
-    const index = newTodos.findIndex((t) => t.id === id);
-
-    newTodos[index].completed = !newTodos[index].completed;
-    setTodos(newTodos);
-  };
-
-  const completeAllTodos = () => {
-    const newTodos = [...todos];
-    newTodos.forEach((t) => (t.completed = true));
-
-    setTodos(newTodos);
-  };
-
-  const handleOnDragEnd = (res: DropResult) => {
-    if (!res.destination) return;
-
-    const newTodos = [...todos];
-    const [reorderedTodos] = newTodos.splice(res.source.index, 1);
-    newTodos.splice(res.destination.index, 0, reorderedTodos);
-
-    setTodos(newTodos);
-  };
 
   return (
     <div className="parent-todo">
       <div className="child-todo">
-        <TodoForm createTodo={createTodo} />
+        <TodoForm />
         {todos.length > 0 ? (
           <div className="completion-button-parent">
-            <div className="completion-button" onClick={completeAllTodos}>
+            <div className="completion-button" onClick={() => dispatch({type: "completeAllTodos"}) }>
               <IconButton>
                 <CheckIcon />
               </IconButton>
               <p>Mark all as complete</p>
             </div>
-            <div className="completion-button" onClick={deleteCompletedTodos}>
+            <div className="completion-button" onClick={() => dispatch({type: "deleteCompleteTodos"}) }>
               <IconButton>
                 <ClearIcon />
               </IconButton>
@@ -92,7 +44,7 @@ const TodoList: React.FC = () => {
         <ul className="todolist">
           <DragDropContext
             onDragEnd={(res) => {
-              handleOnDragEnd(res);
+              dispatch({type: "handleOnDragEnd", payload: {res : res}})
             }}
           >
             <Droppable droppableId="droppable-1">
@@ -121,8 +73,6 @@ const TodoList: React.FC = () => {
                             content={todo.content}
                             completed={todo.completed}
                             date={todo.date}
-                            completeTodo={completeTodo}
-                            deleteTodo={deleteTodo}
                             dragHandle={provided.dragHandleProps}
                            />
                         </div>
@@ -141,3 +91,5 @@ const TodoList: React.FC = () => {
 };
 
 export default TodoList;
+
+

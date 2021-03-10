@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useReducer } from "react";
 import "./App.css";
 import Nav from "./components/Nav";
 import TodoList from "./components/TodoList";
-import { TodoProvider } from "./TodoContext";
+import { TodoReducer, initialState, TodoProvider,} from "./state";
 
 const App: React.FC = () => {
+
+  const [state, dispatch] = useReducer(TodoReducer, initialState);
+
   return (
-    <TodoProvider>
+    <TodoProvider value = {{state, dispatch}}>
       <div className="app">
         <Nav />
         <TodoList />
