@@ -10,13 +10,13 @@ export const InitialValues: Array<ITodo> = [
     subTodos: [
       {
         parentId: 0,
-        id: 0,
+        id: 9999,
         content: "brush teeth",
         completed: false
       },
       {
         parentId: 0,
-        id: 1,
+        id: 9998,
         content: "eat something",
         completed: false
       },

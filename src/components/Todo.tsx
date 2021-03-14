@@ -57,6 +57,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
       </div>
       <div className="todo-buttons">
         <Modal
+          id={id}
           headerText={content}
           isShown={isShown}
           hide={toggle}

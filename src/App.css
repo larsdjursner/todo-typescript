@@ -84,15 +84,13 @@ li:hover {
 
 .todoform-content > * {
   margin-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
 }
 
 .todoform-buttons {
-  right: 0;
-  /* display: flex;
+  /* right: 0; */
+  display: flex;
   margin-right: 10px;
-  justify-content: right; */
+  justify-content: right;
 }
 
 .noform-content > * {

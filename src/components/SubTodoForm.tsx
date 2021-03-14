@@ -4,9 +4,12 @@ import { IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import {TodoContext} from "../state";
 
+interface ISubTodoForm {
+    parentId: number;
+}
 
 
-export const TodoForm: React.FC = () => {
+export const SubTodoForm: React.FC<ISubTodoForm> = ({parentId}) => {
   const [value, setValue] = useState("");
   const [showForm, setShowForm] = useState(false);
 
@@ -15,8 +18,7 @@ export const TodoForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!value) return;
-
-    dispatch({ type: "createTodo", payload: { content: value } });
+    dispatch({ type: "createSubTodo", payload: { parentId : parentId , content: value } });
     setValue("");
   };
 
@@ -46,7 +48,7 @@ export const TodoForm: React.FC = () => {
               variant="outlined"
               color="primary"
             >
-              Add todo
+              Add
             </Button>
             <Button
               onClick={toggleForm}
@@ -63,7 +65,7 @@ export const TodoForm: React.FC = () => {
           <IconButton id="noform-content-addicon">
             <AddIcon />
           </IconButton>
-          <p id="noform-content-text">Add todo</p>
+          <p id="noform-content-text">Add subtodo to todo</p>
         </div>
       )}
     </>

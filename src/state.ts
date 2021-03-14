@@ -1,5 +1,6 @@
 import { createContext } from "react";
 import { DropResult } from "react-beautiful-dnd";
+import { isDoStatement } from "typescript";
 import { InitialValues } from "./utils/InitialValues";
 
 export interface ITodo {
@@ -7,7 +8,7 @@ export interface ITodo {
   content: string;
   completed: boolean;
   date: Date;
-  subTodos: ISubTodo[]
+  subTodos: ISubTodo[];
 }
 
 export interface ISubTodo {
@@ -26,8 +27,9 @@ type ACTIONTYPE =
   | { type: "completeTodo"; payload: { id: number } }
   | { type: "createTodo"; payload: { content: string } }
   | { type: "handleOnDragEnd"; payload: { res: DropResult } }
-  | { type: "completeAllTodos"; }
-  | { type: "deleteCompleteTodos"; }
+  | { type: "completeAllTodos" }
+  | { type: "deleteCompleteTodos" }
+  | { type: "createSubTodo"; payload: { parentId: number; content: string } };
 
 export const initialState: Context = {
   todos: InitialValues,
@@ -41,18 +43,16 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         ...state,
         todos: state.todos.filter((t) => t.id !== id),
       };
-    };
+    }
     case "completeTodo": {
       const { id } = action.payload;
       return {
         ...state,
         todos: state.todos.map((t) =>
-          t.id === id
-            ? { ...t, completed: !t.completed }
-            : { ...t }
+          t.id === id ? { ...t, completed: !t.completed } : { ...t }
         ),
       };
-    };
+    }
     case "createTodo": {
       const { content } = action.payload;
       return {
@@ -63,31 +63,43 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
             content: content,
             completed: false,
             date: new Date(Date.now()),
-            subTodos: []
+            subTodos: [],
           },
         ],
       };
-    };
+    }
     case "handleOnDragEnd": {
       const { res } = action.payload;
-      if (!res.destination) return{...state}
-      
+      if (!res.destination) return { ...state };
+
       return {
         ...state,
-        todos : reorderTodos(state.todos, res.source.index, res.destination.index)
+        todos: reorderTodos(
+          state.todos,
+          res.source.index,
+          res.destination.index
+        ),
       };
-    };
+    }
     case "completeAllTodos": {
       return {
         ...state,
-        todos: completeAllTodos(state.todos)
-      }
+        todos: completeAllTodos(state.todos),
+      };
     }
     case "deleteCompleteTodos": {
       return {
         ...state,
-        todos: state.todos.filter((t) => !t.completed)
-      }
+        todos: state.todos.filter((t) => !t.completed),
+      };
+    }
+    case "createSubTodo": {
+      const { parentId, content } = action.payload;
+      console.log(content, parentId);
+      return {
+        ...state,
+        todos: createSubTodo(state.todos, parentId, content)
+      };
     }
     default:
       return {
@@ -97,19 +109,33 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
   }
 };
 
-const completeAllTodos = (todos: ITodo[]) : ITodo[] => {
-  const newTodos = [...todos];
-  newTodos.map((t) => t.completed = true);
-  return newTodos;
+const createSubTodo = (todos: ITodo[], parentId: number, content: string) => {
+  const todo = todos.find((t) => t.id === parentId)
+  if(!todo) return todos;
+
+
+  todo?.subTodos.push({
+    id: 10000 + (parentId*1000) + todo.subTodos.length, //semi unique id until backend is added
+    parentId: parentId,
+    content: content,
+    completed: false
+  })
+
+  return todos;
 }
 
-const reorderTodos = (todos: ITodo[], src: number, dest:number): ITodo[] => {
+const completeAllTodos = (todos: ITodo[]): ITodo[] => {
+  const newTodos = [...todos];
+  newTodos.map((t) => (t.completed = true));
+  return newTodos;
+};
+
+const reorderTodos = (todos: ITodo[], src: number, dest: number): ITodo[] => {
   const newTodos = [...todos];
   const [reorderedTodos] = newTodos.splice(src, 1);
   newTodos.splice(dest, 0, reorderedTodos);
   return newTodos;
-}
-
+};
 
 export const TodoContext = createContext<{
   state: Context;
