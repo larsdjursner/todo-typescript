@@ -3,9 +3,9 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 
-import React, { useContext,} from "react";
+import React, { useContext } from "react";
 import { useModal } from "../hooks/useModal";
-import { ITodo, TodoContext, } from "../state";
+import { ITodo, TodoContext } from "../state";
 import { getDate, getFullDate } from "../utils/dateFunctions";
 import { Modal } from "./Modal";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
@@ -21,10 +21,9 @@ export const Todo: React.FC<ITodoFunctions> = ({
   content,
   date,
   dragHandle,
-  subTodos
+  subTodos,
 }) => {
-
-  const {state, dispatch} = useContext(TodoContext);
+  const { state, dispatch } = useContext(TodoContext);
   const { isShown, toggle } = useModal();
 
   return (
@@ -38,7 +37,9 @@ export const Todo: React.FC<ITodoFunctions> = ({
       <div className="todo-content-parent">
         <p
           className="todo-content"
-          onClick={ () => dispatch({type: 'completeTodo', payload :{id: id}})}
+          onClick={() =>
+            dispatch({ type: "completeTodo", payload: { id: id } })
+          }
           style={{
             textDecoration: completed ? "line-through" : "",
             color: completed ? "gray" : "",
@@ -46,11 +47,13 @@ export const Todo: React.FC<ITodoFunctions> = ({
         >
           {content}
         </p>
-        <div style={{
-          display: "flex",
-          justifyContent: "space-between",
-          width: "200px"
-        }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "200px",
+          }}
+        >
           <p className="date">{getDate(date)}</p>
           <p className="date">{subTodos.length + " subtodos"}</p>
         </div>
@@ -71,7 +74,9 @@ export const Todo: React.FC<ITodoFunctions> = ({
           </IconButton>
         </div>
 
-        <div onClick={() => dispatch({type : 'deleteTodo',payload: {id: id}})}>
+        <div
+          onClick={() => dispatch({ type: "deleteTodo", payload: { id: id } })}
+        >
           <IconButton className="IconButton">
             <DeleteIcon />
           </IconButton>

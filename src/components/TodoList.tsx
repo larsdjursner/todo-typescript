@@ -1,4 +1,4 @@
-import React, { useContext, useReducer } from "react";
+import React, { useContext } from "react";
 import { TodoForm } from "./TodoForm";
 import "../App.css";
 import { Todo } from "./Todo";
@@ -50,6 +50,7 @@ const TodoList: React.FC = () => {
           <ul className="todolist">
             <DragDropContext
               onDragEnd={(res) => {
+                console.log(state.todos)
                 dispatch({ type: "handleOnDragEnd", payload: { res: res } });
               }}
             >

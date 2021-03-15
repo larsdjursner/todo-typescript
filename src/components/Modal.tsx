@@ -15,8 +15,6 @@ export interface IModal {
   date: string;
 }
 
-
-
 export const Modal: FC<IModal> = ({
   id,
   isShown,
@@ -41,8 +39,8 @@ export const Modal: FC<IModal> = ({
           <div className="Content">
             <SubTodoForm parentId={id} />
             <ul className="todolist">
-              {modalContent.map((sub, i) => (
-                <li className="todo" key={sub.id + 600}>
+              {modalContent.map((sub) => (
+                <li className="todo" key={sub.id + 400}>
                   <p>{sub.content}</p>
                 </li>
               ))}

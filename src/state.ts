@@ -1,6 +1,5 @@
 import { createContext } from "react";
 import { DropResult } from "react-beautiful-dnd";
-import { isDoStatement } from "typescript";
 import { InitialValues } from "./utils/InitialValues";
 
 export interface ITodo {
@@ -95,7 +94,8 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
     }
     case "createSubTodo": {
       const { parentId, content } = action.payload;
-      console.log(content, parentId);
+      const todo = state.todos.filter( t => t.id === parentId)
+      console.log(content, parentId, todo );
       return {
         ...state,
         todos: createSubTodo(state.todos, parentId, content)
@@ -111,7 +111,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
 
 const createSubTodo = (todos: ITodo[], parentId: number, content: string) => {
   const todo = todos.find((t) => t.id === parentId)
-  if(!todo) return todos;
+  if(!todo) { return todos;}
 
 
   todo?.subTodos.push({
@@ -147,7 +147,7 @@ export const TodoContext = createContext<{
 
 export const TodoProvider = TodoContext.Provider;
 
-// // export const TodoContext = createContext<ITodoContext>(InitialValues);
+// export const TodoContext = createContext<ITodoContext>(InitialValues);
 
 // export const TodoProvider = (props: { children: any }) => {
 //   const [state, dispatch] = useReducer(TodoReducer, InitialValues);

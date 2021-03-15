@@ -46,7 +46,7 @@ export const TodoForm: React.FC = () => {
               variant="outlined"
               color="primary"
             >
-              Add todo
+              Add
             </Button>
             <Button
               onClick={toggleForm}

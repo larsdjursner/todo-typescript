@@ -1,4 +1,4 @@
-import React, { useContext, useReducer, useState } from "react";
+import React, { useContext, useState } from "react";
 import Button from "@material-ui/core/Button";
 import { IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
@@ -8,21 +8,21 @@ interface ISubTodoForm {
     parentId: number;
 }
 
-
 export const SubTodoForm: React.FC<ISubTodoForm> = ({parentId}) => {
   const [value, setValue] = useState("");
-  const [showForm, setShowForm] = useState(false);
-
+  const [showForm, setShowForm] = useState(true);
   const { state, dispatch } = useContext(TodoContext);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!value) return;
+
     dispatch({ type: "createSubTodo", payload: { parentId : parentId , content: value } });
     setValue("");
   };
 
   const toggleForm = () => {
+    console.log(parentId);
     setValue("");
     setShowForm(!showForm);
   };
@@ -31,7 +31,7 @@ export const SubTodoForm: React.FC<ISubTodoForm> = ({parentId}) => {
     <>
       {showForm ? (
         <div className="todoform-content">
-          <form id="submit-form" action="/" onSubmit={(e) => handleSubmit(e)}>
+          <form id="subtodo-submit-form" action="/" onSubmit={(e) => handleSubmit(e)}>
             <input
               type="text"
               className="todoform-input"
@@ -44,7 +44,7 @@ export const SubTodoForm: React.FC<ISubTodoForm> = ({parentId}) => {
           <div className="todoform-buttons">
             <Button
               type="submit"
-              form="submit-form"
+              form="subtodo-submit-form"
               variant="outlined"
               color="primary"
             >
@@ -52,7 +52,7 @@ export const SubTodoForm: React.FC<ISubTodoForm> = ({parentId}) => {
             </Button>
             <Button
               onClick={toggleForm}
-              form="submit-form"
+              form="subtodo-submit-form"
               variant="outlined"
               color="secondary"
             >
