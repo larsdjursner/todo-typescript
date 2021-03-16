@@ -6,7 +6,7 @@ import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 import React, { useContext } from "react";
 import { useModal } from "../hooks/useModal";
 import { ITodo, TodoContext } from "../state";
-import { getDate, getFullDate } from "../utils/dateFunctions";
+import { getDate } from "../utils/dateFunctions";
 import { Modal } from "./Modal";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 
@@ -20,11 +20,11 @@ export const Todo: React.FC<ITodoFunctions> = ({
   completed,
   content,
   date,
-  dragHandle,
-  subTodos,
+  dragHandle
 }) => {
   const { state, dispatch } = useContext(TodoContext);
   const { isShown, toggle } = useModal();
+  const children = state.subTodos.filter(t => t.parentId === id);
 
   return (
     <li className="todo">
@@ -55,17 +55,14 @@ export const Todo: React.FC<ITodoFunctions> = ({
           }}
         >
           <p className="date">{getDate(date)}</p>
-          <p className="date">{subTodos.length + " subtodos"}</p>
+          <p className="date">{children.length + " subtodos"}</p>
         </div>
       </div>
       <div className="todo-buttons">
         <Modal
           id={id}
-          headerText={content}
           isShown={isShown}
           hide={toggle}
-          modalContent={subTodos}
-          date={getFullDate(date)}
         />
 
         <div onClick={toggle}>

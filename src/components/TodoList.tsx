@@ -50,7 +50,6 @@ const TodoList: React.FC = () => {
           <ul className="todolist">
             <DragDropContext
               onDragEnd={(res) => {
-                console.log(state.todos)
                 dispatch({ type: "handleOnDragEnd", payload: { res: res } });
               }}
             >
@@ -77,11 +76,11 @@ const TodoList: React.FC = () => {
                             <Todo
                               key={todo.id}
                               id={todo.id}
+                              parentId={todo.parentId}
                               content={todo.content}
                               completed={todo.completed}
                               date={todo.date}
                               dragHandle={provided.dragHandleProps}
-                              subTodos={todo.subTodos}
                             />
                           </div>
                         )}

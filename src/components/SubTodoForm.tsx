@@ -17,12 +17,11 @@ export const SubTodoForm: React.FC<ISubTodoForm> = ({parentId}) => {
     e.preventDefault();
     if (!value) return;
 
-    dispatch({ type: "createSubTodo", payload: { parentId : parentId , content: value } });
+    dispatch({ type: "createTodo", payload: { parentId : parentId , content: value } });
     setValue("");
   };
 
   const toggleForm = () => {
-    console.log(parentId);
     setValue("");
     setShowForm(!showForm);
   };

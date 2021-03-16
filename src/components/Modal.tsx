@@ -1,28 +1,27 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import ReactDOM from "react-dom";
 import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
 import "./modal.style.css";
-import { ISubTodo } from "../state";
+
 import { SubTodoForm } from "./SubTodoForm";
+import { TodoContext } from "../state";
+import { getFullDate } from "../utils/dateFunctions"
 
 export interface IModal {
   id: number;
   isShown: boolean;
   hide: () => void;
-  modalContent: ISubTodo[];
-  headerText: string;
-  date: string;
 }
 
-export const Modal: FC<IModal> = ({
-  id,
-  isShown,
-  hide,
-  modalContent,
-  headerText,
-  date,
-}) => {
+export const Modal: FC<IModal> = ({ id, isShown, hide }) => {
+
+  const { state, dispatch } = useContext(TodoContext);
+  const todo = state.todos.find( t => t.id === id)
+  const header = todo!.content;
+  const date = getFullDate(todo!.date);
+  const subTodos = state.subTodos.filter((t) => t.parentId === id);
+
   const modal = (
     <div>
       <div className="Backdrop" onClick={hide} />
@@ -35,12 +34,12 @@ export const Modal: FC<IModal> = ({
               <CloseIcon />
             </IconButton>
           </div>
-          <div className="HeaderText">{headerText}</div>
+          <div className="HeaderText">{header}</div>
           <div className="Content">
             <SubTodoForm parentId={id} />
             <ul className="todolist">
-              {modalContent.map((sub) => (
-                <li className="todo" key={sub.id + 400}>
+              {subTodos.map((sub) => (
+                <li className="todo" key={"m" + sub.id}>
                   <p>{sub.content}</p>
                 </li>
               ))}

@@ -1,37 +1,32 @@
+import { isNull } from "node:util";
 import { createContext } from "react";
 import { DropResult } from "react-beautiful-dnd";
-import { InitialValues } from "./utils/InitialValues";
+import { InitialTodos, InitialSubTodos } from "./utils/InitialValues";
 
 export interface ITodo {
+  parentId: number | null;
   id: number;
   content: string;
   completed: boolean;
   date: Date;
-  subTodos: ISubTodo[];
-}
-
-export interface ISubTodo {
-  parentId: number;
-  id: number;
-  content: string;
-  completed: boolean;
 }
 
 export type Context = {
   todos: ITodo[];
+  subTodos: ITodo[];
 };
 
 type ACTIONTYPE =
   | { type: "deleteTodo"; payload: { id: number } }
   | { type: "completeTodo"; payload: { id: number } }
-  | { type: "createTodo"; payload: { content: string } }
+  | { type: "createTodo"; payload: { parentId: number | null; content: string; }}
+  | { type: "completeAllTodos"; }
   | { type: "handleOnDragEnd"; payload: { res: DropResult } }
-  | { type: "completeAllTodos" }
-  | { type: "deleteCompleteTodos" }
-  | { type: "createSubTodo"; payload: { parentId: number; content: string } };
+  | { type: "deleteCompleteTodos"; };
 
 export const initialState: Context = {
-  todos: InitialValues,
+  todos: InitialTodos,
+  subTodos: InitialSubTodos,
 };
 
 export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
@@ -41,6 +36,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       return {
         ...state,
         todos: state.todos.filter((t) => t.id !== id),
+        subTodos: state.subTodos.filter((t) => t.parentId !== id),
       };
     }
     case "completeTodo": {
@@ -50,23 +46,36 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         todos: state.todos.map((t) =>
           t.id === id ? { ...t, completed: !t.completed } : { ...t }
         ),
+        subTodos: state.subTodos.map((t) =>
+          t.parentId === id ? { ...t, completed: !t.completed } : { ...t }
+        ),
       };
     }
     case "createTodo": {
-      const { content } = action.payload;
-      return {
-        todos: [
-          ...state.todos,
-          {
-            id: state.todos.length,
-            content: content,
-            completed: false,
-            date: new Date(Date.now()),
-            subTodos: [],
-          },
-        ],
-      };
+      const { parentId, content } = action.payload;
+      const newTodo : ITodo =
+      {
+        id: (parentId != null ? 600 + state.subTodos.length : state.todos.length ),
+        parentId: parentId,
+        content: content,
+        completed: false,
+        date: new Date(Date.now()),
+      }
+      
+      if(parentId != null) {
+        return {
+          ...state,
+          subTodos: [...state.subTodos, newTodo]
+        };
+      }
+      else {
+        return {
+          ...state,
+          todos: [...state.todos, newTodo]
+        };
+      }
     }
+
     case "handleOnDragEnd": {
       const { res } = action.payload;
       if (!res.destination) return { ...state };
@@ -92,37 +101,14 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         todos: state.todos.filter((t) => !t.completed),
       };
     }
-    case "createSubTodo": {
-      const { parentId, content } = action.payload;
-      const todo = state.todos.filter( t => t.id === parentId)
-      console.log(content, parentId, todo );
-      return {
-        ...state,
-        todos: createSubTodo(state.todos, parentId, content)
-      };
-    }
+
     default:
       return {
         ...state,
-        todos: InitialValues,
+        todos: InitialTodos,
       };
   }
 };
-
-const createSubTodo = (todos: ITodo[], parentId: number, content: string) => {
-  const todo = todos.find((t) => t.id === parentId)
-  if(!todo) { return todos;}
-
-
-  todo?.subTodos.push({
-    id: 10000 + (parentId*1000) + todo.subTodos.length, //semi unique id until backend is added
-    parentId: parentId,
-    content: content,
-    completed: false
-  })
-
-  return todos;
-}
 
 const completeAllTodos = (todos: ITodo[]): ITodo[] => {
   const newTodos = [...todos];
