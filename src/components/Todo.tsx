@@ -9,6 +9,7 @@ import { ITodo, TodoContext } from "../state";
 import { getDate } from "../utils/dateFunctions";
 import { Modal } from "./Modal";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
+import { Checkbox } from "@material-ui/core";
 
 interface ITodoFunctions extends ITodo {
   dragHandle: DraggableProvidedDragHandleProps | undefined;
@@ -47,19 +48,6 @@ export const Todo: React.FC<ITodoFunctions> = ({
         >
           {content}
         </p>
-        {/* <div className="todo-content-additional">
-          {children.length > 0 ? (
-            <div className="todo-content-additional-icon">
-              <TocIcon id="TocIcon" />
-              <p className="date">
-                {`${children.filter((t) => t.completed === true).length}/${
-                  children.length
-                }`}
-              </p>
-            </div>
-          ) : (
-          )} */}
-
 
         <div className="todo-content-additional">
             <div className="todo-content-additional-icon">
@@ -83,6 +71,13 @@ export const Todo: React.FC<ITodoFunctions> = ({
       </div>
       <div className="todo-buttons">
         <Modal id={id} isShown={isShown} hide={toggle} />
+        <Checkbox   
+          onClick={() =>
+            dispatch({ type: "completeTodo", payload: { id: id } })
+          }
+          checked = { completed ? true : false}
+          color="default"
+        />
 
         <div onClick={toggle}>
           <IconButton className="IconButton">
