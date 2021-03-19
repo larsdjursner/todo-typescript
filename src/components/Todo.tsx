@@ -47,15 +47,36 @@ export const Todo: React.FC<ITodoFunctions> = ({
         >
           {content}
         </p>
+        {/* <div className="todo-content-additional">
+          {children.length > 0 ? (
+            <div className="todo-content-additional-icon">
+              <TocIcon id="TocIcon" />
+              <p className="date">
+                {`${children.filter((t) => t.completed === true).length}/${
+                  children.length
+                }`}
+              </p>
+            </div>
+          ) : (
+          )} */}
+
+
         <div className="todo-content-additional">
-          <div className="todo-content-additional-icon">
-            <TocIcon id="TocIcon"/>
-            <p className="date">
-              {`${children.filter((t) => t.completed === true).length}/${
-                children.length
-              }`}
-            </p>
-          </div>
+            <div className="todo-content-additional-icon">
+            {children.length > 0 ? (
+              <>
+                <TocIcon id="TocIcon" />
+                <p className="date">
+                  {`${children.filter((t) => t.completed === true).length}/${
+                    children.length
+                  }`}
+                </p>
+                </>
+                ) : (
+                  <TocIcon id="TocIconHidden" />
+                )}
+            </div>
+        
 
           <p className="date">{getDate(date)}</p>
         </div>

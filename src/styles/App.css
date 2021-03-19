@@ -74,6 +74,9 @@ p.todo-content {
 #TocIcon {
   color:gray;
 }
+#TocIconHidden {
+  visibility: hidden;
+}
 
 .date {
   color: gray;

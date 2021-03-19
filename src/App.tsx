@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import "./App.css";
+import "./styles/App.css";
 import Nav from "./components/Nav";
 import TodoList from "./components/TodoList";
 import { TodoReducer, initialState, TodoProvider,} from "./state";
