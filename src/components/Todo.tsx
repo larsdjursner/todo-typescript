@@ -2,7 +2,7 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
-
+import TocIcon from "@material-ui/icons/Toc";
 import React, { useContext } from "react";
 import { useModal } from "../hooks/useModal";
 import { ITodo, TodoContext } from "../state";
@@ -20,11 +20,11 @@ export const Todo: React.FC<ITodoFunctions> = ({
   completed,
   content,
   date,
-  dragHandle
+  dragHandle,
 }) => {
   const { state, dispatch } = useContext(TodoContext);
   const { isShown, toggle } = useModal();
-  const children = state.subTodos.filter(t => t.parentId === id);
+  const children = state.subTodos.filter((t) => t.parentId === id);
 
   return (
     <li className="todo">
@@ -47,23 +47,21 @@ export const Todo: React.FC<ITodoFunctions> = ({
         >
           {content}
         </p>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            width: "200px",
-          }}
-        >
+        <div className="todo-content-additional">
+          <div className="todo-content-additional-icon">
+            <TocIcon id="TocIcon"/>
+            <p className="date">
+              {`${children.filter((t) => t.completed === true).length}/${
+                children.length
+              }`}
+            </p>
+          </div>
+
           <p className="date">{getDate(date)}</p>
-          <p className="date">{children.length + " subtodos"}</p>
         </div>
       </div>
       <div className="todo-buttons">
-        <Modal
-          id={id}
-          isShown={isShown}
-          hide={toggle}
-        />
+        <Modal id={id} isShown={isShown} hide={toggle} />
 
         <div onClick={toggle}>
           <IconButton className="IconButton">

@@ -1,4 +1,3 @@
-import { isNull } from "node:util";
 import { createContext } from "react";
 import { DropResult } from "react-beautiful-dnd";
 import { InitialTodos, InitialSubTodos } from "./utils/InitialValues";
@@ -17,12 +16,20 @@ export type Context = {
 };
 
 type ACTIONTYPE =
-  | { type: "deleteTodo"; payload: { id: number } }
-  | { type: "completeTodo"; payload: { id: number } }
-  | { type: "createTodo"; payload: { parentId: number | null; content: string; }}
-  | { type: "completeAllTodos"; }
+  | { type: "deleteTodo"; payload: { id: number; parentId: number | null } }
+  | { type: "completeTodo"; payload: { id: number; parentId: number | null } }
+  | {
+      type: "createTodo";
+      payload: { content: string; parentId: number | null };
+    }
+  | { type: "completeAllTodos" }
   | { type: "handleOnDragEnd"; payload: { res: DropResult } }
-  | { type: "deleteCompleteTodos"; };
+  | { type: "deleteCompleteTodos" }
+  | { type: "deleteSubTodo"; payload: { id: number } }
+  | {
+      type: "completeSubTodo";
+      payload: { id: number; parentId: number | null };
+    };
 
 export const initialState: Context = {
   todos: InitialTodos,
@@ -39,39 +46,54 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         subTodos: state.subTodos.filter((t) => t.parentId !== id),
       };
     }
-    case "completeTodo": {
+    case "deleteSubTodo": {
       const { id } = action.payload;
       return {
         ...state,
+        subTodos: state.subTodos.filter((t) => t.id !== id),
+      };
+    }
+    case "completeTodo": {
+      const { id } = action.payload;
+      const todo = state.todos.filter((t) => t.id === id)[0];
+      const status = !todo.completed;
+
+      return {
+        ...state,
         todos: state.todos.map((t) =>
-          t.id === id ? { ...t, completed: !t.completed } : { ...t }
+          t.id === id ? { ...t, completed: status } : { ...t }
         ),
         subTodos: state.subTodos.map((t) =>
-          t.parentId === id ? { ...t, completed: !t.completed } : { ...t }
+          t.parentId === id ? { ...t, completed: status } : { ...t }
         ),
       };
     }
+    case "completeSubTodo": {
+      const { id } = action.payload;
+      return {
+        ...state, 
+        subTodos : state.subTodos.map( t => t.id === id ? { ...t, completed: !t.completed } : { ...t })
+      }
+    }
     case "createTodo": {
-      const { parentId, content } = action.payload;
-      const newTodo : ITodo =
-      {
-        id: (parentId != null ? 600 + state.subTodos.length : state.todos.length ),
+      const { content, parentId } = action.payload;
+      const newTodo: ITodo = {
+        id: parentId != null ? 600 + state.subTodos.length : state.todos.length,
         parentId: parentId,
         content: content,
         completed: false,
         date: new Date(Date.now()),
-      }
-      
-      if(parentId != null) {
+      };
+
+      if (parentId != null) {
         return {
           ...state,
-          subTodos: [...state.subTodos, newTodo]
+          subTodos: [...state.subTodos, newTodo],
         };
-      }
-      else {
+      } else {
         return {
           ...state,
-          todos: [...state.todos, newTodo]
+          todos: [...state.todos, newTodo],
         };
       }
     }
@@ -93,12 +115,14 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       return {
         ...state,
         todos: completeAllTodos(state.todos),
+        subTodos: completeAllTodos(state.subTodos),
       };
     }
     case "deleteCompleteTodos": {
       return {
         ...state,
         todos: state.todos.filter((t) => !t.completed),
+        subTodos: state.subTodos.filter((t) => !t.completed),
       };
     }
 

@@ -10,7 +10,7 @@ interface ISubTodoForm {
 
 export const SubTodoForm: React.FC<ISubTodoForm> = ({parentId}) => {
   const [value, setValue] = useState("");
-  const [showForm, setShowForm] = useState(true);
+  const [showForm, setShowForm] = useState(false);
   const { state, dispatch } = useContext(TodoContext);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -64,7 +64,7 @@ export const SubTodoForm: React.FC<ISubTodoForm> = ({parentId}) => {
           <IconButton id="noform-content-addicon">
             <AddIcon />
           </IconButton>
-          <p id="noform-content-text">Add subtodo to todo</p>
+          <p id="noform-content-text">Add subtodo</p>
         </div>
       )}
     </>

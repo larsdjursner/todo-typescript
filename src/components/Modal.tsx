@@ -2,11 +2,11 @@ import { FC, useContext } from "react";
 import ReactDOM from "react-dom";
 import CloseIcon from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
-import "./modal.style.css";
 
 import { SubTodoForm } from "./SubTodoForm";
 import { TodoContext } from "../state";
-import { getFullDate } from "../utils/dateFunctions"
+import { getFullDate } from "../utils/dateFunctions";
+import { SubTodo } from "./SubTodo";
 
 export interface IModal {
   id: number;
@@ -15,9 +15,8 @@ export interface IModal {
 }
 
 export const Modal: FC<IModal> = ({ id, isShown, hide }) => {
-
   const { state, dispatch } = useContext(TodoContext);
-  const todo = state.todos.find( t => t.id === id)
+  const todo = state.todos.find((t) => t.id === id);
   const header = todo!.content;
   const date = getFullDate(todo!.date);
   const subTodos = state.subTodos.filter((t) => t.parentId === id);
@@ -39,9 +38,14 @@ export const Modal: FC<IModal> = ({ id, isShown, hide }) => {
             <SubTodoForm parentId={id} />
             <ul className="todolist">
               {subTodos.map((sub) => (
-                <li className="todo" key={"m" + sub.id}>
-                  <p>{sub.content}</p>
-                </li>
+                <SubTodo
+                  key={sub.id}
+                  id={sub.id}
+                  parentId={sub.parentId}
+                  content={sub.content}
+                  completed={sub.completed}
+                  date={sub.date}
+                />
               ))}
             </ul>
           </div>
