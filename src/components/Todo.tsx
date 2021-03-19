@@ -2,11 +2,11 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
-
-import React, { useContext,} from "react";
+import TocIcon from "@material-ui/icons/Toc";
+import React, { useContext } from "react";
 import { useModal } from "../hooks/useModal";
-import { ITodo, TodoContext, } from "../state";
-import { getDate, getFullDate } from "../utils/dateFunctions";
+import { ITodo, TodoContext } from "../state";
+import { getDate } from "../utils/dateFunctions";
 import { Modal } from "./Modal";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 
@@ -22,9 +22,9 @@ export const Todo: React.FC<ITodoFunctions> = ({
   date,
   dragHandle,
 }) => {
-
-  const {state, dispatch} = useContext(TodoContext);
+  const { state, dispatch } = useContext(TodoContext);
   const { isShown, toggle } = useModal();
+  const children = state.subTodos.filter((t) => t.parentId === id);
 
   return (
     <li className="todo">
@@ -37,7 +37,9 @@ export const Todo: React.FC<ITodoFunctions> = ({
       <div className="todo-content-parent">
         <p
           className="todo-content"
-          onClick={ () => dispatch({type: 'completeTodo', payload :{id: id}})}
+          onClick={() =>
+            dispatch({ type: "completeTodo", payload: { id: id } })
+          }
           style={{
             textDecoration: completed ? "line-through" : "",
             color: completed ? "gray" : "",
@@ -45,16 +47,21 @@ export const Todo: React.FC<ITodoFunctions> = ({
         >
           {content}
         </p>
-        <p className="date">{getDate(date)}</p>
+        <div className="todo-content-additional">
+          <div className="todo-content-additional-icon">
+            <TocIcon id="TocIcon"/>
+            <p className="date">
+              {`${children.filter((t) => t.completed === true).length}/${
+                children.length
+              }`}
+            </p>
+          </div>
+
+          <p className="date">{getDate(date)}</p>
+        </div>
       </div>
       <div className="todo-buttons">
-        <Modal
-          headerText={content}
-          isShown={isShown}
-          hide={toggle}
-          modalContent={completed ? "completed" : "not completed"}
-          date={getFullDate(date)}
-        />
+        <Modal id={id} isShown={isShown} hide={toggle} />
 
         <div onClick={toggle}>
           <IconButton className="IconButton">
@@ -62,7 +69,9 @@ export const Todo: React.FC<ITodoFunctions> = ({
           </IconButton>
         </div>
 
-        <div onClick={() => dispatch({type : 'deleteTodo',payload: {id: id}})}>
+        <div
+          onClick={() => dispatch({ type: "deleteTodo", payload: { id: id } })}
+        >
           <IconButton className="IconButton">
             <DeleteIcon />
           </IconButton>
