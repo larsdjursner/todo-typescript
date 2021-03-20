@@ -42,6 +42,7 @@ export const Modal: FC<IModal> = ({ id, isShown, hide }) => {
                   key={sub.id}
                   id={sub.id}
                   parentId={sub.parentId}
+                  parent={undefined} //temporary solution
                   content={sub.content}
                   completed={sub.completed}
                   date={sub.date}

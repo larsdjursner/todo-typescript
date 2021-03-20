@@ -1,11 +1,12 @@
 import { IconButton } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import React, { useContext } from "react";
-import { ITodo, TodoContext } from "../state";
+import { ISubTodo, TodoContext } from "../state";
 
-export const SubTodo: React.FC<ITodo> = ({
+export const SubTodo: React.FC<ISubTodo> = ({
     id,
     parentId,
+    parent,
     completed,
     content,
     date
