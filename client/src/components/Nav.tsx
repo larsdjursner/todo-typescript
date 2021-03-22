@@ -17,7 +17,8 @@ const Nav: React.FC = () => {
     const today = new Date(Date.now());
     const count = todos
       .filter((t) => !t.completed)
-      .filter((t) => getFullDate(t.date) !== getFullDate(today)).length;
+      // .filter((t) => getFullDate(t.date) !== getFullDate(today))
+      .length;
 
     return count > 0 ? count + " overdue todos" : "";
   };

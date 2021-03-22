@@ -1,15 +1,22 @@
-import { createContext } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 import { DropResult } from "react-beautiful-dnd";
 import { InitialTodos } from "./utils/InitialValues";
+import { getTodos } from "./services/todos";
+import { Todo } from "./components/Todo";
 
 export interface ITodo {
   id: number;
   content: string;
   completed: boolean;
   date: Date;
+  userId: string | undefined;
 }
 
-export interface ISubTodo extends ITodo {
+export interface ISubTodo {
+  id: number;
+  content: string;
+  completed: boolean;
+  date: Date;
   parent: ITodo | undefined;
   parentId: number;
 }
@@ -37,15 +44,23 @@ type ACTIONTYPE =
   | {
       type: "completeSubTodo";
       payload: { id: number; parentId: number | null };
-    };
+    }
+  | { type: "FETCHTODOS"; payload: { todos: ITodo[] } };
 
 export const initialState: Context = {
-  todos: InitialTodos,
+  todos: [],
   subTodos: [],
 };
 
 export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
   switch (action.type) {
+    case "FETCHTODOS": {
+      const { todos } = action.payload;
+      console.log(todos);
+
+      // return {...state };
+      return { ...state, todos };
+    }
     case "deleteTodo": {
       const { id } = action.payload;
       return {
@@ -92,6 +107,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         content: content,
         completed: false,
         date: new Date(Date.now()),
+        userId: undefined,
       };
 
       return {
@@ -104,7 +120,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       const newTodo: ISubTodo = {
         id: state.subTodos.length + 600,
         parentId: parentId,
-        parent: state.todos.find(t => t.id === parentId),
+        parent: state.todos.find((t) => t.id === parentId),
         content: content,
         completed: false,
         date: new Date(Date.now()),
@@ -177,17 +193,23 @@ export const TodoContext = createContext<{
   state: initialState,
   dispatch: () => 0,
 });
-
-export const TodoProvider = TodoContext.Provider;
+// export const TodoProvider = TodoContext.Provider;
 
 // export const TodoContext = createContext<ITodoContext>(InitialValues);
 
-// export const TodoProvider = (props: { children: any }) => {
-//   const [state, dispatch] = useReducer(TodoReducer, InitialValues);
+export const TodoProvider = (props: { children: any }) => {
+  const [state, dispatch] = useReducer(TodoReducer, initialState);
 
-//   return (
-//     <TodoContext.Provider value={{ state, dispatch}}>
-//       {props.children}
-//     </TodoContext.Provider>
-//   );
-// };
+  useEffect(() => {
+    getTodos().then((res) => {
+      console.log(res);
+      dispatch({ type: "FETCHTODOS", payload: {todos: res} });
+    });
+  }, []);
+
+  return (
+    <TodoContext.Provider value={{ state, dispatch }}>
+      {props.children}
+    </TodoContext.Provider>
+  );
+};

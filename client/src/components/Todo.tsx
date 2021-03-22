@@ -66,7 +66,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
             </div>
         
 
-          <p className="date">{getDate(date)}</p>
+          {/* <p className="date">{getDate(date)}</p> */}
         </div>
       </div>
       <div className="todo-buttons">

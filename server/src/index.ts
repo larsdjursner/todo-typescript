@@ -6,6 +6,11 @@ const app = express();
 
 app.use(express.json());
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+}) 
+
 // routes
 //user
 app.get("/users", async (req, res) => {
