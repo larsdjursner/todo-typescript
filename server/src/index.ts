@@ -1,13 +1,26 @@
 import { PrismaClient } from "@prisma/client";
 import express from "express";
+// import PORT from "dotenv";
+import cors from "cors";
+
+
 
 const prisma = new PrismaClient();
 const app = express();
 
+
+if (!process.env.PORT) {
+  process.exit(1);
+}
+
+const PORT: number = parseInt(process.env.PORT as string, 10);
+
 app.use(express.json());
+app.use(cors());
+
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   next();
 }) 
 
@@ -68,7 +81,7 @@ app.get("/todos/:id", async (req, res) => {
 
 app.post("/todos", async (req, res) => {
   const todo = await prisma.todo.create({
-    data: { ...req.body },
+    data: { ...req.body, completed: false},
   });
   res.json(todo);
 });
@@ -128,6 +141,6 @@ app.delete(`/subtodos/:id`, async (req, res) => {
   res.json(subTodo);
 });
 
-app.listen(3001, () => {
+app.listen(PORT, () => {
   console.log("REST API server ready at : http://localhost:3001");
 });
