@@ -1,6 +1,6 @@
 import { createContext, useEffect, useReducer, useState } from "react";
 import { DropResult } from "react-beautiful-dnd";
-import { AddSubTodo, AddTodo, CompleteTodo, getTodos } from "./services/todos";
+import { AddSubTodo, AddTodo, CompleteTodo, DeleteTodo, getTodos } from "./services/todos";
 
 export interface ITodo {
   id: number;
@@ -61,10 +61,12 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
     }
     case "deleteTodo": {
       const { id } = action.payload;
+      DeleteTodo(id);
       return {
         ...state,
-        todos: state.todos.filter((t) => t.id !== id),
-        subTodos: state.subTodos.filter((t) => t.parentId !== id),
+        refresh : true
+        // todos: state.todos.filter((t) => t.id !== id),
+        // subTodos: state.subTodos.filter((t) => t.parentId !== id),
       };
     }
     case "deleteSubTodo": {
@@ -77,8 +79,8 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
     case "completeTodo": {
       const { id } = action.payload;
       const todo = state.todos.filter((t) => t.id === id)[0];
-      const status = !todo.completed;
-      CompleteTodo(id, status);
+      const completed = !todo.completed;
+      CompleteTodo(id, completed);
       
       return {
         ...state,
@@ -163,9 +165,10 @@ export const TodoProvider = (props: { children: any }) => {
   const [state, dispatch] = useReducer(TodoReducer, initialState);
 
   useEffect(() => {
-    getTodos().then((res) => {
-      if(state.refresh) state.refresh = false;
-      dispatch({ type: "FETCHTODOS", payload: { todos: res[0], subTodos:res[1] } });
+    getTodos()
+      .then((res) => {
+        if(state.refresh) state.refresh = false;
+        dispatch({ type: "FETCHTODOS", payload: { todos: res[0], subTodos:res[1] } });
     });
   }, [state.refresh]);
 
