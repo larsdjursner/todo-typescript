@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import express from "express";
-// import PORT from "dotenv";
 import cors from "cors";
 
 
@@ -25,8 +24,8 @@ app.use((req, res, next) => {
 }) 
 
 // routes
-//user
-app.get("/users", async (req, res) => {
+//user  
+  app.get("/users", async (req, res) => {
     const users = await prisma.user.findMany();
     res.json(users);
   });
@@ -88,10 +87,17 @@ app.post("/todos", async (req, res) => {
 
 app.put("/todos/:id", async (req, res) => {
   const { id } = req.params;
+
+  await prisma.subTodo.updateMany({
+    where: {parentId: Number(id)},
+    data: {...req.body}
+  })
+  
   const todo = await prisma.todo.update({
     where: { id: Number(id) },
     data: { ...req.body },
   });
+
   res.json(todo);
 });
 
@@ -122,7 +128,7 @@ app.get("/subtodos/:id", async (req, res) => {
 
 app.post("/subtodos", async (req, res) => {
   const subTodo = await prisma.subTodo.create({
-    data: { ...req.body },
+    data: { ...req.body, completed: false},
   });
   res.json(subTodo);
 });

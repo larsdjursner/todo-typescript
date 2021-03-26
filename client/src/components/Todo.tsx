@@ -39,7 +39,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
         <p
           className="todo-content"
           onClick={() =>
-            dispatch({ type: "completeTodo", payload: { id: id } })
+            dispatch({ type: "completeTodo", payload: { id: id, completed: completed} })
           }
           style={{
             textDecoration: completed ? "line-through" : "",
@@ -73,7 +73,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
         <Modal id={id} isShown={isShown} hide={toggle} />
         <Checkbox   
           onClick={() =>
-            dispatch({ type: "completeTodo", payload: { id: id } })
+            dispatch({ type: "completeTodo", payload: { id: id, completed: completed} })
           }
           checked = { completed ? true : false}
           color="default"

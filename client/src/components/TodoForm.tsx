@@ -36,6 +36,7 @@ export const TodoForm: React.FC = () => {
               value={value}
               onChange={(e) => setValue(e.target.value)}
               placeholder={"Enter a todo!"}
+              autoFocus={true}
             />
           </form>
 

@@ -37,6 +37,7 @@ export const SubTodoForm: React.FC<ISubTodoForm> = ({parentId}) => {
               value={value}
               onChange={(e) => setValue(e.target.value)}
               placeholder={"Enter a todo!"}
+              autoFocus={true}
             />
           </form>
 

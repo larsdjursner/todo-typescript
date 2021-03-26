@@ -20,7 +20,7 @@ export const SubTodo: React.FC<ISubTodo> = ({
           <p
             className="todo-content"
             onClick={() =>
-              dispatch({ type: "completeSubTodo", payload: { id: id } })
+              dispatch({ type: "completeSubTodo", payload: { id: id, completed: completed} })
             }
             style={{
               textDecoration: completed ? "line-through" : "",

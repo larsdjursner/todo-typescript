@@ -1,6 +1,6 @@
-import { createContext, useEffect, useReducer, useState } from "react";
+import { createContext, useEffect, useReducer } from "react";
 import { DropResult } from "react-beautiful-dnd";
-import { AddSubTodo, AddTodo, CompleteTodo, DeleteTodo, getTodos } from "./services/todos";
+import { AddSubTodo, AddTodo, CompleteSubTodo, CompleteTodo, DeleteTodo, getTodos } from "./services/todos";
 
 export interface ITodo {
   id: number;
@@ -26,8 +26,8 @@ export type Context = {
 };
 
 type ACTIONTYPE =
-  | { type: "deleteTodo"; payload: { id: number; parentId: number | null } }
-  | { type: "completeTodo"; payload: { id: number; parentId: number | null } }
+  | { type: "deleteTodo"; payload: { id: number; } }
+  | { type: "completeTodo"; payload: { id: number; completed: boolean} }
   | {
       type: "createTodo";
       payload: { content: string };
@@ -42,7 +42,7 @@ type ACTIONTYPE =
   | { type: "deleteSubTodo"; payload: { id: number } }
   | {
       type: "completeSubTodo";
-      payload: { id: number; parentId: number | null };
+      payload: { id: number; completed: boolean};
     }
   | { type: "FETCHTODOS"; payload: { todos: ITodo[], subTodos: ISubTodo[] } };
 
@@ -65,8 +65,6 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       return {
         ...state,
         refresh : true
-        // todos: state.todos.filter((t) => t.id !== id),
-        // subTodos: state.subTodos.filter((t) => t.parentId !== id),
       };
     }
     case "deleteSubTodo": {
@@ -77,29 +75,22 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       };
     }
     case "completeTodo": {
-      const { id } = action.payload;
-      const todo = state.todos.filter((t) => t.id === id)[0];
-      const completed = !todo.completed;
-      CompleteTodo(id, completed);
+      const { id, completed } = action.payload;
+      const newStatus = !completed;
+      CompleteTodo(id, newStatus);
       
       return {
         ...state,
         refresh: true
-        // todos: state.todos.map((t) =>
-        //   t.id === id ? { ...t, completed: status } : { ...t }
-        // ),
-        // subTodos: state.subTodos.map((t) =>
-        //   t.parentId === id ? { ...t, completed: status } : { ...t }
-        // ),
       };
     }
     case "completeSubTodo": {
-      const { id } = action.payload;
+      const { id, completed } = action.payload;
+      const newStatus = !completed;
+      CompleteSubTodo(id, newStatus);
       return {
         ...state,
-        subTodos: state.subTodos.map((t) =>
-          t.id === id ? { ...t, completed: !t.completed } : { ...t }
-        ),
+        refresh: true
       };
     }
     case "createTodo": {
@@ -111,19 +102,10 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
     }
     case "createSubTodo": {
       const { content, parentId } = action.payload;
-      // const newTodo: ISubTodo = {
-      //   id: state.subTodos.length + 600,
-      //   parentId: parentId,
-      //   parent: state.todos.find((t) => t.id === parentId),
-      //   content: content,
-      //   completed: false,
-      //   date: new Date(Date.now()),
-      // };
       AddSubTodo(content, parentId);
       return {
         ...state,
         refresh: true
-        // subTodos: [...state.subTodos, newTodo],
       };
     }
     case "handleOnDragEnd": {
