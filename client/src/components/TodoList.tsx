@@ -81,6 +81,7 @@ const TodoList: React.FC = () => {
                               date={todo.date}
                               userId={todo.userId}
                               dragHandle={provided.dragHandleProps}
+                              rank= {todo.rank}
                             />
                           </div>
                         )}

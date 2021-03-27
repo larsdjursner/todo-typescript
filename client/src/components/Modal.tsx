@@ -48,6 +48,7 @@ export const Modal: FC<IModal> = ({ id, isShown, hide }) => {
                   content={sub.content}
                   completed={sub.completed}
                   date={sub.date}
+                  rank={sub.rank}
                 />
               ))}
             </ul>

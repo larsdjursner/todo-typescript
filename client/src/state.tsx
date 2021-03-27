@@ -8,6 +8,7 @@ export interface ITodo {
   completed: boolean;
   date: Date;
   userId: string | undefined;
+  rank: number;
 }
 
 export interface ISubTodo {
@@ -17,6 +18,7 @@ export interface ISubTodo {
   date: Date;
   parent: ITodo | undefined;
   parentId: number;
+  rank: number;
 }
 
 export type Context = {
@@ -57,7 +59,17 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
   switch (action.type) {
     case "FETCHTODOS": {
       const { todos, subTodos } = action.payload;
-      return { ...state, todos, subTodos };
+      const sortedTodos = todos.sort((a: ITodo, b: ITodo) => {
+        if(a.rank < b.rank) {
+          return -1;
+        }
+        if(a.rank > b.rank) {
+          return 1;
+        }
+        return 0;
+      });
+
+      return { ...state, todos: sortedTodos, subTodos };
     }
     case "deleteTodo": {
       const { id } = action.payload;
@@ -110,16 +122,23 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
     }
     case "handleOnDragEnd": {
       const { res } = action.payload;
+
       if (!res.destination) return { ...state };
 
+
+      
+      // return {
+      //   ...state,
+      //   todos: reorderTodos(
+      //     state.todos,
+      //     res.source.index,
+      //     res.destination.index
+      //   ),
+      // };
       return {
-        ...state,
-        todos: reorderTodos(
-          state.todos,
-          res.source.index,
-          res.destination.index
-        ),
-      };
+        ...state, 
+        refresh: true
+      }
     }
     case "completeAllTodos": {
       return {
@@ -172,12 +191,7 @@ const completeSubTodos = (todos: ISubTodo[]): ISubTodo[] => {
   return newTodos;
 };
 
-const reorderTodos = (todos: ITodo[], src: number, dest: number): ITodo[] => {
-  const newTodos = [...todos];
-  const [reorderedTodos] = newTodos.splice(src, 1);
-  newTodos.splice(dest, 0, reorderedTodos);
-  return newTodos;
-};
+
 
 export const TodoContext = createContext<{
   state: Context;

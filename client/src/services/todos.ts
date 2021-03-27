@@ -1,3 +1,5 @@
+import { ITodo } from "../state";
+
 export async function getTodos() {
   return await Promise.all([
     fetch("http://localhost:3001/todos").then((data) => data.json()),
@@ -29,6 +31,7 @@ export async function CompleteTodo(id: number, completed: boolean) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ completed }),
+    // body: JSON.parse({ completed })
   })
     .then((response) => response.json())
     .then((data) => {
@@ -101,3 +104,32 @@ export async function DeleteSubTodo(id: number) {
       console.error("Error:", error);
     });
 }
+
+async function ReorderTodo(id: number, newRank: number) {
+  fetch(`http://localhost:3001/todos/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ newRank }),
+    // body: JSON.parse({ completed })
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+
+
+// export const reorderTodos = (todos: ITodo[], src: number, dest: number): ITodo[] => {
+//   const newTodos = [...todos];
+//   const [reorderedTodos] = newTodos.splice(src, 1);
+//   // newTodos.splice(dest, 0, reorderedTodos);
+//   reorderTodos.map(t => ReorderTodo(t.id, ))
+
+
+//   return newTodos;
+// };
