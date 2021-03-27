@@ -69,7 +69,17 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         return 0;
       });
 
-      return { ...state, todos: sortedTodos, subTodos };
+      const sortedSubTodos = subTodos.sort((a: ISubTodo, b: ISubTodo) => {
+        if(a.rank < b.rank) {
+          return -1;
+        }
+        if(a.rank > b.rank) {
+          return 1;
+        }
+        return 0;
+      });
+
+      return { ...state, todos: sortedTodos, subTodos: sortedSubTodos };
     }
     case "deleteTodo": {
       const { id } = action.payload;
