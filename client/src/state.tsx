@@ -1,6 +1,18 @@
 import { createContext, useEffect, useReducer } from "react";
 import { DropResult } from "react-beautiful-dnd";
-import { AddSubTodo, AddTodo, CompleteSubTodo, CompleteTodo, DeleteTodo, getTodos } from "./services/todos";
+import {
+  AddSubTodo,
+  AddTodo,
+  completeAllTodos,
+  CompleteSubTodo,
+  completeSubTodos,
+  CompleteTodo,
+  DeleteTodo,
+  getTodos,
+  reorderTodos,
+  
+} from "./services/todos";
+import { RankSort, SubRankSort } from "./utils/ArraySort";
 
 export interface ITodo {
   id: number;
@@ -28,8 +40,8 @@ export type Context = {
 };
 
 type ACTIONTYPE =
-  | { type: "deleteTodo"; payload: { id: number; } }
-  | { type: "completeTodo"; payload: { id: number; completed: boolean} }
+  | { type: "deleteTodo"; payload: { id: number } }
+  | { type: "completeTodo"; payload: { id: number; completed: boolean } }
   | {
       type: "createTodo";
       payload: { content: string };
@@ -44,40 +56,22 @@ type ACTIONTYPE =
   | { type: "deleteSubTodo"; payload: { id: number } }
   | {
       type: "completeSubTodo";
-      payload: { id: number; completed: boolean};
+      payload: { id: number; completed: boolean };
     }
-  | { type: "FETCHTODOS"; payload: { todos: ITodo[], subTodos: ISubTodo[] } };
+  | { type: "FETCHTODOS"; payload: { todos: ITodo[]; subTodos: ISubTodo[] } };
 
 export const initialState: Context = {
   todos: [],
   subTodos: [],
-  refresh: false
+  refresh: false,
 };
-
 
 export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
   switch (action.type) {
     case "FETCHTODOS": {
       const { todos, subTodos } = action.payload;
-      const sortedTodos = todos.sort((a: ITodo, b: ITodo) => {
-        if(a.rank < b.rank) {
-          return -1;
-        }
-        if(a.rank > b.rank) {
-          return 1;
-        }
-        return 0;
-      });
-
-      const sortedSubTodos = subTodos.sort((a: ISubTodo, b: ISubTodo) => {
-        if(a.rank < b.rank) {
-          return -1;
-        }
-        if(a.rank > b.rank) {
-          return 1;
-        }
-        return 0;
-      });
+      const sortedTodos = RankSort(todos);
+      const sortedSubTodos = SubRankSort(subTodos);
 
       return { ...state, todos: sortedTodos, subTodos: sortedSubTodos };
     }
@@ -86,7 +80,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       DeleteTodo(id);
       return {
         ...state,
-        refresh : true
+        refresh: true,
       };
     }
     case "deleteSubTodo": {
@@ -100,10 +94,10 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       const { id, completed } = action.payload;
       const newStatus = !completed;
       CompleteTodo(id, newStatus);
-      
+
       return {
         ...state,
-        refresh: true
+        refresh: true,
       };
     }
     case "completeSubTodo": {
@@ -112,14 +106,16 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       CompleteSubTodo(id, newStatus);
       return {
         ...state,
-        refresh: true
+        refresh: true,
       };
     }
     case "createTodo": {
       const { content } = action.payload;
       AddTodo(content, 1);
+
       return {
-        ...state, refresh: true
+        ...state,
+        refresh: true, 
       };
     }
     case "createSubTodo": {
@@ -127,28 +123,20 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       AddSubTodo(content, parentId);
       return {
         ...state,
-        refresh: true
+        refresh: true,
       };
     }
     case "handleOnDragEnd": {
       const { res } = action.payload;
-
+      const tds = state.todos;
       if (!res.destination) return { ...state };
 
+      const todos = reorderTodos(tds, res.source.index, res.destination.index);
 
-      
-      // return {
-      //   ...state,
-      //   todos: reorderTodos(
-      //     state.todos,
-      //     res.source.index,
-      //     res.destination.index
-      //   ),
-      // };
       return {
-        ...state, 
-        refresh: true
-      }
+        ...state,
+        todos: todos,
+      };
     }
     case "completeAllTodos": {
       return {
@@ -176,10 +164,12 @@ export const TodoProvider = (props: { children: any }) => {
   const [state, dispatch] = useReducer(TodoReducer, initialState);
 
   useEffect(() => {
-    getTodos()
-      .then((res) => {
-        if(state.refresh) state.refresh = false;
-        dispatch({ type: "FETCHTODOS", payload: { todos: res[0], subTodos:res[1] } });
+    getTodos().then((res) => {
+      if (state.refresh) state.refresh = false;
+      dispatch({
+        type: "FETCHTODOS",
+        payload: { todos: res[0], subTodos: res[1] },
+      });
     });
   }, [state.refresh]);
 
@@ -189,18 +179,6 @@ export const TodoProvider = (props: { children: any }) => {
     </TodoContext.Provider>
   );
 };
-const completeAllTodos = (todos: ITodo[]): ITodo[] => {
-  const newTodos = [...todos];
-  newTodos.map((t) => (t.completed = true));
-  return newTodos;
-};
-
-const completeSubTodos = (todos: ISubTodo[]): ISubTodo[] => {
-  const newTodos = [...todos];
-  newTodos.map((t) => (t.completed = true));
-  return newTodos;
-};
-
 
 
 export const TodoContext = createContext<{

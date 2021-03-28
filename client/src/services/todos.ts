@@ -1,4 +1,4 @@
-import { ITodo } from "../state";
+import { ISubTodo, ITodo } from "../state";
 
 export async function getTodos() {
   return await Promise.all([
@@ -105,14 +105,13 @@ export async function DeleteSubTodo(id: number) {
     });
 }
 
-async function ReorderTodo(id: number, newRank: number) {
+async function ReorderTodo(id: number, rank: number) {
   fetch(`http://localhost:3001/todos/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ newRank }),
-    // body: JSON.parse({ completed })
+    body: JSON.stringify({ rank }),
   })
     .then((response) => response.json())
     .then((data) => {
@@ -124,12 +123,25 @@ async function ReorderTodo(id: number, newRank: number) {
 }
 
 
-// export const reorderTodos = (todos: ITodo[], src: number, dest: number): ITodo[] => {
-//   const newTodos = [...todos];
-//   const [reorderedTodos] = newTodos.splice(src, 1);
-//   // newTodos.splice(dest, 0, reorderedTodos);
-//   reorderTodos.map(t => ReorderTodo(t.id, ))
+export const reorderTodos = (todos: ITodo[], src: number, dest: number): ITodo[] => {
+  const newTodos = [...todos];
+  const [reorderedTodos] = newTodos.splice(src, 1);
+  newTodos.splice(dest, 0, reorderedTodos);
+  let i = 1;
 
+  newTodos.forEach(t => ReorderTodo(t.id, i++))
 
-//   return newTodos;
-// };
+  return newTodos;
+};
+
+export const completeAllTodos = (todos: ITodo[]): ITodo[] => {
+  const newTodos = [...todos];
+  newTodos.map((t) => (t.completed = true));
+  return newTodos;
+};
+
+export const completeSubTodos = (todos: ISubTodo[]): ISubTodo[] => {
+  const newTodos = [...todos];
+  newTodos.map((t) => (t.completed = true));
+  return newTodos;
+};
