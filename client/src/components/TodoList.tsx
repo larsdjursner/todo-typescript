@@ -76,11 +76,12 @@ const TodoList: React.FC = () => {
                             <Todo
                               key={todo.id}
                               id={todo.id}
-                              parentId={todo.parentId}
                               content={todo.content}
                               completed={todo.completed}
                               date={todo.date}
+                              userId={todo.userId}
                               dragHandle={provided.dragHandleProps}
+                              rank= {todo.rank}
                             />
                           </div>
                         )}

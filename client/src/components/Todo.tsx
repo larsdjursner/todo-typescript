@@ -39,7 +39,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
         <p
           className="todo-content"
           onClick={() =>
-            dispatch({ type: "completeTodo", payload: { id: id } })
+            dispatch({ type: "completeTodo", payload: { id: id, completed: completed} })
           }
           style={{
             textDecoration: completed ? "line-through" : "",
@@ -66,14 +66,14 @@ export const Todo: React.FC<ITodoFunctions> = ({
             </div>
         
 
-          <p className="date">{getDate(date)}</p>
+          {/* <p className="date">{getDate(date)}</p> */}
         </div>
       </div>
       <div className="todo-buttons">
         <Modal id={id} isShown={isShown} hide={toggle} />
         <Checkbox   
           onClick={() =>
-            dispatch({ type: "completeTodo", payload: { id: id } })
+            dispatch({ type: "completeTodo", payload: { id: id, completed: completed} })
           }
           checked = { completed ? true : false}
           color="default"
