@@ -31,7 +31,6 @@ export async function CompleteTodo(id: number, completed: boolean) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ completed }),
-    // body: JSON.parse({ completed })
   })
     .then((response) => response.json())
     .then((data) => {
@@ -72,7 +71,6 @@ export async function AddSubTodo(content: string, parentId: number | undefined) 
       console.error("Error:", error);
     });
 }
-
 
 export async function CompleteSubTodo(id: number, completed: boolean) {
   fetch(`http://localhost:3001/subtodos/${id}`, {
@@ -128,20 +126,8 @@ export const reorderTodos = (todos: ITodo[], src: number, dest: number): ITodo[]
   const [reorderedTodos] = newTodos.splice(src, 1);
   newTodos.splice(dest, 0, reorderedTodos);
   let i = 1;
-
+  //hacky solution so far, optimizations are due
   newTodos.forEach(t => ReorderTodo(t.id, i++))
 
-  return newTodos;
-};
-
-export const completeAllTodos = (todos: ITodo[]): ITodo[] => {
-  const newTodos = [...todos];
-  newTodos.map((t) => (t.completed = true));
-  return newTodos;
-};
-
-export const completeSubTodos = (todos: ISubTodo[]): ISubTodo[] => {
-  const newTodos = [...todos];
-  newTodos.map((t) => (t.completed = true));
   return newTodos;
 };

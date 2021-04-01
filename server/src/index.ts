@@ -1,12 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import express from "express";
 import cors from "cors";
-
-
+import { TodoController } from "./controllers/todocontroller";
 
 const prisma = new PrismaClient();
 const app = express();
-
 
 if (!process.env.PORT) {
   process.exit(1);
@@ -16,58 +14,26 @@ const PORT: number = parseInt(process.env.PORT as string, 10);
 
 app.use(express.json());
 app.use(cors());
-
-
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   next();
 }) 
 
+const tc = new TodoController(prisma);
+app.get("/todos", tc.getTodos);
+
 // routes
-//user  
-  app.get("/users", async (req, res) => {
-    const users = await prisma.user.findMany();
-    res.json(users);
-  });
-  
-  app.get("/users/:id", async (req, res) => {
-    const { id } = req.params;
-    const user = await prisma.user.findFirst({
-      where: { id: Number(id) },
-      include: { todos: true },
-    });
-    res.json(user);
-  });
-  
-  app.post("/users", async (req, res) => {
-    const user = await prisma.user.create({
-      data: { ...req.body },
-    });
-    res.json(user);
-  });
-  
-  app.put("/users/:id", async (req, res) => {
-    const { id } = req.params;
-    const user = await prisma.user.update({
-      where: { id: Number(id) },
-      data: { ...req.body },
-    });
-    res.json(user);
-  });
-  
-  app.delete(`/users/:id`, async (req, res) => {
-    const { id } = req.params;
-    const user = await prisma.user.delete({
-      where: { id: Number(id) },
-    });
-    res.json(user);
-  });
-  
+
+
 // todo
-app.get("/todos", async (req, res) => {
-  const todos = await prisma.todo.findMany();
-  res.json(todos);
-});
+// app.get("/todos", async (req, res) => {
+//   // const { userId } = req.body; some sort of userId fetching in the long run
+//   const userId = 1;
+//   const todos = await prisma.todo.findMany({
+//     where: {userId: Number(userId)}
+//   });
+//   res.json(todos);
+// });
 
 app.get("/todos/:id", async (req, res) => {
   const { id } = req.params;
@@ -150,6 +116,48 @@ app.delete(`/subtodos/:id`, async (req, res) => {
   res.json(subTodo);
 });
 
+//user  
+app.get("/users", async (req, res) => {
+  const users = await prisma.user.findMany();
+  res.json(users);
+});
+
+app.get("/users/:id", async (req, res) => {
+  const { id } = req.params;
+  const user = await prisma.user.findFirst({
+    where: { id: Number(id) },
+    include: { todos: true },
+  });
+  res.json(user);
+});
+
+app.post("/users", async (req, res) => {
+  const user = await prisma.user.create({
+    data: { ...req.body },
+  });
+  res.json(user);
+});
+
+app.put("/users/:id", async (req, res) => {
+  const { id } = req.params;
+  const user = await prisma.user.update({
+    where: { id: Number(id) },
+    data: { ...req.body },
+  });
+  res.json(user);
+});
+
+app.delete(`/users/:id`, async (req, res) => {
+  const { id } = req.params;
+  const user = await prisma.user.delete({
+    where: { id: Number(id) },
+  });
+  res.json(user);
+});
+
+
+
 app.listen(PORT, () => {
   console.log("REST API server ready at : http://localhost:3001");
 });
+

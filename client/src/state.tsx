@@ -3,14 +3,12 @@ import { DropResult } from "react-beautiful-dnd";
 import {
   AddSubTodo,
   AddTodo,
-  completeAllTodos,
   CompleteSubTodo,
-  completeSubTodos,
   CompleteTodo,
+  DeleteSubTodo,
   DeleteTodo,
   getTodos,
   reorderTodos,
-  
 } from "./services/todos";
 import { RankSort, SubRankSort } from "./utils/ArraySort";
 
@@ -66,6 +64,8 @@ export const initialState: Context = {
   refresh: false,
 };
 
+const USERID = 1;
+
 export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
   switch (action.type) {
     case "FETCHTODOS": {
@@ -80,14 +80,18 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       DeleteTodo(id);
       return {
         ...state,
-        refresh: true,
+        refresh: true
+        // todos: state.todos.filter( t => t.id !== id),
+        // subTodos: state.subTodos.filter( t => t.parentId !== id) MIGHT NOT REALLY BE NECESSARY
       };
     }
     case "deleteSubTodo": {
       const { id } = action.payload;
+      DeleteSubTodo(id);
       return {
         ...state,
-        subTodos: state.subTodos.filter((t) => t.id !== id),
+        refresh: true
+        // subTodos: state.subTodos.filter((t) => t.id !== id),
       };
     }
     case "completeTodo": {
@@ -111,7 +115,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
     }
     case "createTodo": {
       const { content } = action.payload;
-      AddTodo(content, 1);
+      AddTodo(content, USERID);
 
       return {
         ...state,
@@ -139,17 +143,25 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       };
     }
     case "completeAllTodos": {
+      state.todos.forEach( t => CompleteTodo(t.id, true));
+
       return {
         ...state,
-        todos: completeAllTodos(state.todos),
-        subTodos: completeSubTodos(state.subTodos),
+        refresh: true
+        // todos: completeAllTodos(state.todos),
+        // subTodos: completeSubTodos(state.subTodos),
       };
     }
     case "deleteCompleteTodos": {
+      state.todos
+        .filter(t => t.completed === true)
+        .forEach( t => DeleteTodo(t.id));
+
       return {
         ...state,
-        todos: state.todos.filter((t) => !t.completed),
-        subTodos: state.subTodos.filter((t) => !t.completed),
+        refresh: true
+        // todos: state.todos.filter((t) => !t.completed),
+        // subTodos: state.subTodos.filter((t) => !t.completed),
       };
     }
 
