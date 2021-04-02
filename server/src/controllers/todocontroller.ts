@@ -10,24 +10,23 @@ export class TodoController {
     this.userId = 1;
 
   }
-  getTodos = async (req: Request, res: Response) => {
-    // const { userId } = req.body;
+  // getTodos = async (req: Request, res: Response) :Promise<Todo>=> {
     
-    await this.prisma.todo.findMany({
-      where: { userId: Number(this.userId) },
-    })
-    .then((data) => {
-      res.json(data);
-    })
-    .catch((err) => {
-      res.status(500).json({ error: err.message });
-    })
-    // return res.json(todos);
-  };
+  //   await this.prisma.todo.findMany({
+  //     where: { userId: Number(this.userId) },
+  //   })
+  //   .then((data) => {
+  //     return res.json(data);
+  //   })
+  //   .catch((err) => {
+  //     return res.status(500).json({ error: err.message });
+  //   })
+  //   return res.status(404);
+  // };
 
-  getTodoById = async (req: Request, res: Response) => {
+  // getTodoById = async (req: Request, res: Response) => {
       
-  };
+  // };
 
   // app.get("/todos/:id", async (req, res) => {
   //     const { id } = req.params;
