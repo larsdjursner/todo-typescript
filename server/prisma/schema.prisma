@@ -21,7 +21,7 @@ model User {
 model Todo {
   id        Int       @default(autoincrement()) @id
   content   String
-  completed Boolean
+  completed Boolean?  @default(false)
   date      DateTime  @default(now())
   subtodos  SubTodo[]
   user      User      @relation(fields: [userId], references: [id])
@@ -34,7 +34,7 @@ model SubTodo {
   parent    Todo    @relation(fields: [parentId], references: [id])
   parentId  Int     
   content   String
-  completed Boolean
+  completed Boolean?  @default(false)
   date      DateTime  @default(now())
   rank      Int   @default(autoincrement())
 }
