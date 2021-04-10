@@ -44,8 +44,8 @@ export class TodoService {
   }): Promise<Todo> {
     const { data, where } = params;
     return this.prisma.todo.update({
-      data,
       where,
+      data,
     });
   }
 

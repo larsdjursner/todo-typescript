@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { TodoForm } from "./TodoForm";
-// import "../App.css";
 import { Todo } from "./Todo";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { IconButton } from "@material-ui/core";

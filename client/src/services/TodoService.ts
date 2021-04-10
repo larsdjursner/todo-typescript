@@ -79,9 +79,8 @@ export const reorderTodos = (todos: ITodo[], src: number, dest: number): ITodo[]
   const newTodos = [...todos];
   const [reorderedTodos] = newTodos.splice(src, 1);
   newTodos.splice(dest, 0, reorderedTodos);
-  let i = 1;
-  //hacky solution so far, optimizations are due
-  newTodos.forEach(t => ReorderTodo(t.id, i++))
+
+  newTodos.forEach((t, index) => ReorderTodo(t.id, index))
 
   return newTodos;
 };
