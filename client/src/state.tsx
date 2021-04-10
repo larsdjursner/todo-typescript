@@ -40,15 +40,24 @@ export type Context = {
 };
 
 type ACTIONTYPE =
-  | { type: "deleteTodo"; payload: { id: number }; }
-  | { type: "completeTodo"; payload: { id: number; completed: boolean }; }
-  | { type: "createTodo"; payload: { content: string }; }
-  | { type: "createSubTodo"; payload: { content: string; parentId: number }; }
+  | { type: "deleteTodo"; payload: { id: number } }
+  | { type: "completeTodo"; payload: { id: number; completed: boolean } }
+  | {
+      type: "createTodo";
+      payload: { content: string };
+    }
+  | {
+      type: "createSubTodo";
+      payload: { content: string; parentId: number };
+    }
   | { type: "completeAllTodos" }
   | { type: "handleOnDragEnd"; payload: { res: DropResult } }
   | { type: "deleteCompleteTodos" }
   | { type: "deleteSubTodo"; payload: { id: number } }
-  | { type: "completeSubTodo"; payload: { id: number; completed: boolean }; }
+  | {
+      type: "completeSubTodo";
+      payload: { id: number; completed: boolean };
+    }
   | { type: "FETCHTODOS"; payload: { todos: ITodo[]; subTodos: ISubTodo[] } };
 
 export const initialState: Context = {
@@ -74,6 +83,8 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       return {
         ...state,
         refresh: true,
+        // todos: state.todos.filter( t => t.id !== id),
+        // subTodos: state.subTodos.filter( t => t.parentId !== id) MIGHT NOT REALLY BE NECESSARY
       };
     }
     case "deleteSubTodo": {
@@ -82,15 +93,13 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       return {
         ...state,
         refresh: true,
+        // subTodos: state.subTodos.filter((t) => t.id !== id),
       };
     }
     case "completeTodo": {
       const { id, completed } = action.payload;
       const newStatus = !completed;
       CompleteTodo(id, newStatus);
-
-      const subTodos = state.subTodos.filter(st => st.parentId == id);
-      subTodos.forEach(st => CompleteSubTodo(st.id, newStatus));
 
       return {
         ...state,
@@ -101,7 +110,6 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       const { id, completed } = action.payload;
       const newStatus = !completed;
       CompleteSubTodo(id, newStatus);
-
       return {
         ...state,
         refresh: true,
@@ -138,7 +146,6 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
     }
     case "completeAllTodos": {
       state.todos.forEach((t) => CompleteTodo(t.id, true));
-      // state.subTodos.forEach(st => CompleteSubTodo(st.id, true));     //cascade
 
       return {
         ...state,

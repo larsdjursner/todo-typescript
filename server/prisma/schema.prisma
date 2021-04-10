@@ -15,8 +15,6 @@ model User {
   id    Int     @default(autoincrement()) @id
   email String  @unique
   name  String
-
-  //relations
   todos Todo[]
 }
 
@@ -25,22 +23,18 @@ model Todo {
   content   String
   completed Boolean?  @default(false)
   date      DateTime  @default(now())
-  rank      Int   @default(autoincrement())
-
-  //relations
   subtodos  SubTodo[]
-  user      User?      @relation(fields: [userId], references: [id])
-  userId    Int?
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int
+  rank      Int   @default(autoincrement())
 }
 
 model SubTodo {
   id        Int     @default(autoincrement()) @id
+  parent    Todo    @relation(fields: [parentId], references: [id])
+  parentId  Int     
   content   String
   completed Boolean?  @default(false)
   date      DateTime  @default(now())
   rank      Int   @default(autoincrement())
-
-  //relations
-  parent    Todo?    @relation(fields: [parentId], references: [id])
-  parentId  Int?    
 }

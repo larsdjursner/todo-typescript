@@ -42,10 +42,11 @@ import {
     }
 
     @Put('todos/:id')
-    async updateTodo(@Param('id') id: string, @Body() todoData: TodoModel): Promise<TodoModel> {
+    async updateTodo(@Param('id') id: string, @Body() todoData: {completed: boolean}): Promise<TodoModel> {
+        const {completed} = todoData;
         return this.todoService.updateTodo({
         where: { id: Number(id) },
-        data: todoData
+        data: { completed: completed }
       });
     }
   
