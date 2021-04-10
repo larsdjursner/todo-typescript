@@ -71,7 +71,6 @@ export async function AddSubTodo(content: string, parentId: number | undefined) 
       console.error("Error:", error);
     });
 }
-<<<<<<< HEAD:client/src/services/todos.ts
 
 export async function CompleteSubTodo(id: number, completed: boolean) {
   fetch(`http://localhost:3001/subtodos/${id}`, {
@@ -90,26 +89,6 @@ export async function CompleteSubTodo(id: number, completed: boolean) {
     });
 }
 
-=======
-
-export async function CompleteSubTodo(id: number, completed: boolean) {
-  fetch(`http://localhost:3001/subtodos/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ completed }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-}
-
->>>>>>> parent of dd16246 (services, controllers outcommented):client/src/services/TodoService.ts
 export async function DeleteSubTodo(id: number) {
   fetch(`http://localhost:3001/subtodos/${id}`, {
     method: "DELETE",

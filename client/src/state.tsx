@@ -72,11 +72,8 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       return {
         ...state,
 <<<<<<< HEAD
-<<<<<<< HEAD
         refresh: true,
 =======
-=======
->>>>>>> parent of dd16246 (services, controllers outcommented)
         refresh: true
         // todos: state.todos.filter( t => t.id !== id),
         // subTodos: state.subTodos.filter( t => t.parentId !== id) MIGHT NOT REALLY BE NECESSARY
@@ -89,11 +86,8 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       return {
         ...state,
 <<<<<<< HEAD
-<<<<<<< HEAD
         refresh: true,
 =======
-=======
->>>>>>> parent of dd16246 (services, controllers outcommented)
         refresh: true
         // subTodos: state.subTodos.filter((t) => t.id !== id),
 >>>>>>> parent of dd16246 (services, controllers outcommented)
@@ -153,12 +147,8 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
     }
     case "completeAllTodos": {
 <<<<<<< HEAD
-<<<<<<< HEAD
       state.todos.forEach((t) => CompleteTodo(t.id, true));
       // state.subTodos.forEach(st => CompleteSubTodo(st.id, true));     //cascade
-=======
-      state.todos.forEach( t => CompleteTodo(t.id, true));
->>>>>>> parent of dd16246 (services, controllers outcommented)
 =======
       state.todos.forEach( t => CompleteTodo(t.id, true));
 >>>>>>> parent of dd16246 (services, controllers outcommented)
