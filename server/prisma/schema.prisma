@@ -12,9 +12,10 @@ generator client {
 
 
 model User {
-  id    Int     @default(autoincrement()) @id
-  email String  @unique
-  name  String
+  id        Int     @default(autoincrement()) @id
+  email     String  @unique
+  name      String
+  password  String
   todos Todo[]
 }
 
@@ -24,15 +25,15 @@ model Todo {
   completed Boolean
   date      DateTime  @default(now())
   subtodos  SubTodo[]
-  user      User      @relation(fields: [userId], references: [id])
-  userId    Int
+  user      User?      @relation(fields: [userId], references: [id])
+  userId    Int?
   rank      Int   @default(autoincrement())
 }
 
 model SubTodo {
   id        Int     @default(autoincrement()) @id
-  parent    Todo    @relation(fields: [parentId], references: [id])
-  parentId  Int     
+  parent    Todo?    @relation(fields: [parentId], references: [id])
+  parentId  Int?     
   content   String
   completed Boolean
   date      DateTime  @default(now())

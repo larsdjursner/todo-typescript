@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import express from "express";
 import cors from "cors";
-import { TodoController } from "./controllers/todocontroller";
+import { TodoController } from "./controllers/todo.controller";
 
 const prisma = new PrismaClient();
 const app = express();
@@ -19,21 +19,21 @@ app.use((req, res, next) => {
   next();
 }) 
 
-const tc = new TodoController(prisma);
-app.get("/todos", tc.getTodos);
+const todoController = new TodoController();
+// app.get("/todos", tc.getTodos);
 
 // routes
 
 
 // todo
-// app.get("/todos", async (req, res) => {
-//   // const { userId } = req.body; some sort of userId fetching in the long run
-//   const userId = 1;
-//   const todos = await prisma.todo.findMany({
-//     where: {userId: Number(userId)}
-//   });
-//   res.json(todos);
-// });
+app.get("/todos", async (req, res) => {
+  // const { userId } = req.body; some sort of userId fetching in the long run
+  const userId = 1;
+  const todos = await prisma.todo.findMany({
+    where: {userId: Number(userId)}
+  });
+  res.json(todos);
+});
 
 app.get("/todos/:id", async (req, res) => {
   const { id } = req.params;
