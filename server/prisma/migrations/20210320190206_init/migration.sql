@@ -11,10 +11,9 @@ CREATE TABLE "User" (
 CREATE TABLE "Todo" (
     "id" SERIAL NOT NULL,
     "content" TEXT NOT NULL,
-    "completed" BOOLEAN DEFAULT false,
+    "completed" BOOLEAN NOT NULL,
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" INTEGER NOT NULL,
-    "rank" SERIAL NOT NULL,
 
     PRIMARY KEY ("id")
 );
@@ -24,9 +23,8 @@ CREATE TABLE "SubTodo" (
     "id" SERIAL NOT NULL,
     "parentId" INTEGER NOT NULL,
     "content" TEXT NOT NULL,
-    "completed" BOOLEAN DEFAULT false,
+    "completed" BOOLEAN NOT NULL,
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "rank" SERIAL NOT NULL,
 
     PRIMARY KEY ("id")
 );
