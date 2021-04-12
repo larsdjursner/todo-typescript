@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import express from "express";
 import cors from "cors";
-import router from "./routes/jwtAuth";
+import authRoute from "./routes/jwtAuthRoute";
 import auth from "./middleware/auth";
 
 const prisma = new PrismaClient();
@@ -23,13 +23,14 @@ app.use((req, res, next) => {
 
 //ROUTES
 
-//register an login
-app.use("/auth", router)
+//register and login
+app.use("/auth", authRoute)
 
 // todo
+
+// app.use("/todo", auth,)
 app.get("/todos", auth, async (req, res) => {
   const user = req.body.user;
-  // console.log(req.body.user);
 
   const todos = await prisma.todo.findMany({
     where: {userId: Number(user.id)}
@@ -37,18 +38,22 @@ app.get("/todos", auth, async (req, res) => {
   res.status(200).json(todos);
 });
 
-app.get("/todos/:id", async (req, res) => {
+app.get("/todos/:id", auth, async (req, res) => {
   const { id } = req.params;
+  const user = req.body.user;
+
   const todo = await prisma.todo.findFirst({
-    where: { id: Number(id) },
+    where: { id: Number(id), user: user},
     include: { subtodos: true },
   });
   res.status(200).json(todo);
 });
 
-app.post("/todos", async (req, res) => {
+app.post("/todos", auth, async (req, res) => {
+  const user = req.body.user;
+
   const todo = await prisma.todo.create({
-    data: { ...req.body, completed: false},
+    data: { ...req.body, user: user, completed: false},
   });
   res.status(200).json(todo);
 });
@@ -118,7 +123,7 @@ app.delete(`/subtodos/:id`, async (req, res) => {
   res.status(200).json(subTodo);
 });
 
-//user  
+//user  needs to be inaccesible
 app.get("/users", async (req, res) => {
   const users = await prisma.user.findMany();
   res.status(200).json(users);
@@ -132,20 +137,6 @@ app.get("/users/:id", async (req, res) => {
   });
   res.status(200).json(user);
 });
-
-// app.post("/users", async (req, res) => {
-//   const {email} = req.body;
-
-//   if( await prisma.user.findFirst({where: {email: email}})) {
-//     res.status(401).json("Email already in use");
-//     return;
-//   }
-
-//   const user = await prisma.user.create({
-//     data: { ...req.body },
-//   });
-//   res.status(200).json(user);
-// });
 
 app.put("/users/:id", async (req, res) => {
   const { id } = req.params;

@@ -11,7 +11,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   try {
     const verify = jwt.verify(jwtToken, process.env.JWTSECRET as string);
 
-    const { user } = verify as IVerify;
+    const { user } = verify as IUserToken;
 
     req.body.user = user;
     console.log(req.body.user);
@@ -24,10 +24,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 };
 
 
-
-
-
-interface IVerify {
+interface IUserToken {
     user: {
         id: number
     },
