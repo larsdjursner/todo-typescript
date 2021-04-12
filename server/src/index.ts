@@ -76,9 +76,9 @@ app.put("/todos/:id", async (req, res) => {
 
 app.delete(`/todos/:id`, async (req, res) => {
   const { id } = req.params;
-  await prisma.subTodo.deleteMany({
-    where: {parentId: Number(id)}
-  });
+  // await prisma.subTodo.deleteMany({
+  //   where: {parentId: Number(id)}
+  // });
   const todo = await prisma.todo.delete({
     where: { id: Number(id) },
   });

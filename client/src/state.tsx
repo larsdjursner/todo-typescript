@@ -69,11 +69,16 @@ const USERID = 1;
 export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
   switch (action.type) {
     case "FETCHTODOS": {
-      const { todos, subTodos } = action.payload;
-      const sortedTodos = RankSort(todos);
-      const sortedSubTodos = SubRankSort(subTodos);
+      // const { todos, subTodos } = action.payload;
+      // const sortedTodos = RankSort(todos);
+      // const sortedSubTodos = SubRankSort(subTodos);
+      const todos : ITodo[] = []
+      const subTodos : ISubTodo[] = []
 
-      return { ...state, todos: sortedTodos, subTodos: sortedSubTodos };
+      //todos and subtodos wont return proper arrays until auth has been fixed for client
+
+      // return { ...state, todos: sortedTodos, subTodos: sortedSubTodos };
+      return { ...state, todos, subTodos};
     }
     case "deleteTodo": {
       const { id } = action.payload;
