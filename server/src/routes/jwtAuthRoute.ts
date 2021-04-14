@@ -9,8 +9,8 @@ import auth from "../middleware/auth";
 const router = express.Router();
 const prisma = new PrismaClient();
 
-//registration
-router.post("/register", validInfo, async (req: Request, res: Response) => {
+//signup
+router.post("/signup", validInfo, async (req: Request, res: Response) => {
   try {
     //1. unfold req.body
     const { email, password, name } = req.body;
@@ -43,8 +43,8 @@ router.post("/register", validInfo, async (req: Request, res: Response) => {
   }
 });
 
-//login
-router.post("/login", validInfo, async (req, res) => {
+//signin
+router.post("/signin", validInfo, async (req, res) => {
   try {
     //1. unfold req.body
     const { email, password } = req.body;

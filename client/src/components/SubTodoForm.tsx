@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { FC, FormEvent, useContext, useState } from "react";
 import Button from "@material-ui/core/Button";
 import { IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
@@ -8,12 +8,12 @@ interface ISubTodoForm {
     parentId: number;
 }
 
-export const SubTodoForm: React.FC<ISubTodoForm> = ({parentId}) => {
+export const SubTodoForm: FC<ISubTodoForm> = ({parentId}) => {
   const [value, setValue] = useState("");
   const [showForm, setShowForm] = useState(false);
   const { state, dispatch } = useContext(TodoContext);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!value) return;
 

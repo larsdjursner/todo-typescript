@@ -1,3 +1,4 @@
+import { Button } from "@material-ui/core";
 import React, { useContext } from "react";
 import { TodoContext } from "../state";
 import { getFullDate } from "../utils/dateFunctions";
@@ -25,6 +26,9 @@ const Nav: React.FC = () => {
 
   return (
     <div className="Nav">
+
+      <Button onClick={() => dispatch({ type: "setAuth", payload: { auth: false } })}>Log out</Button>
+      
       <p> User Userson </p>
 
       <p> {countComplete()}</p>

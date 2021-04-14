@@ -1,45 +1,60 @@
-import React, { Fragment } from "react";
+import React, { useContext } from "react";
 import "./styles/App.css";
 import Nav from "./components/Nav";
 import TodoList from "./components/TodoList";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import { TodoProvider } from "./state";
+import SignIn from "./components/Login";
+import SignUp from "./components/SignUp";
+import { TodoContext } from "./state";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
-  RouteComponentProps,
 } from "react-router-dom";
 
 const App: React.FC = () => {
-  return (
-    <TodoProvider>
-      <Router>
-        <div className="container">
-          <Switch>
-            <Route
-              exact
-              path="/login"
-              render={(props) => <Login {...props} />}
-            />
-            <Route
-              exact
-              path="/register"
-              render={(props) => <Register {...props} />}
-            />
-            <Route path="/">
-              <div className="app">
-                <Nav />
-                <TodoList />
-              </div>
-            </Route>
+  const { state, dispatch } = useContext(TodoContext);
+  const { isAuthenticated } = state;
 
-          </Switch>
-        </div>
-      </Router>
-    </TodoProvider>
+  return (
+    <Router>
+      <div className="container">
+        <Switch>
+          <Route
+            exact
+            path="/signin"
+            render={(props) =>
+              !isAuthenticated ? <SignIn {...props} /> : <Redirect to="/" />
+            }
+          />
+          <Route
+            exact
+            path="/signup"
+            render={(props) =>
+              !isAuthenticated ? (
+                <SignUp {...props} />
+              ) : (
+                <Redirect to="/signin" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/"
+            render={(props) =>
+              isAuthenticated ? (
+                <div className="app">
+                  <Nav />
+                  <TodoList />
+                </div>
+              ) : (
+                <Redirect to="/signin" />
+              )
+            }
+          ></Route>
+        </Switch>
+      </div>
+    </Router>
   );
 };
 
