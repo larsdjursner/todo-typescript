@@ -41,7 +41,7 @@ const App: React.FC = () => {
           <Route
             exact
             path="/"
-            render={(props) =>
+            render={() =>
               isAuthenticated ? (
                 <div className="app">
                   <Nav />

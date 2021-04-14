@@ -57,12 +57,16 @@ const SignIn: FC<RouteComponentProps> = () => {
     if (!input.email || !input.password) {
       return;
     }
-    const token = await SignInAPI(input.email, input.password);
+    const {token, newUser} = await SignInAPI(input.email, input.password);
+    
     if (token) {
-      dispatch({ type: "setAuth", payload: { auth: true } });
+      localStorage.setItem("token", token);
+      await dispatch({ type: "setUser", payload: { user: newUser } });
+      await dispatch({ type: "setAuth", payload: { auth: true } });
       console.log("authenticated");
       return;
     }
+
     console.log("something went wrong")
  
   };

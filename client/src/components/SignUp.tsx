@@ -59,18 +59,18 @@ const SignUp: FC<RouteComponentProps> = () => {
     if (!input.name || !input.email || !input.password) {
       return;
     }
-    const token = await SignUpAPI(input.name, input.email, input.password);
+    const {token, newUser} = await SignUpAPI(input.name, input.email, input.password);
 
     if (token) {
-      dispatch({ type: "setAuth", payload: { auth: true } });
+      localStorage.setItem("token", token);
+      await dispatch({ type: "setUser", payload: { user: newUser } });
+      await dispatch({ type: "setAuth", payload: { auth: true } });
       console.log("authenticated");
       return;
     }
+
     console.log("something went wrong");
 
-    // token
-    //   .then(() => dispatch({ type: "setAuth", payload: { auth: true } }))
-    //   .catch((err: { message: any; }) => console.log(err.message));
   };
   return (
     <Container component="main" maxWidth="xs">

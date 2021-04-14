@@ -14,9 +14,7 @@ export async function SignUpAPI(name: string, email: string, password: string) {
       body: JSON.stringify({ name, email, password }),
     });
 
-    const res = await req.json();
-    localStorage.setItem("token", res.token);
-    return res.token;
+    return await req.json();
   } catch (error) {
     console.error("Error:", error);
   }
@@ -33,41 +31,52 @@ export async function SignInAPI(email: string, password: string) {
     });
 
     const res = await req.json();
-    localStorage.setItem("token", res.token);
-    return res.token;
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
-
-export const getName = async () => {
-  try {
-    const req = await fetch(`${APIRoute}/users/`, {
-      method: "POST",
-      headers: { token: localStorage.token },
-    });
-
-    const res = await req.json();
     return res;
   } catch (error) {
     console.error("Error:", error);
   }
+}
 
-};
+// export const getName = async () => {
+//   try {
+//     const req = await fetch(`${APIRoute}/users/`, {
+//       method: "POST",
+//       headers: { token: localStorage.token },
+//     });
+
+//     const res = await req.json();
+//     return res;
+//   } catch (error) {
+//     console.error("Error:", error);
+//   }
+
+// };
 
 //todos
 export async function getTodos() {
   return await Promise.all([
-    fetch(`${APIRoute}/todos`).then((data) => data.json()),
-    fetch(`${APIRoute}/subtodos`).then((data) => data.json()),
+    fetch(`${APIRoute}/todos`, {
+      method: "GET",
+      headers: {
+        token: localStorage.token,
+      },
+    }).then((data) => data.json())
+    // ,
+    // fetch(`${APIRoute}/subtodos`, {
+    //   method: "GET",
+    //   headers: {
+    //     token: localStorage.token,
+    //   },
+    // }).then((data) => data.json())
   ]);
 }
 
-export async function AddTodo(content: string, userId: number | undefined) {
+export async function AddTodo(content: string, userId: number) {
   fetch(`${APIRoute}/todos`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      token: localStorage.token,
     },
     body: JSON.stringify({ content, userId }),
   })

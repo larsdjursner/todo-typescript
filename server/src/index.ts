@@ -29,35 +29,35 @@ app.use("/auth", authRoute);
 
 // app.use("/todo", auth,)
 app.get("/todos", auth, async (req, res) => {
-  const user = req.body.user;
-
+  const { userId } = req.body;
+  console.log("hit server")
   const todos = await prisma.todo.findMany({
-    where: { userId: Number(user.id) },
+    where: { userId: Number(userId) },
   });
   res.status(200).json(todos);
 });
 
 app.get("/todos/:id", auth, async (req, res) => {
   const { id } = req.params;
-  const user = req.body.user;
+  const { userId } = req.body;
 
   const todo = await prisma.todo.findFirst({
-    where: { id: Number(id), user: user },
+    where: { id: Number(id), userId: userId },
     include: { subtodos: true },
   });
   res.status(200).json(todo);
 });
 
 app.post("/todos", auth, async (req, res) => {
-  const user = req.body.user;
+  const { content, userId } = req.body;
 
   const todo = await prisma.todo.create({
-    data: { ...req.body, user: user, completed: false },
+    data: { content: content, userId: userId, completed: false },
   });
   res.status(200).json(todo);
 });
 
-app.put("/todos/:id", async (req, res) => {
+app.put("/todos/:id", auth, async (req, res) => {
   const { id } = req.params;
 
   await prisma.subTodo.updateMany({
@@ -73,11 +73,9 @@ app.put("/todos/:id", async (req, res) => {
   res.status(200).json(todo);
 });
 
-app.delete(`/todos/:id`, async (req, res) => {
+app.delete(`/todos/:id`, auth, async (req, res) => {
   const { id } = req.params;
-  // await prisma.subTodo.deleteMany({
-  //   where: {parentId: Number(id)}
-  // });
+
   const todo = await prisma.todo.delete({
     where: { id: Number(id) },
   });
@@ -85,12 +83,12 @@ app.delete(`/todos/:id`, async (req, res) => {
 });
 
 // subtodo
-app.get("/subtodos", async (req, res) => {
+app.get("/subtodos", auth, async (req, res) => {
   const subTodos = await prisma.subTodo.findMany();
   res.status(200).json(subTodos);
 });
 
-app.get("/subtodos/:id", async (req, res) => {
+app.get("/subtodos/:id", auth, async (req, res) => {
   const { id } = req.params;
   const subTodo = await prisma.subTodo.findFirst({
     where: { id: Number(id) },
@@ -98,14 +96,14 @@ app.get("/subtodos/:id", async (req, res) => {
   res.status(200).json(subTodo);
 });
 
-app.post("/subtodos", async (req, res) => {
+app.post("/subtodos", auth, async (req, res) => {
   const subTodo = await prisma.subTodo.create({
     data: { ...req.body, completed: false },
   });
   res.status(200).json(subTodo);
 });
 
-app.put("/subtodos/:id", async (req, res) => {
+app.put("/subtodos/:id", auth, async (req, res) => {
   const { id } = req.params;
   const subTodo = await prisma.subTodo.update({
     where: { id: Number(id) },
@@ -114,7 +112,7 @@ app.put("/subtodos/:id", async (req, res) => {
   res.status(200).json(subTodo);
 });
 
-app.delete(`/subtodos/:id`, async (req, res) => {
+app.delete(`/subtodos/:id`, auth, async (req, res) => {
   const { id } = req.params;
   const subTodo = await prisma.subTodo.delete({
     where: { id: Number(id) },
@@ -122,11 +120,11 @@ app.delete(`/subtodos/:id`, async (req, res) => {
   res.status(200).json(subTodo);
 });
 
-//user  needs to be inaccesible
-// app.get("/users", async (req, res) => {
-//   const users = await prisma.user.findMany();
-//   res.status(200).json(users);
-// });
+//ADMIN ONLY ROUTES eventually
+app.get("/users", auth, async (req, res) => {
+  const users = await prisma.user.findMany();
+  res.status(200).json(users);
+});
 
 app.post("/users", auth, async (req, res) => {
   const { id } = req.body.user;
@@ -144,7 +142,7 @@ app.post("/users", auth, async (req, res) => {
   res.status(200).json(user);
 });
 
-app.put("/users/:id", async (req, res) => {
+app.put("/users/:id", auth, async (req, res) => {
   const { id } = req.params;
   const user = await prisma.user.update({
     where: { id: Number(id) },
@@ -153,7 +151,7 @@ app.put("/users/:id", async (req, res) => {
   res.status(200).json(user);
 });
 
-app.delete(`/users/:id`, async (req, res) => {
+app.delete(`/users/:id`, auth, async (req, res) => {
   const { id } = req.params;
   const user = await prisma.user.delete({
     where: { id: Number(id) },

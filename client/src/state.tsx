@@ -38,7 +38,7 @@ export interface IUser {
   name: string;
 }
 
-export type Context = {
+export interface Context  {
   user: IUser;
   isAuthenticated: boolean;
   todos: ITodo[];
@@ -48,6 +48,7 @@ export type Context = {
 
 type ACTIONTYPE =
   | { type: "setAuth"; payload: { auth: boolean } }
+  | { type: "setUser"; payload: { user: IUser } }
   | { type: "deleteTodo"; payload: { id: number } }
   | { type: "completeTodo"; payload: { id: number; completed: boolean } }
   | {
@@ -76,21 +77,25 @@ export const initialState: Context = {
   refresh: false,
 };
 
-const USERID = 1;
 // const SETAUTH = "setAuth";
 
 export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
+
   switch (action.type) {
+    case "setUser": {
+      const { user } = action.payload;
+      return {...state, user: user}
+    }
     case "setAuth": {
       const { auth } = action.payload;
-      return { ...state, isAuthenticated: auth };
+      return { ...state, isAuthenticated: auth, refresh: true};
     }
     case "fetchTodos": {
-      // const { todos, subTodos } = action.payload;
+      const { todos, subTodos } = action.payload;
       // const sortedTodos = RankSort(todos);
       // const sortedSubTodos = SubRankSort(subTodos);
-      const todos: ITodo[] = [];
-      const subTodos: ISubTodo[] = [];
+      // const todos: ITodo[] = [];
+      // const subTodos: ISubTodo[] = [];
 
       //todos and subtodos wont return proper arrays until auth has been fixed for client
 
@@ -134,7 +139,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
     }
     case "createTodo": {
       const { content } = action.payload;
-      AddTodo(content, USERID);
+      AddTodo(content, state.user.id);
 
       return {
         ...state,
@@ -167,8 +172,6 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       return {
         ...state,
         refresh: true,
-        // todos: completeAllTodos(state.todos),
-        // subTodos: completeSubTodos(state.subTodos),
       };
     }
     case "deleteCompleteTodos": {
@@ -179,8 +182,6 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       return {
         ...state,
         refresh: true,
-        // todos: state.todos.filter((t) => !t.completed),
-        // subTodos: state.subTodos.filter((t) => !t.completed),
       };
     }
 
@@ -194,15 +195,15 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
 export const TodoProvider = (props: { children: any }) => {
   const [state, dispatch] = useReducer(TodoReducer, initialState);
 
-  // useEffect(() => {
-  //   getTodos().then((res) => {
-  //     if (state.refresh) state.refresh = false;
-  //     dispatch({
-  //       type: "fetchTodos",
-  //       payload: { todos: res[0], subTodos: res[1] },
-  //     });
-  //   });
-  // }, [state.refresh]);
+  useEffect(() => {
+    getTodos().then((res) => {
+      // if (state.refresh) state.refresh = false;
+      dispatch({
+        type: "fetchTodos",
+        payload: { todos: res[0], subTodos: res[1] },
+      });
+    });
+  }, [state.refresh]);
 
   return (
     <TodoContext.Provider value={{ state, dispatch }}>

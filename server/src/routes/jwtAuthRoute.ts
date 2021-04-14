@@ -26,7 +26,7 @@ router.post("/signup", validInfo, async (req: Request, res: Response) => {
     const encryptPass = await hash(password, salt);
 
     //4. enter new user inside DB
-    const newUser = await prisma.user.create({
+    await prisma.user.create({
       data: {
         email: email,
         name: name,
@@ -34,9 +34,20 @@ router.post("/signup", validInfo, async (req: Request, res: Response) => {
       },
     });
 
+    // create user to respond
+    const newUser  = await prisma.user.findFirst({
+      where: { email: email },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        todos: true,
+      },
+    });
+  
     //5. generate jwt
-    const token = jwtGenerate(newUser.id);
-    return res.status(200).json({ token });
+    const token = jwtGenerate(newUser!.id);
+    return res.status(200).json({ newUser, token });
   } catch (err) {
     console.error(err.message);
     return res.status(500).json("Server Error");
@@ -61,10 +72,21 @@ router.post("/signin", validInfo, async (req, res) => {
       return res.status(404).json("Password or Email is incorrect");
     }
 
-    //4. pass jwt
-    const token = jwtGenerate(user.id);
+    // create user to respond
+    const newUser = await prisma.user.findFirst({
+      where: { email: email },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        todos: true,
+      },
+    });
 
-    return res.status(200).json({ token });
+    //4. pass jwt
+    const token = jwtGenerate(newUser!.id);
+    return res.status(200).json({ newUser, token});
+
   } catch (err) {
     console.error(err.message);
     res.status(500).json("Server Error");
