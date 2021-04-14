@@ -1,12 +1,13 @@
 import { Button } from "@material-ui/core";
-import React, { useContext } from "react";
-import { TodoContext } from "../state";
+import React, { useContext, useEffect, useState } from "react";
+import { getName } from "../services/todos";
+import { IUser, TodoContext } from "../state";
 import { getFullDate } from "../utils/dateFunctions";
 
 const Nav: React.FC = () => {
-  const {state, dispatch} = useContext(TodoContext);
+  const { state, dispatch } = useContext(TodoContext);
   const { todos } = state;
-  
+
   const countComplete = () => {
     const count = todos.filter((t) => t.completed).length;
     return todos.length > 0
@@ -16,20 +17,29 @@ const Nav: React.FC = () => {
 
   const countOldTodos = () => {
     const today = new Date(Date.now());
-    const count = todos
-      .filter((t) => !t.completed)
+    const count =
       // .filter((t) => getFullDate(t.date) !== getFullDate(today))
-      .length;
+      todos.filter((t) => !t.completed).length;
 
     return count > 0 ? count + " overdue todos" : "";
   };
 
+  const [user, setUser] = useState({} as IUser);
+
+  const GetUserProfile = async () => {
+    useEffect(() => {
+      getName().then((res) => {setUser(res)});
+    }, []);
+  };
+
+  GetUserProfile();
+  console.log(user);
+
   return (
     <div className="Nav">
+      {/* <Button onClick={() => dispatch({ type: "setAuth", payload: { auth: false } })}>Log out</Button> */}
 
-      <Button onClick={() => dispatch({ type: "setAuth", payload: { auth: false } })}>Log out</Button>
-      
-      <p> User Userson </p>
+      <p> {user!.name} </p>
 
       <p> {countComplete()}</p>
 

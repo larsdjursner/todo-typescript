@@ -10,13 +10,12 @@ import {
 } from "@material-ui/core";
 import React, { ChangeEvent, FC, FormEvent, useContext, useState } from "react";
 import { RouteComponentProps } from "react-router";
-import { SignUpAPI } from "../services/todos";
 import { TodoContext } from "../state";
 import { LockOutlined } from "@material-ui/icons";
+import { SignInAPI } from "../services/todos";
 import { Link } from "react-router-dom";
 
-// template from https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-up
-
+// template from https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-in/SignIn.js
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -30,23 +29,22 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
 }));
 
-const SignUp: FC<RouteComponentProps> = () => {
+const SignIn: FC<RouteComponentProps> = () => {
   const { state, dispatch } = useContext(TodoContext);
   const classes = useStyles();
 
   const [input, setInput] = useState({
-    name: "",
     email: "",
     password: "",
   });
-  // const { name, email, password } = input;
+  // const { email, password } = input;
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -56,21 +54,17 @@ const SignUp: FC<RouteComponentProps> = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!input.name || !input.email || !input.password) {
+    if (!input.email || !input.password) {
       return;
     }
-    const token = await SignUpAPI(input.name, input.email, input.password);
-
+    const token = await SignInAPI(input.email, input.password);
     if (token) {
       dispatch({ type: "setAuth", payload: { auth: true } });
       console.log("authenticated");
       return;
     }
-    console.log("something went wrong");
-
-    // token
-    //   .then(() => dispatch({ type: "setAuth", payload: { auth: true } }))
-    //   .catch((err: { message: any; }) => console.log(err.message));
+    console.log("something went wrong")
+ 
   };
   return (
     <Container component="main" maxWidth="xs">
@@ -80,52 +74,41 @@ const SignUp: FC<RouteComponentProps> = () => {
           <LockOutlined />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Sign in
         </Typography>
         <form
           className={classes.form}
           noValidate
           onClick={(e) => handleSubmit(e)}
         >
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="name"
-                label="Full Name"
-                name="name"
-                autoComplete="name"
-                onChange={(e) => handleChange(e)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                onChange={(e) => handleChange(e)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={(e) => handleChange(e)}
-              />
-            </Grid>
-          </Grid>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            // autoFocus
+            onChange={(e) => handleChange(e)}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            onChange={(e) => handleChange(e)}
+          />
+          {/* <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />} redundant atm, already using localstorage
+            label="Remember me"
+          /> */}
           <Button
             type="submit"
             fullWidth
@@ -133,11 +116,19 @@ const SignUp: FC<RouteComponentProps> = () => {
             color="primary"
             className={classes.submit}
           >
-            Sign Up
+            Sign In
           </Button>
-          <Grid container justify="flex-end">
+          <Grid container>
+            <Grid item xs>
+              
+              {/* <Link href="#" variant="body2">           implement
+                Forgot password?
+              </Link> */}
+            </Grid>
             <Grid item>
-              <Link to="/signin">{"Already have an account? Sign in"}</Link>
+              <Link to="/signup">
+                {"Don't have an account? Sign Up"}
+              </Link>
             </Grid>
           </Grid>
         </form>
@@ -146,4 +137,4 @@ const SignUp: FC<RouteComponentProps> = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;

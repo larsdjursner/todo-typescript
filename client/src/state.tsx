@@ -31,7 +31,15 @@ export interface ISubTodo {
   rank: number;
 }
 
+export interface IUser {
+  id: number;
+  email: string;
+  todos: ITodo[];
+  name: string;
+}
+
 export type Context = {
+  user: IUser;
   isAuthenticated: boolean;
   todos: ITodo[];
   subTodos: ISubTodo[];
@@ -61,6 +69,7 @@ type ACTIONTYPE =
   | { type: "fetchTodos"; payload: { todos: ITodo[]; subTodos: ISubTodo[] } };
 
 export const initialState: Context = {
+  user: {} as IUser,
   isAuthenticated: false,
   todos: [],
   subTodos: [],

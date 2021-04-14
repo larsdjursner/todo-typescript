@@ -2,25 +2,60 @@ import { ISubTodo, ITodo } from "../state";
 
 const APIRoute = "http://localhost:3001";
 
+//refactor
+//auth
 export async function SignUpAPI(name: string, email: string, password: string) {
-  return await fetch(`${APIRoute}/auth/signup`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ name, email, password }),
-  })
-    .then(async (response) => {
-      await response.json();
-    })
-    .then((data) => {
-      console.log("Success:", data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
+  try {
+    const req = await fetch(`${APIRoute}/auth/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email, password }),
     });
+
+    const res = await req.json();
+    localStorage.setItem("token", res.token);
+    return res.token;
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
 
+export async function SignInAPI(email: string, password: string) {
+  try {
+    const req = await fetch(`${APIRoute}/auth/signin`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const res = await req.json();
+    localStorage.setItem("token", res.token);
+    return res.token;
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+export const getName = async () => {
+  try {
+    const req = await fetch(`${APIRoute}/users/`, {
+      method: "POST",
+      headers: { token: localStorage.token },
+    });
+
+    const res = await req.json();
+    return res;
+  } catch (error) {
+    console.error("Error:", error);
+  }
+
+};
+
+//todos
 export async function getTodos() {
   return await Promise.all([
     fetch(`${APIRoute}/todos`).then((data) => data.json()),

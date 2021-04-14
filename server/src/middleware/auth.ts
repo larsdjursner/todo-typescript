@@ -14,7 +14,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const { user } = verify as IUserToken;
 
     req.body.user = user;
-    console.log(req.body.user);
+    // console.log(req.body.user);
     next();
 
   } catch (error) {
