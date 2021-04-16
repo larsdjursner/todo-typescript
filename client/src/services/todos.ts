@@ -38,7 +38,7 @@ export async function SignInAPI(email: string, password: string) {
 export const isAuth = async () => {
   try {
     const req = await fetch(`${APIRoute}/auth/verify`, {
-      method: "GET",
+      method: "POST",
       headers: {
         token: localStorage.token,
       },

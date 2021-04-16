@@ -18,7 +18,7 @@ const TodoList: FC<RouteComponentProps> = () => {
   useEffect(() => {
     getTodos()
       .then((res) => {
-        // console.log("called fetch todos from useeffect")
+        console.log("called fetch todos from useeffect")
         if (state.refresh) state.refresh = false;
         dispatch({ type: "fetchTodos", payload: { todos: res } });
       })

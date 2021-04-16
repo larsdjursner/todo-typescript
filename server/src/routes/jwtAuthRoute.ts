@@ -92,7 +92,7 @@ router.post("/signin", validInfo, async (req, res) => {
   }
 });
 
-router.get("/verify", auth, async (req, res) => {
+router.post("/verify", auth, async (req, res) => {
   try {
     const user = await prisma.user.findFirst({
       where: { id: req.body.userId },

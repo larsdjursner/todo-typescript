@@ -55,7 +55,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
     }
     case "setAuth": {
       const { auth } = action.payload;
-      return { ...state, isAuthenticated: auth, refresh: true};
+      return { ...state, isAuthenticated: auth};
     }
     case "fetchTodos": {
       const { todos } = action.payload;
@@ -65,6 +65,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
     case "deleteTodo": {
       const { id } = action.payload;
       DeleteTodo(id);
+
       return {
         ...state,
         refresh: true,
@@ -92,6 +93,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       const { id, completed } = action.payload;
       const newStatus = !completed;
       CompleteSubTodo(id, newStatus);
+      
       return {
         ...state,
         refresh: true,
@@ -135,9 +137,10 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       };
     }
     case "deleteCompleteTodos": {
-      state.todos
-        .filter((t) => t.completed === true)
-        .forEach((t) => DeleteTodo(t.id));
+      // refactor
+      // state.todos
+      //   .filter((t) => t.completed === true)
+      //   .forEach((t) => DeleteTodo(t.id));
 
       return {
         ...state,
@@ -157,7 +160,7 @@ export const TodoProvider = (props: { children: any }) => {
 
 
   useEffect(() => {
-    console.log("rerender");
+    console.log("ISAUTH()");
     isAuth().then((res) => {
       if (!res.isAuth) {
         return Promise.reject("not auth yet");
