@@ -11,7 +11,12 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-import { getTodos } from "./services/todos";
+
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+toast.configure();
 
 const App: React.FC = () => {
   const { state, dispatch } = useContext(TodoContext);

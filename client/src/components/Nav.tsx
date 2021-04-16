@@ -1,6 +1,8 @@
 import { Button } from "@material-ui/core";
 import React, { FC, useContext } from "react";
 import { RouteComponentProps } from "react-router-dom";
+import { toast } from "react-toastify";
+import { IUser } from "../common/types";
 import { TodoContext } from "../state";
 import { getFullDate } from "../utils/dateFunctions";
 
@@ -8,12 +10,19 @@ const Nav: FC<RouteComponentProps> = () => {
   const { state, dispatch } = useContext(TodoContext);
   const { todos } = state;
 
-  const logout = (e: React.MouseEvent) => {
+  const logout = async (e: React.MouseEvent) => {
     e.preventDefault();
+    toast.success(`Bye ${state.user.name}`)
     localStorage.removeItem("token");
-    dispatch({ type: "setUser", payload: { user: null } });
+    dispatch({ type: "setUser", payload: { user: {} as IUser} });
     dispatch({ type: "setAuth", payload: { auth: false }});
     console.log("logout")
+    // console.log(state.user);
+    // console.log(state.isAuthenticated);
+    state.user = {} as IUser;
+    state.isAuthenticated = false;
+    console.log(state.user);
+    console.log(state.isAuthenticated);
   }
 
   const countComplete = () => {

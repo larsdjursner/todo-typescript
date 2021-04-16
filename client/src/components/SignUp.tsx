@@ -14,6 +14,8 @@ import { SignUpAPI } from "../services/todos";
 import { TodoContext } from "../state";
 import { LockOutlined } from "@material-ui/icons";
 import { Link } from "react-router-dom";
+import { toast } from 'react-toastify';
+
 
 // template from https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-up
 
@@ -59,17 +61,16 @@ const SignUp: FC<RouteComponentProps> = () => {
     if (!input.name || !input.email || !input.password) {
       return;
     }
-    const {token, newUser} = await SignUpAPI(input.name, input.email, input.password);
+    const response = await SignUpAPI(input.name, input.email, input.password);
 
-    if (token) {
-      localStorage.setItem("token", token);
-      await dispatch({ type: "setUser", payload: { user: newUser } });
+    if (response.token) {
+      localStorage.setItem("token", response.token);
+      await dispatch({ type: "setUser", payload: { user: response.newUser } });
       await dispatch({ type: "setAuth", payload: { auth: true } });
-      console.log("authenticated");
+      toast.success(`Welcome ${response.newUser.name} !`)
       return;
     }
-
-    console.log("something went wrong");
+    toast.error(response);
 
   };
   return (
