@@ -44,7 +44,6 @@ const SignIn: FC<RouteComponentProps> = () => {
     email: "",
     password: "",
   });
-  // const { email, password } = input;
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -57,12 +56,12 @@ const SignIn: FC<RouteComponentProps> = () => {
     if (!input.email || !input.password) {
       return;
     }
-    const {token, newUser} = await SignInAPI(input.email, input.password);
+    const { newUser, token } = await SignInAPI(input.email, input.password);
     
     if (token) {
       localStorage.setItem("token", token);
-      await dispatch({ type: "setUser", payload: { user: newUser } });
-      await dispatch({ type: "setAuth", payload: { auth: true } });
+      dispatch({ type: "setUser", payload: { user: newUser } });
+      dispatch({ type: "setAuth", payload: { auth: true } });
       console.log("authenticated");
       return;
     }

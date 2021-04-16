@@ -5,11 +5,12 @@ import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 import TocIcon from "@material-ui/icons/Toc";
 import React, { useContext } from "react";
 import { useModal } from "../hooks/useModal";
-import { ITodo, TodoContext } from "../state";
+import { TodoContext } from "../state";
 import { getDate } from "../utils/dateFunctions";
 import { Modal } from "./Modal";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import { Checkbox } from "@material-ui/core";
+import { ITodo } from "../common/types";
 
 interface ITodoFunctions extends ITodo {
   dragHandle: DraggableProvidedDragHandleProps | undefined;

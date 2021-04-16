@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { FC, Fragment, useContext, useEffect } from "react";
 import { TodoForm } from "./TodoForm";
 // import "../App.css";
 import { Todo } from "./Todo";
@@ -8,11 +8,28 @@ import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
 import { TodoContext } from "../state";
 import { getCurrentDate } from "../utils/dateFunctions";
+import { RouteComponentProps } from "react-router-dom";
+import { getTodos } from "../services/todos";
 
-const TodoList: React.FC = () => {
+const TodoList: FC<RouteComponentProps> = () => {
   const { state, dispatch } = useContext(TodoContext);
   const todos = state.todos;
 
+  useEffect(() => {
+    getTodos()
+      .then((res) => {
+        // console.log("called fetch todos from useeffect")
+        if (state.refresh) state.refresh = false;
+        dispatch({ type: "fetchTodos", payload: { todos: res } });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+      // return () => {
+      //   dispatch({ type: "fetchTodos", payload: { todos: []} });
+      // }
+  }, [state.refresh]);
   return (
     <Fragment>
       <div className="parent-todo">

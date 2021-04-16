@@ -1,5 +1,8 @@
+import { ContactSupportOutlined } from "@material-ui/icons";
+import userEvent from "@testing-library/user-event";
 import { createContext, useEffect, useReducer, useState } from "react";
 import { DropResult } from "react-beautiful-dnd";
+import { Context, ISubTodo, ITodo, IUser } from "./common/types";
 import {
   AddSubTodo,
   AddTodo,
@@ -9,42 +12,9 @@ import {
   DeleteTodo,
   getTodos,
   reorderTodos,
+  isAuth,
 } from "./services/todos";
 import { RankSort, SubRankSort } from "./utils/ArraySort";
-
-export interface ITodo {
-  id: number;
-  content: string;
-  completed: boolean;
-  date: Date;
-  userId: string | undefined;
-  rank: number;
-}
-
-export interface ISubTodo {
-  id: number;
-  content: string;
-  completed: boolean;
-  date: Date;
-  parent: ITodo | undefined;
-  parentId: number;
-  rank: number;
-}
-
-export interface IUser {
-  id: number;
-  email: string;
-  todos: ITodo[];
-  name: string;
-}
-
-export interface Context  {
-  user: IUser;
-  isAuthenticated: boolean;
-  todos: ITodo[];
-  subTodos: ISubTodo[];
-  refresh: Boolean;
-};
 
 type ACTIONTYPE =
   | { type: "setAuth"; payload: { auth: boolean } }
@@ -67,7 +37,7 @@ type ACTIONTYPE =
       type: "completeSubTodo";
       payload: { id: number; completed: boolean };
     }
-  | { type: "fetchTodos"; payload: { todos: ITodo[]; subTodos: ISubTodo[] } };
+  | { type: "fetchTodos"; payload: { todos: ITodo[] } };
 
 export const initialState: Context = {
   user: {} as IUser,
@@ -77,30 +47,20 @@ export const initialState: Context = {
   refresh: false,
 };
 
-// const SETAUTH = "setAuth";
-
 export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
-
   switch (action.type) {
     case "setUser": {
       const { user } = action.payload;
-      return {...state, user: user}
+      return { ...state, user: user};
     }
     case "setAuth": {
       const { auth } = action.payload;
       return { ...state, isAuthenticated: auth, refresh: true};
     }
     case "fetchTodos": {
-      const { todos, subTodos } = action.payload;
-      // const sortedTodos = RankSort(todos);
-      // const sortedSubTodos = SubRankSort(subTodos);
-      // const todos: ITodo[] = [];
-      // const subTodos: ISubTodo[] = [];
+      const { todos } = action.payload;
 
-      //todos and subtodos wont return proper arrays until auth has been fixed for client
-
-      // return { ...state, todos: sortedTodos, subTodos: sortedSubTodos };
-      return { ...state, todos, subTodos };
+      return { ...state, todos: todos.length === 0 ? [] : RankSort(todos) };
     }
     case "deleteTodo": {
       const { id } = action.payload;
@@ -159,7 +119,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       const tds = state.todos;
       if (!res.destination) return { ...state };
 
-      const todos = reorderTodos(tds, res.source.index, res.destination.index);
+      const todos = reorderTodos(state.user.id, tds, res.source.index, res.destination.index);
 
       return {
         ...state,
@@ -195,15 +155,25 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
 export const TodoProvider = (props: { children: any }) => {
   const [state, dispatch] = useReducer(TodoReducer, initialState);
 
+
   useEffect(() => {
-    getTodos().then((res) => {
-      // if (state.refresh) state.refresh = false;
-      dispatch({
-        type: "fetchTodos",
-        payload: { todos: res[0], subTodos: res[1] },
-      });
+    console.log("rerender");
+    isAuth().then((res) => {
+      if (!res.isAuth) {
+        return Promise.reject("not auth yet");
+      }
+      dispatch({ type: "setAuth", payload: { auth: res.isAuth } });
+      dispatch({ type: "setUser", payload: { user: res.user } });
     });
-  }, [state.refresh]);
+
+    // return () => {
+    //   localStorage.removeItem("token");
+    //   dispatch({ type: "setAuth", payload: { auth: false } });
+    //   dispatch({ type: "setUser", payload: { user: {} as IUser} });
+    // }
+  }, []);
+
+  
 
   return (
     <TodoContext.Provider value={{ state, dispatch }}>

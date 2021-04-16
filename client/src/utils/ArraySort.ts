@@ -1,4 +1,5 @@
-import { ISubTodo, ITodo } from "../state";
+import { ISubTodo, ITodo } from "../common/types";
+
 
 export const RankSort = (todos: ITodo[]) => {
   todos.sort((a: ITodo, b: ITodo) => {

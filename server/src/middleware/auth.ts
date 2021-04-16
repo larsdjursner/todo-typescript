@@ -13,13 +13,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
     const { user } = verify as IUserToken;
 
-    req.body.user = user;
-    // console.log(req.body.user);
+    req.body.userId = user.id;
     next();
 
   } catch (error) {
     console.error(error.message);
-    return res.status(403).json("Not Authorized");
+    return res.status(403).json(false);
   }
 };
 

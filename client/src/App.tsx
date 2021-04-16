@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import "./styles/App.css";
 import Nav from "./components/Nav";
 import TodoList from "./components/TodoList";
@@ -11,10 +11,12 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
+import { getTodos } from "./services/todos";
 
 const App: React.FC = () => {
   const { state, dispatch } = useContext(TodoContext);
   const { isAuthenticated } = state;
+
 
   return (
     <Router>
@@ -41,11 +43,11 @@ const App: React.FC = () => {
           <Route
             exact
             path="/"
-            render={() =>
+            render={(props) =>
               isAuthenticated ? (
                 <div className="app">
-                  <Nav />
-                  <TodoList />
+                  <Nav  {...props}/>
+                  <TodoList {...props}/>
                 </div>
               ) : (
                 <Redirect to="/signin" />

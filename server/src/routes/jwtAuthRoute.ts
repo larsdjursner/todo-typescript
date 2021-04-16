@@ -35,7 +35,7 @@ router.post("/signup", validInfo, async (req: Request, res: Response) => {
     });
 
     // create user to respond
-    const newUser  = await prisma.user.findFirst({
+    const newUser = await prisma.user.findFirst({
       where: { email: email },
       select: {
         id: true,
@@ -44,7 +44,7 @@ router.post("/signup", validInfo, async (req: Request, res: Response) => {
         todos: true,
       },
     });
-  
+
     //5. generate jwt
     const token = jwtGenerate(newUser!.id);
     return res.status(200).json({ newUser, token });
@@ -85,8 +85,7 @@ router.post("/signin", validInfo, async (req, res) => {
 
     //4. pass jwt
     const token = jwtGenerate(newUser!.id);
-    return res.status(200).json({ newUser, token});
-
+    return res.status(200).json({ newUser, token });
   } catch (err) {
     console.error(err.message);
     res.status(500).json("Server Error");
@@ -95,7 +94,15 @@ router.post("/signin", validInfo, async (req, res) => {
 
 router.get("/verify", auth, async (req, res) => {
   try {
-      res.json(true);
+    const user = await prisma.user.findFirst({
+      where: { id: req.body.userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+      },
+    });
+    res.json({isAuth: true, user: user});
   } catch (err) {
     console.error(err.message);
     res.status(500).json("Server Error");

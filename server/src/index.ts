@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import authRoute from "./routes/jwtAuthRoute";
 import auth from "./middleware/auth";
+import { userInfo } from "node:os";
 
 const prisma = new PrismaClient();
 const app = express();
@@ -30,10 +31,12 @@ app.use("/auth", authRoute);
 // app.use("/todo", auth,)
 app.get("/todos", auth, async (req, res) => {
   const { userId } = req.body;
-  console.log("hit server")
+
+
   const todos = await prisma.todo.findMany({
     where: { userId: Number(userId) },
   });
+
   res.status(200).json(todos);
 });
 
@@ -60,10 +63,10 @@ app.post("/todos", auth, async (req, res) => {
 app.put("/todos/:id", auth, async (req, res) => {
   const { id } = req.params;
 
-  await prisma.subTodo.updateMany({
-    where: { parentId: Number(id) },
-    data: { ...req.body },
-  });
+  // await prisma.subTodo.updateMany({
+  //   where: { parentId: Number(id) },
+  //   data: { ...req.body},
+  // });
 
   const todo = await prisma.todo.update({
     where: { id: Number(id) },

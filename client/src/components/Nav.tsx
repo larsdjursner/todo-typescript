@@ -1,9 +1,10 @@
 import { Button } from "@material-ui/core";
 import React, { FC, useContext } from "react";
+import { RouteComponentProps } from "react-router-dom";
 import { TodoContext } from "../state";
 import { getFullDate } from "../utils/dateFunctions";
 
-const Nav: FC = () => {
+const Nav: FC<RouteComponentProps> = () => {
   const { state, dispatch } = useContext(TodoContext);
   const { todos } = state;
 
