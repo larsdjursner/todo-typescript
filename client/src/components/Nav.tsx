@@ -1,11 +1,26 @@
-import React, { useContext } from "react";
+import { Button } from "@material-ui/core";
+import React, { FC, useContext } from "react";
+import { RouteComponentProps } from "react-router-dom";
+import { toast } from "react-toastify";
+import { IUser } from "../common/types";
 import { TodoContext } from "../state";
 import { getFullDate } from "../utils/dateFunctions";
 
-const Nav: React.FC = () => {
-  const {state, dispatch} = useContext(TodoContext);
+const Nav: FC<RouteComponentProps> = () => {
+  const { state, dispatch } = useContext(TodoContext);
   const { todos } = state;
-  
+
+  const logout = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    toast.success(`Bye ${state.user.name}`);
+    localStorage.removeItem("token");
+    dispatch({ type: "setUser", payload: { user: {} as IUser } });
+    dispatch({ type: "setAuth", payload: { auth: false } });
+    state.user = {} as IUser;
+    state.isAuthenticated = false;
+  };
+
   const countComplete = () => {
     const count = todos.filter((t) => t.completed).length;
     return todos.length > 0
@@ -16,16 +31,19 @@ const Nav: React.FC = () => {
   const countOldTodos = () => {
     const today = new Date(Date.now());
     const count = todos
-      .filter((t) => !t.completed)
-      // .filter((t) => getFullDate(t.date) !== getFullDate(today))
-      .length;
+      // .filter((t) => getFullDate(t.date) !== getFullDate(today)).length;
+      .filter((t) => !t.completed).length;
 
     return count > 0 ? count + " overdue todos" : "";
   };
 
   return (
     <div className="Nav">
-      <p> User Userson </p>
+      <Button variant="contained" size="small" onClick={(e) => logout(e)}>
+        Log out
+      </Button>
+
+      <p> {state.user.name} </p>
 
       <p> {countComplete()}</p>
 

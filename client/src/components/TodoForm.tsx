@@ -1,4 +1,4 @@
-import React, { useContext, useReducer, useState } from "react";
+import React, { FC, FormEvent, useContext, useReducer, useState } from "react";
 import Button from "@material-ui/core/Button";
 import { IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
@@ -6,13 +6,13 @@ import {TodoContext} from "../state";
 
 
 
-export const TodoForm: React.FC = () => {
+export const TodoForm: FC = () => {
   const [value, setValue] = useState("");
   const [showForm, setShowForm] = useState(false);
 
   const { state, dispatch } = useContext(TodoContext);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!value) return;
 

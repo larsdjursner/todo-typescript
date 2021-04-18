@@ -1,7 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import express from "express";
 import cors from "cors";
-import { TodoController } from "./controllers/todo.controller";
+import authRoute from "./routes/jwtAuthRoute";
+import auth from "./middleware/auth";
+import { userInfo } from "node:os";
 
 const prisma = new PrismaClient();
 const app = express();
@@ -10,154 +12,161 @@ if (!process.env.PORT) {
   process.exit(1);
 }
 
+//config
 const PORT: number = parseInt(process.env.PORT as string, 10);
-
 app.use(express.json());
 app.use(cors());
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   next();
-}) 
+});
 
-const todoController = new TodoController();
-// app.get("/todos", tc.getTodos);
+//ROUTES
 
-// routes
-
+//register and login
+app.use("/auth", authRoute);
 
 // todo
-app.get("/todos", async (req, res) => {
-  // const { userId } = req.body; some sort of userId fetching in the long run
-  const userId = 1;
+
+// app.use("/todo", auth,)
+app.get("/todos", auth, async (req, res) => {
+  const { userId } = req.body;
+
+
   const todos = await prisma.todo.findMany({
-    where: {userId: Number(userId)}
+    where: { userId: Number(userId) },
+    include: { subtodos: true }
   });
-  res.json(todos);
+
+  res.status(200).json(todos);
 });
 
-app.get("/todos/:id", async (req, res) => {
+app.get("/todos/:id", auth, async (req, res) => {
   const { id } = req.params;
+  const { userId } = req.body;
+
   const todo = await prisma.todo.findFirst({
-    where: { id: Number(id) },
+    where: { id: Number(id), userId: userId },
     include: { subtodos: true },
   });
-  res.json(todo);
+  res.status(200).json(todo);
 });
 
-app.post("/todos", async (req, res) => {
+app.post("/todos", auth, async (req, res) => {
+  const { content, userId } = req.body;
+
   const todo = await prisma.todo.create({
-    data: { ...req.body, completed: false},
+    data: { content: content, userId: userId, completed: false },
   });
-  res.json(todo);
+  res.status(200).json(todo);
 });
 
-app.put("/todos/:id", async (req, res) => {
+app.put("/todos/:id", auth, async (req, res) => {
   const { id } = req.params;
+  const { completed } = req.body
 
   await prisma.subTodo.updateMany({
-    where: {parentId: Number(id)},
-    data: {...req.body}
-  })
-  
+    where: { parentId: Number(id) },
+    data: { completed: completed },
+  });
+
   const todo = await prisma.todo.update({
     where: { id: Number(id) },
     data: { ...req.body },
   });
 
-  res.json(todo);
+  res.status(200).json(todo);
 });
 
-app.delete(`/todos/:id`, async (req, res) => {
+app.delete(`/todos/:id`, auth, async (req, res) => {
   const { id } = req.params;
-  await prisma.subTodo.deleteMany({
-    where: {parentId: Number(id)}
-  });
+
   const todo = await prisma.todo.delete({
     where: { id: Number(id) },
   });
-  res.json(todo);
+  res.status(200).json(todo);
 });
 
 // subtodo
-app.get("/subtodos", async (req, res) => {
+app.get("/subtodos", auth, async (req, res) => {
   const subTodos = await prisma.subTodo.findMany();
-  res.json(subTodos);
+  res.status(200).json(subTodos);
 });
 
-app.get("/subtodos/:id", async (req, res) => {
+app.get("/subtodos/:id", auth, async (req, res) => {
   const { id } = req.params;
   const subTodo = await prisma.subTodo.findFirst({
     where: { id: Number(id) },
   });
-  res.json(subTodo);
+  res.status(200).json(subTodo);
 });
 
-app.post("/subtodos", async (req, res) => {
+app.post("/subtodos", auth, async (req, res) => {
+  const {content, parentId} = req.body;
+
   const subTodo = await prisma.subTodo.create({
-    data: { ...req.body, completed: false},
+    data: { content: content, parentId: parentId, completed: false },
   });
-  res.json(subTodo);
+  res.status(200).json(subTodo);
 });
 
-app.put('/subtodos/:id', async (req, res) => {
-    const { id } = req.params;
-    const subTodo = await prisma.subTodo.update({
-        where: { id: Number(id) },
-        data: { ...req.body },
-      })
-      res.json(subTodo);
-})
+app.put("/subtodos/:id", auth, async (req, res) => {
+  const { id } = req.params;
+  const { completed } = req.body;
+  const subTodo = await prisma.subTodo.update({
+    where: { id: Number(id) },
+    data: { completed: completed },
+  });
+  res.status(200).json(subTodo);
+});
 
-app.delete(`/subtodos/:id`, async (req, res) => {
+app.delete(`/subtodos/:id`, auth, async (req, res) => {
   const { id } = req.params;
   const subTodo = await prisma.subTodo.delete({
     where: { id: Number(id) },
   });
-  res.json(subTodo);
+  res.status(200).json(subTodo);
 });
 
-//user  
-app.get("/users", async (req, res) => {
+//ADMIN ONLY ROUTES eventually
+app.get("/users", auth, async (req, res) => {
   const users = await prisma.user.findMany();
-  res.json(users);
+  res.status(200).json(users);
 });
 
-app.get("/users/:id", async (req, res) => {
-  const { id } = req.params;
+app.post("/users", auth, async (req, res) => {
+  const { id } = req.body.user;
+
   const user = await prisma.user.findFirst({
     where: { id: Number(id) },
-    include: { todos: true },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      todos: true,
+    },
   });
-  res.json(user);
+
+  res.status(200).json(user);
 });
 
-app.post("/users", async (req, res) => {
-  const user = await prisma.user.create({
-    data: { ...req.body },
-  });
-  res.json(user);
-});
-
-app.put("/users/:id", async (req, res) => {
+app.put("/users/:id", auth, async (req, res) => {
   const { id } = req.params;
   const user = await prisma.user.update({
     where: { id: Number(id) },
     data: { ...req.body },
   });
-  res.json(user);
+  res.status(200).json(user);
 });
 
-app.delete(`/users/:id`, async (req, res) => {
+app.delete(`/users/:id`, auth, async (req, res) => {
   const { id } = req.params;
   const user = await prisma.user.delete({
     where: { id: Number(id) },
   });
-  res.json(user);
+  res.status(200).json(user);
 });
-
-
 
 app.listen(PORT, () => {
-  console.log("REST API server ready at : http://localhost:3001");
+  console.log("REST API server ready at : http://localhost:%d", PORT);
 });
-
