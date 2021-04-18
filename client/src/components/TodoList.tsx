@@ -18,7 +18,6 @@ const TodoList: FC<RouteComponentProps> = () => {
   useEffect(() => {
     getTodos()
       .then((res) => {
-        console.log(res);
         if (state.refresh) state.refresh = false;
         dispatch({ type: "fetchTodos", payload: { todos: res } });
       })
@@ -100,6 +99,7 @@ const TodoList: FC<RouteComponentProps> = () => {
                                 userId={todo.userId}
                                 dragHandle={provided.dragHandleProps}
                                 rank={todo.rank}
+                                subtodos={todo.subtodos}
                               />
                             </div>
                           )}

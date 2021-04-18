@@ -23,6 +23,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
   content,
   date,
   dragHandle,
+  subtodos
 }) => {
   const { state, dispatch } = useContext(TodoContext);
   const { isShown, toggle } = useModal();

@@ -5,6 +5,7 @@ export interface ITodo {
     date: Date;
     userId: string | undefined;
     rank: number;
+    subtodos: ISubTodo[]
   }
   
   export interface ISubTodo {

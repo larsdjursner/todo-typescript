@@ -35,6 +35,7 @@ app.get("/todos", auth, async (req, res) => {
 
   const todos = await prisma.todo.findMany({
     where: { userId: Number(userId) },
+    include: { subtodos: true }
   });
 
   res.status(200).json(todos);
