@@ -61,7 +61,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       const { todos } = action.payload;
       const subtodos = todos.flatMap((t) => t.subtodos);
 
-      return { ...state, todos: todos.length === 0 ? [] : RankSort(todos), subTodos: SubRankSort(subtodos)};
+      return { ...state, todos: RankSort(todos), subTodos: SubRankSort(subtodos) };
     }
     case "deleteTodo": {
       const { id } = action.payload;
@@ -144,9 +144,9 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
     }
     case "deleteCompleteTodos": {
       // refactor
-      // state.todos
-      //   .filter((t) => t.completed === true)
-      //   .forEach((t) => DeleteTodo(t.id));
+      state.todos
+        .filter((t) => t.completed === true)
+        .forEach((t) => DeleteTodo(t.id));
 
       return {
         ...state,

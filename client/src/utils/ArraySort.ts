@@ -1,7 +1,7 @@
 import { ISubTodo, ITodo } from "../common/types";
 
 
-export const RankSort = (todos: ITodo[]) => {
+export const RankSort = (todos: ITodo[] ) => {
   todos.sort((a: ITodo, b: ITodo) => {
     if (a.rank < b.rank) {
       return -1;
@@ -14,8 +14,8 @@ export const RankSort = (todos: ITodo[]) => {
   return todos;
 };
 
-export const SubRankSort = (subTodos: ISubTodo[]) => {
-  subTodos.sort((a: ISubTodo, b: ISubTodo) => {
+export const SubRankSort = (todos: ISubTodo[] ) => {
+  todos.sort((a: ISubTodo, b: ISubTodo) => {
     if (a.rank < b.rank) {
       return -1;
     }
@@ -24,5 +24,6 @@ export const SubRankSort = (subTodos: ISubTodo[]) => {
     }
     return 0;
   });
-  return subTodos;
+  return todos;
 };
+

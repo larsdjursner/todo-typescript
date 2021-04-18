@@ -63,11 +63,12 @@ app.post("/todos", auth, async (req, res) => {
 
 app.put("/todos/:id", auth, async (req, res) => {
   const { id } = req.params;
+  const { completed } = req.body
 
-  // await prisma.subTodo.updateMany({
-  //   where: { parentId: Number(id) },
-  //   data: { ...req.body},
-  // });
+  await prisma.subTodo.updateMany({
+    where: { parentId: Number(id) },
+    data: { completed: completed },
+  });
 
   const todo = await prisma.todo.update({
     where: { id: Number(id) },
@@ -111,9 +112,10 @@ app.post("/subtodos", auth, async (req, res) => {
 
 app.put("/subtodos/:id", auth, async (req, res) => {
   const { id } = req.params;
+  const { completed } = req.body;
   const subTodo = await prisma.subTodo.update({
     where: { id: Number(id) },
-    data: { ...req.body },
+    data: { completed: completed },
   });
   res.status(200).json(subTodo);
 });

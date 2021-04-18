@@ -12,18 +12,14 @@ const Nav: FC<RouteComponentProps> = () => {
 
   const logout = async (e: React.MouseEvent) => {
     e.preventDefault();
-    toast.success(`Bye ${state.user.name}`)
+
+    toast.success(`Bye ${state.user.name}`);
     localStorage.removeItem("token");
-    dispatch({ type: "setUser", payload: { user: {} as IUser} });
-    dispatch({ type: "setAuth", payload: { auth: false }});
-    console.log("logout")
-    // console.log(state.user);
-    // console.log(state.isAuthenticated);
+    dispatch({ type: "setUser", payload: { user: {} as IUser } });
+    dispatch({ type: "setAuth", payload: { auth: false } });
     state.user = {} as IUser;
     state.isAuthenticated = false;
-    console.log(state.user);
-    console.log(state.isAuthenticated);
-  }
+  };
 
   const countComplete = () => {
     const count = todos.filter((t) => t.completed).length;
@@ -34,18 +30,16 @@ const Nav: FC<RouteComponentProps> = () => {
 
   const countOldTodos = () => {
     const today = new Date(Date.now());
-    const count =
-      // .filter((t) => getFullDate(t.date) !== getFullDate(today))
-      todos.filter((t) => !t.completed).length;
+    const count = todos
+      // .filter((t) => getFullDate(t.date) !== getFullDate(today)).length;
+      .filter((t) => !t.completed).length;
 
     return count > 0 ? count + " overdue todos" : "";
   };
 
   return (
     <div className="Nav">
-      <Button variant="contained" size="small"
-        onClick={(e) => logout(e)}
-      >
+      <Button variant="contained" size="small" onClick={(e) => logout(e)}>
         Log out
       </Button>
 
