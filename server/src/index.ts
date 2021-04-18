@@ -100,8 +100,10 @@ app.get("/subtodos/:id", auth, async (req, res) => {
 });
 
 app.post("/subtodos", auth, async (req, res) => {
+  const {content, parentId} = req.body;
+
   const subTodo = await prisma.subTodo.create({
-    data: { ...req.body, completed: false },
+    data: { content: content, parentId: parentId, completed: false },
   });
   res.status(200).json(subTodo);
 });
