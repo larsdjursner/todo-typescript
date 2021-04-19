@@ -12,7 +12,7 @@ import React, { ChangeEvent, FC, FormEvent, useContext, useState } from "react";
 import { RouteComponentProps } from "react-router";
 import { TodoContext } from "../state";
 import { LockOutlined } from "@material-ui/icons";
-import { SignInAPI } from "../services/todos";
+import { SignInAPI } from "../services/TodosService";
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 
@@ -108,10 +108,6 @@ const SignIn: FC<RouteComponentProps> = () => {
             autoComplete="current-password"
             onChange={(e) => handleChange(e)}
           />
-          {/* <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />} redundant atm, already using localstorage
-            label="Remember me"
-          /> */}
           <Button
             type="submit"
             fullWidth

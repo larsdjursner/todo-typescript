@@ -9,7 +9,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import { TodoContext } from "../state";
 import { getCurrentDate } from "../utils/dateFunctions";
 import { RouteComponentProps } from "react-router-dom";
-import { getTodos } from "../services/todos";
+import { getTodos } from "../services/TodosService";
 
 const TodoList: FC<RouteComponentProps> = () => {
   const { state, dispatch } = useContext(TodoContext);
@@ -25,12 +25,8 @@ const TodoList: FC<RouteComponentProps> = () => {
         console.log(err);
       });
 
-      // return () => {
-      //   dispatch({ type: "fetchTodos", payload: { todos: []} });
-      // }
   }, [state.refresh]);
   return (
-    <Fragment>
       <div className="parent-todo">
         <div className="child-todo">
           <div className="todoform">
@@ -114,7 +110,6 @@ const TodoList: FC<RouteComponentProps> = () => {
           </div>
         </div>
       </div>
-    </Fragment>
   );
 };
 

@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import React, { ChangeEvent, FC, FormEvent, useContext, useState } from "react";
 import { RouteComponentProps } from "react-router";
-import { SignUpAPI } from "../services/todos";
+import { SignUpAPI } from "../services/TodosService";
 import { TodoContext } from "../state";
 import { LockOutlined } from "@material-ui/icons";
 import { Link } from "react-router-dom";

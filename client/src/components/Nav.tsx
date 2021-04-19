@@ -1,25 +1,17 @@
 import { Button } from "@material-ui/core";
-import React, { FC, useContext } from "react";
+import { FC, useContext } from "react";
 import { RouteComponentProps } from "react-router-dom";
-import { toast } from "react-toastify";
-import { IUser } from "../common/types";
 import { TodoContext } from "../state";
 import { getFullDate } from "../utils/dateFunctions";
 
-const Nav: FC<RouteComponentProps> = () => {
+import "../styles/Nav.css";
+import ProfileMenu from "./ProfileMenu";
+
+export const Nav: FC<RouteComponentProps> = () => {
   const { state, dispatch } = useContext(TodoContext);
   const { todos } = state;
 
-  const logout = async (e: React.MouseEvent) => {
-    e.preventDefault();
-
-    toast.success(`Bye ${state.user.name}`);
-    localStorage.removeItem("token");
-    dispatch({ type: "setUser", payload: { user: {} as IUser } });
-    dispatch({ type: "setAuth", payload: { auth: false } });
-    state.user = {} as IUser;
-    state.isAuthenticated = false;
-  };
+ 
 
   const countComplete = () => {
     const count = todos.filter((t) => t.completed).length;
@@ -39,15 +31,15 @@ const Nav: FC<RouteComponentProps> = () => {
 
   return (
     <div className="Nav">
-      <Button variant="contained" size="small" onClick={(e) => logout(e)}>
-        Log out
-      </Button>
+      <div className="Nav-Item">
+        <ProfileMenu/>
+      </div>
 
-      <p> {state.user.name} </p>
+      <div className="Nav-Item">
+        <p> {countComplete()}</p>
 
-      <p> {countComplete()}</p>
-
-      <p> {countOldTodos()} </p>
+        <p> {countOldTodos()} </p>
+      </div>
     </div>
   );
 };

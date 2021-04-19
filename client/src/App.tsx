@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext} from "react";
 import "./styles/App.css";
 import Nav from "./components/Nav";
 import TodoList from "./components/TodoList";
@@ -11,10 +11,8 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 toast.configure();
 
@@ -22,10 +20,8 @@ const App: React.FC = () => {
   const { state, dispatch } = useContext(TodoContext);
   const { isAuthenticated } = state;
 
-
   return (
     <Router>
-      <div className="container">
         <Switch>
           <Route
             exact
@@ -45,22 +41,21 @@ const App: React.FC = () => {
               )
             }
           />
-          <Route
-            exact
-            path="/"
-            render={(props) =>
-              isAuthenticated ? (
-                <div className="app">
-                  <Nav  {...props}/>
-                  <TodoList {...props}/>
-                </div>
-              ) : (
-                <Redirect to="/signin" />
-              )
-            }
-          ></Route>
+            <Route
+              exact
+              path="/"
+              render={(props) =>
+                isAuthenticated ? (
+                  <div className="app">
+                    <Nav {...props} />
+                    <TodoList {...props} />
+                  </div>
+                ) : (
+                  <Redirect to="/signin" />
+                )
+              }
+            ></Route>
         </Switch>
-      </div>
     </Router>
   );
 };

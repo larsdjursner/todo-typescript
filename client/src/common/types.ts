@@ -32,3 +32,10 @@ export interface ITodo {
     subTodos: ISubTodo[];
     refresh: Boolean;
   }
+
+  export interface IModal {
+    id: number;
+    isShown: boolean;
+    hide: () => void;
+  }
+  

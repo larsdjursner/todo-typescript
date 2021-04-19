@@ -25,9 +25,9 @@ export const Todo: React.FC<ITodoFunctions> = ({
   dragHandle,
   subtodos
 }) => {
+
   const { state, dispatch } = useContext(TodoContext);
   const { isShown, toggle } = useModal();
-  const children = state.subTodos.filter((t) => t.parentId === id);
 
   return (
     <li className="todo">
@@ -53,12 +53,12 @@ export const Todo: React.FC<ITodoFunctions> = ({
 
         <div className="todo-content-additional">
             <div className="todo-content-additional-icon">
-            {children.length > 0 ? (
+            {subtodos.length > 0 ? (
               <>
                 <TocIcon id="TocIcon" />
                 <p className="date">
-                  {`${children.filter((t) => t.completed === true).length}/${
-                    children.length
+                  {`${subtodos.filter((t) => t.completed === true).length}/${
+                    subtodos.length
                   }`}
                 </p>
                 </>
@@ -73,7 +73,8 @@ export const Todo: React.FC<ITodoFunctions> = ({
       </div>
       <div className="todo-buttons">
         <Modal id={id} isShown={isShown} hide={toggle} />
-        <Checkbox   
+        <Checkbox
+          size="small"   
           onClick={() =>
             dispatch({ type: "completeTodo", payload: { id: id, completed: completed} })
           }
@@ -82,7 +83,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
         />
 
         <div onClick={toggle}>
-          <IconButton className="IconButton">
+          <IconButton size="small" className="IconButton" >
             <MoreVertIcon />
           </IconButton>
         </div>
@@ -90,7 +91,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
         <div
           onClick={() => dispatch({ type: "deleteTodo", payload: { id: id } })}
         >
-          <IconButton className="IconButton">
+          <IconButton size="small" className="IconButton">
             <DeleteIcon />
           </IconButton>
         </div>

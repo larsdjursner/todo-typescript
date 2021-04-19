@@ -1,0 +1,36 @@
+.todoform-content > * {
+  margin-bottom: 10px;
+}
+
+.todoform-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.todoform-input {
+  height: 40px;
+}
+
+.todoform-buttons {
+  /* right: 0; */
+  display: flex;
+  margin-right: 10px;
+  justify-content: right;
+}
+
+.noform-content > * {
+  margin-bottom: 10px;
+  display: inline-block;
+  white-space: nowrap;
+  font-size: small;
+  cursor: pointer;
+  color: gray;
+}
+
+.noform-content:hover #todoform-content-addicon {
+  color: rgb(32, 42, 70);
+}
+
+.noform-content:hover #todoform-content-text {
+  color: rgb(32, 42, 70);
+}

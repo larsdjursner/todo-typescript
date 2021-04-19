@@ -13,7 +13,7 @@ import {
   getTodos,
   reorderTodos,
   isAuth,
-} from "./services/todos";
+} from "./services/TodosService";
 import { RankSort, SubRankSort } from "./utils/ArraySort";
 
 type ACTIONTYPE =

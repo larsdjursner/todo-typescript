@@ -3,6 +3,7 @@ import Button from "@material-ui/core/Button";
 import { IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import {TodoContext} from "../state";
+import "../styles/TodoForm.css";
 
 
 
@@ -44,7 +45,6 @@ export const TodoForm: FC = () => {
             <Button
               type="submit"
               form="submit-form"
-              variant="outlined"
               color="primary"
             >
               Add
@@ -52,8 +52,6 @@ export const TodoForm: FC = () => {
             <Button
               onClick={toggleForm}
               form="submit-form"
-              variant="outlined"
-              color="secondary"
             >
               Cancel
             </Button>
