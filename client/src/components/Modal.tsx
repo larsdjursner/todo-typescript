@@ -20,7 +20,10 @@ export const Modal: FC<IModal> = ({ id, isShown, hide }) => {
   const header = todo!.content;
 
   const date = new Date();
-  // console.log(typeof todo!.date);
+  console.log(todo!.date);
+  console.log(typeof todo!.date);
+  console.log(typeof date);
+  console.log(date);
   const subTodos = state.subTodos.filter((t) => t.parentId === id);
 
   // const date = getFullDate(Datetodo!.date);
