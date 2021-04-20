@@ -8,7 +8,7 @@ import { TodoContext } from "../state";
 import { getFullDate } from "../utils/dateFunctions";
 import { SubTodo } from "./SubTodo";
 import { IModal } from "../common/types";
-import DatePicker from "./DatePicker";
+import { DatePicker } from "./DatePicker";
 
 import "../styles/Modal.css";
 
@@ -19,14 +19,9 @@ export const Modal: FC<IModal> = ({ id, isShown, hide }) => {
 
   const header = todo!.content;
 
-  const date = new Date();
-  console.log(todo!.date);
-  console.log(typeof todo!.date);
-  console.log(typeof date);
-  console.log(date);
-  const subTodos = state.subTodos.filter((t) => t.parentId === id);
+  const date : Date = new Date(Date.parse(todo!.date));
 
-  // const date = getFullDate(Datetodo!.date);
+  const subTodos = state.subTodos.filter((t) => t.parentId === id);
 
   const modal = (
     <>
@@ -41,7 +36,7 @@ export const Modal: FC<IModal> = ({ id, isShown, hide }) => {
             <div className="HeaderText">{header}</div>
 
             <div className="Content-Date Content date">
-              <DatePicker />
+              <DatePicker date={date} />
               <SubTodoForm parentId={id} />
             </div>
             <div className="Content">

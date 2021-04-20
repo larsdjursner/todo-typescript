@@ -2,7 +2,7 @@ export interface ITodo {
     id: number;
     content: string;
     completed: boolean;
-    date: Date;
+    date: string;
     userId: string | undefined;
     rank: number;
     subtodos: ISubTodo[]
@@ -12,7 +12,7 @@ export interface ITodo {
     id: number;
     content: string;
     completed: boolean;
-    date: Date;
+    date: string;
     parent: ITodo | undefined;
     parentId: number;
     rank: number;
@@ -39,3 +39,7 @@ export interface ITodo {
     hide: () => void;
   }
   
+
+  export interface IDatePicker {
+    date: Date
+  }

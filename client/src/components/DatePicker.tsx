@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
+import { IDatePicker } from "../common/types";
 
-export default function DatePicker() {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+
+
+export const DatePicker : FC<IDatePicker>= ({ date }) => {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(date);
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);

@@ -48,8 +48,8 @@ export default function ProfileMenu() {
           anchorEl={anchorEl}
           keepMounted
           getContentAnchorEl={null}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-          transformOrigin={{ vertical: "top", horizontal: "center" }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          transformOrigin={{ vertical: "top", horizontal: "left" }}
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
