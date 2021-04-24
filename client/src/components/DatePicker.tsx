@@ -6,13 +6,14 @@ import {
 } from "@material-ui/pickers";
 import { IDatePicker } from "../common/types";
 
-
-
-export const DatePicker : FC<IDatePicker>= ({ date }) => {
+export const DatePicker: FC<IDatePicker> = ({ id, date, updateDate}) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(date);
 
   const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
+    if (date) {
+      setSelectedDate(date);
+      updateDate(date);
+    }
   };
 
   return (
@@ -31,4 +32,4 @@ export const DatePicker : FC<IDatePicker>= ({ date }) => {
       />
     </MuiPickersUtilsProvider>
   );
-}
+};

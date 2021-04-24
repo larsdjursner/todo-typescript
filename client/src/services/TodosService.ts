@@ -95,6 +95,24 @@ export async function CompleteTodo(id: number, completed: boolean) {
     });
 }
 
+export async function UpdateTodo(id: number, date: Date) {
+  await fetch(`${APIRoute}/todos/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      token: localStorage.token,
+    },
+    body: JSON.stringify({ date }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+
 export async function DeleteTodo(id: number) {
   await fetch(`${APIRoute}/todos/${id}`, {
     method: "DELETE",

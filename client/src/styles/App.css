@@ -63,7 +63,7 @@ p.todo-content {
 .todo-content-additional {
   margin: 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
 }
 
 .todo-content-additional-icon {

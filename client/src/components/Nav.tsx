@@ -23,7 +23,7 @@ export const Nav: FC<RouteComponentProps> = () => {
   const countOldTodos = () => {
     const today = new Date(Date.now());
     const count = todos
-      .filter((t) => getFullDate(new Date(Date.parse(t.date))) !== getFullDate(today)).length;
+      .filter((t) => getFullDate(new Date(Date.parse(t.date))) !== getFullDate(today) && !t.completed).length;
       // .filter((t) => !t.completed).length;
 
     return count > 0 ? count + " overdue todos" : "";

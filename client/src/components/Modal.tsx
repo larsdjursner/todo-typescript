@@ -23,6 +23,10 @@ export const Modal: FC<IModal> = ({ id, isShown, hide }) => {
 
   const subTodos = state.subTodos.filter((t) => t.parentId === id);
 
+  const updateDate = (date : Date) => {
+    dispatch({ type: "updateDateTodo", payload: { id, date } });
+  }
+
   const modal = (
     <>
       <div className="Backdrop" onClick={hide} />
@@ -36,7 +40,7 @@ export const Modal: FC<IModal> = ({ id, isShown, hide }) => {
             <div className="HeaderText">{header}</div>
 
             <div className="Content-Date Content date">
-              <DatePicker date={date} />
+              <DatePicker date={date} id={id} updateDate={updateDate} />
               <SubTodoForm parentId={id} />
             </div>
             <div className="Content">

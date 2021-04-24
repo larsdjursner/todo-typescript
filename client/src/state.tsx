@@ -13,6 +13,7 @@ import {
   getTodos,
   reorderTodos,
   isAuth,
+  UpdateTodo,
 } from "./services/TodosService";
 import { RankSort, SubRankSort } from "./utils/ArraySort";
 
@@ -20,6 +21,7 @@ type ACTIONTYPE =
   | { type: "setAuth"; payload: { auth: boolean } }
   | { type: "setUser"; payload: { user: IUser } }
   | { type: "deleteTodo"; payload: { id: number } }
+  | { type: "updateDateTodo"; payload: { id: number; date: Date } }
   | { type: "completeTodo"; payload: { id: number; completed: boolean } }
   | {
       type: "createTodo";
@@ -61,20 +63,16 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       const { todos } = action.payload;
       const subtodos = todos.flatMap((t) => t.subtodos);
 
-      return { ...state, todos: RankSort(todos), subTodos: SubRankSort(subtodos) };
-    }
-    case "deleteTodo": {
-      const { id } = action.payload;
-      DeleteTodo(id);
-
       return {
         ...state,
-        refresh: true,
+        todos: RankSort(todos),
+        subTodos: SubRankSort(subtodos),
       };
     }
-    case "deleteSubTodo": {
-      const { id } = action.payload;
-      DeleteSubTodo(id);
+    case "createTodo": {
+      const { content } = action.payload;
+      AddTodo(content, state.user.id);
+
       return {
         ...state,
         refresh: true,
@@ -90,6 +88,33 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         refresh: true,
       };
     }
+    case "deleteTodo": {
+      const { id } = action.payload;
+      DeleteTodo(id);
+
+      return {
+        ...state,
+        refresh: true,
+      };
+    }
+
+    case "updateDateTodo": {
+      const { id, date} = action.payload;
+      UpdateTodo(id, date);
+      
+      return {
+        ...state,
+        refresh: true,
+      };
+    }
+    case "createSubTodo": {
+      const { content, parentId } = action.payload;
+      AddSubTodo(content, parentId);
+      return {
+        ...state,
+        refresh: true,
+      };
+    }
     case "completeSubTodo": {
       const { id, completed } = action.payload;
       const newStatus = !completed;
@@ -100,18 +125,9 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         refresh: true,
       };
     }
-    case "createTodo": {
-      const { content } = action.payload;
-      AddTodo(content, state.user.id);
-
-      return {
-        ...state,
-        refresh: true,
-      };
-    }
-    case "createSubTodo": {
-      const { content, parentId } = action.payload;
-      AddSubTodo(content, parentId);
+    case "deleteSubTodo": {
+      const { id } = action.payload;
+      DeleteSubTodo(id);
       return {
         ...state,
         refresh: true,

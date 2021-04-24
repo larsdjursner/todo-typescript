@@ -41,5 +41,7 @@ export interface ITodo {
   
 
   export interface IDatePicker {
-    date: Date
+    id: number;
+    date: Date;
+    updateDate: (date : Date) => void;
   }

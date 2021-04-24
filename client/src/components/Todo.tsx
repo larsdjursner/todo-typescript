@@ -11,6 +11,8 @@ import { Modal } from "./Modal";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import { Checkbox } from "@material-ui/core";
 import { ITodo } from "../common/types";
+import EventIcon from "@material-ui/icons/Event";
+import { format } from "date-fns";
 
 interface ITodoFunctions extends ITodo {
   dragHandle: DraggableProvidedDragHandleProps | undefined;
@@ -23,9 +25,8 @@ export const Todo: React.FC<ITodoFunctions> = ({
   content,
   date,
   dragHandle,
-  subtodos
+  subtodos,
 }) => {
-
   const { state, dispatch } = useContext(TodoContext);
   const { isShown, toggle } = useModal();
 
@@ -41,7 +42,10 @@ export const Todo: React.FC<ITodoFunctions> = ({
         <p
           className="todo-content"
           onClick={() =>
-            dispatch({ type: "completeTodo", payload: { id: id, completed: completed} })
+            dispatch({
+              type: "completeTodo",
+              payload: { id: id, completed: completed },
+            })
           }
           style={{
             textDecoration: completed ? "line-through" : "",
@@ -52,7 +56,11 @@ export const Todo: React.FC<ITodoFunctions> = ({
         </p>
 
         <div className="todo-content-additional">
-            <div className="todo-content-additional-icon">
+          <div className="todo-content-additional-icon">
+            <EventIcon id="TocIcon" />
+            <p className="date">{format(new Date(date), "dd LLL")}</p>
+          </div>
+          <div className="todo-content-additional-icon">
             {subtodos.length > 0 ? (
               <>
                 <TocIcon id="TocIcon" />
@@ -61,29 +69,29 @@ export const Todo: React.FC<ITodoFunctions> = ({
                     subtodos.length
                   }`}
                 </p>
-                </>
-                ) : (
-                  <TocIcon id="TocIconHidden" />
-                )}
-            </div>
-        
-
-          {/* <p className="date">{getDate(date)}</p> */}
+              </>
+            ) : (
+              <TocIcon id="TocIconHidden" />
+            )}
+          </div>
         </div>
       </div>
       <div className="todo-buttons">
         <Modal id={id} isShown={isShown} hide={toggle} />
         <Checkbox
-          size="small"   
+          size="small"
           onClick={() =>
-            dispatch({ type: "completeTodo", payload: { id: id, completed: completed} })
+            dispatch({
+              type: "completeTodo",
+              payload: { id: id, completed: completed },
+            })
           }
-          checked = { completed ? true : false}
+          checked={completed ? true : false}
           color="default"
         />
 
         <div onClick={toggle}>
-          <IconButton size="small" className="IconButton" >
+          <IconButton size="small" className="IconButton">
             <MoreVertIcon />
           </IconButton>
         </div>
