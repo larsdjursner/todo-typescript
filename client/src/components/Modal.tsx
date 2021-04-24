@@ -11,6 +11,7 @@ import { IModal } from "../common/types";
 import { DatePicker } from "./DatePicker";
 
 import "../styles/Modal.css";
+import { Action } from "../common/actions";
 
 
 export const Modal: FC<IModal> = ({ id, isShown, hide }) => {
@@ -24,7 +25,7 @@ export const Modal: FC<IModal> = ({ id, isShown, hide }) => {
   const subTodos = state.subTodos.filter((t) => t.parentId === id);
 
   const updateDate = (date : Date) => {
-    dispatch({ type: "updateDateTodo", payload: { id, date } });
+    dispatch({ type: Action.UPDATEDATETODO, payload: { id, date } });
   }
 
   const modal = (

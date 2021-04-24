@@ -4,6 +4,7 @@ import { IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import {TodoContext} from "../state";
 import "../styles/TodoForm.css";
+import { Action } from "../common/actions";
 
 interface ISubTodoForm {
     parentId: number;
@@ -18,7 +19,7 @@ export const SubTodoForm: FC<ISubTodoForm> = ({parentId}) => {
     e.preventDefault();
     if (!value) return;
 
-    dispatch({ type: "createSubTodo", payload: { parentId : parentId , content: value } });
+    dispatch({ type: Action.CREATESUBTODO, payload: { parentId : parentId , content: value } });
     setValue("");
   };
 

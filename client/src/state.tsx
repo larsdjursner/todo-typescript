@@ -16,30 +16,31 @@ import {
   UpdateTodo,
 } from "./services/TodosService";
 import { RankSort, SubRankSort } from "./utils/ArraySort";
+import { Action } from "./common/actions";
 
 type ACTIONTYPE =
-  | { type: "setAuth"; payload: { auth: boolean } }
-  | { type: "setUser"; payload: { user: IUser } }
-  | { type: "deleteTodo"; payload: { id: number } }
-  | { type: "updateDateTodo"; payload: { id: number; date: Date } }
-  | { type: "completeTodo"; payload: { id: number; completed: boolean } }
+  | { type: Action.SETAUTH; payload: { auth: boolean } }
+  | { type: Action.SETUSER; payload: { user: IUser } }
+  | { type: Action.DELETETODO; payload: { id: number } }
+  | { type: Action.UPDATEDATETODO; payload: { id: number; date: Date } }
+  | { type: Action.COMPLETETODO; payload: { id: number; completed: boolean } }
   | {
-      type: "createTodo";
+      type: Action.CREATETODO;
       payload: { content: string };
     }
   | {
-      type: "createSubTodo";
+      type: Action.CREATESUBTODO;
       payload: { content: string; parentId: number };
     }
-  | { type: "completeAllTodos" }
-  | { type: "handleOnDragEnd"; payload: { res: DropResult } }
-  | { type: "deleteCompleteTodos" }
-  | { type: "deleteSubTodo"; payload: { id: number } }
+  | { type: Action.COMPLETEALLTODOS }
+  | { type: Action.HANDLEONDRAGEND; payload: { res: DropResult } }
+  | { type: Action.DELETECOMPLETETODOS }
+  | { type: Action.DELETESUBTODO; payload: { id: number } }
   | {
-      type: "completeSubTodo";
+      type: Action.COMPLETESUBTODO;
       payload: { id: number; completed: boolean };
     }
-  | { type: "fetchTodos"; payload: { todos: ITodo[] } };
+  | { type: Action.FETCHTODOS; payload: { todos: ITodo[] } };
 
 export const initialState: Context = {
   user: {} as IUser,
@@ -51,15 +52,15 @@ export const initialState: Context = {
 
 export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
   switch (action.type) {
-    case "setUser": {
+    case Action.SETUSER: {
       const { user } = action.payload;
       return { ...state, user: user };
     }
-    case "setAuth": {
+    case Action.SETAUTH: {
       const { auth } = action.payload;
       return { ...state, isAuthenticated: auth };
     }
-    case "fetchTodos": {
+    case Action.FETCHTODOS: {
       const { todos } = action.payload;
       const subtodos = todos.flatMap((t) => t.subtodos);
 
@@ -69,7 +70,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         subTodos: SubRankSort(subtodos),
       };
     }
-    case "createTodo": {
+    case Action.CREATETODO: {
       const { content } = action.payload;
       AddTodo(content, state.user.id);
 
@@ -78,7 +79,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         refresh: true,
       };
     }
-    case "completeTodo": {
+    case Action.COMPLETETODO: {
       const { id, completed } = action.payload;
       const newStatus = !completed;
       CompleteTodo(id, newStatus);
@@ -88,7 +89,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         refresh: true,
       };
     }
-    case "deleteTodo": {
+    case Action.DELETETODO: {
       const { id } = action.payload;
       DeleteTodo(id);
 
@@ -98,16 +99,16 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       };
     }
 
-    case "updateDateTodo": {
-      const { id, date} = action.payload;
+    case  Action.UPDATEDATETODO: {
+      const { id, date } = action.payload;
       UpdateTodo(id, date);
-      
+
       return {
         ...state,
         refresh: true,
       };
     }
-    case "createSubTodo": {
+    case Action.CREATESUBTODO: {
       const { content, parentId } = action.payload;
       AddSubTodo(content, parentId);
       return {
@@ -115,7 +116,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         refresh: true,
       };
     }
-    case "completeSubTodo": {
+    case Action.COMPLETESUBTODO: {
       const { id, completed } = action.payload;
       const newStatus = !completed;
       CompleteSubTodo(id, newStatus);
@@ -125,7 +126,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         refresh: true,
       };
     }
-    case "deleteSubTodo": {
+    case Action.DELETESUBTODO: {
       const { id } = action.payload;
       DeleteSubTodo(id);
       return {
@@ -133,7 +134,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         refresh: true,
       };
     }
-    case "handleOnDragEnd": {
+    case Action.HANDLEONDRAGEND: {
       const { res } = action.payload;
       const tds = state.todos;
       if (!res.destination) return { ...state };
@@ -150,7 +151,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         todos: todos,
       };
     }
-    case "completeAllTodos": {
+    case Action.COMPLETEALLTODOS: {
       state.todos.forEach((t) => CompleteTodo(t.id, true));
 
       return {
@@ -158,7 +159,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         refresh: true,
       };
     }
-    case "deleteCompleteTodos": {
+    case  Action.DELETECOMPLETETODOS: {
       // refactor
       state.todos
         .filter((t) => t.completed === true)
@@ -186,9 +187,11 @@ export const TodoProvider = (props: { children: any }) => {
       if (!res.isAuth) {
         return Promise.reject("not auth yet");
       }
-      dispatch({ type: "setAuth", payload: { auth: res.isAuth } });
-      dispatch({ type: "setUser", payload: { user: res.user } });
+      dispatch({ type: Action.SETAUTH, payload: { auth: res.isAuth } });
+      dispatch({ type: Action.SETUSER, payload: { user: res.user } });
     });
+
+    
 
     // return () => {
     //   localStorage.removeItem("token");
@@ -196,6 +199,18 @@ export const TodoProvider = (props: { children: any }) => {
     //   dispatch({ type: "setUser", payload: { user: {} as IUser} });
     // }
   }, []);
+
+  useEffect(() => {
+    getTodos()
+      .then((res) => {
+        if (state.refresh) state.refresh = false;
+        dispatch({ type: Action.FETCHTODOS, payload: { todos: res } });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+  }, [state.refresh]);
 
   return (
     <TodoContext.Provider value={{ state, dispatch }}>

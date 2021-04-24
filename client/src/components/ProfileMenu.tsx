@@ -5,6 +5,7 @@ import { TodoContext } from "../state";
 import { toast } from "react-toastify";
 import { IUser } from "../common/types";
 import { Avatar, IconButton } from "@material-ui/core";
+import { Action } from "../common/actions";
 
 export default function ProfileMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -19,8 +20,8 @@ export default function ProfileMenu() {
     toast.success(`Bye ${state.user.name}`);
 
     localStorage.removeItem("token");
-    dispatch({ type: "setUser", payload: { user: {} as IUser } });
-    dispatch({ type: "setAuth", payload: { auth: false } });
+    dispatch({ type: Action.SETUSER, payload: { user: {} as IUser } });
+    dispatch({ type: Action.SETAUTH, payload: { auth: false } });
     state.user = {} as IUser;
     state.isAuthenticated = false;
   };

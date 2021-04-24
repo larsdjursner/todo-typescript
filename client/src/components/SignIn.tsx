@@ -15,6 +15,7 @@ import { LockOutlined } from "@material-ui/icons";
 import { SignInAPI } from "../services/TodosService";
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
+import { Action } from "../common/actions";
 
 // template from https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-in/SignIn.js
 const useStyles = makeStyles((theme) => ({
@@ -60,8 +61,8 @@ const SignIn: FC<RouteComponentProps> = () => {
     const response = await SignInAPI(input.email, input.password);
     if (response.token) {
       localStorage.setItem("token", response.token);
-      dispatch({ type: "setUser", payload: { user: response.newUser } });
-      dispatch({ type: "setAuth", payload: { auth: true } });
+      dispatch({ type: Action.SETUSER, payload: { user: response.newUser } });
+      dispatch({ type: Action.SETAUTH, payload: { auth: true } });
       toast.success("Signed in!")
       return;
     }

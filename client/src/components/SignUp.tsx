@@ -15,6 +15,7 @@ import { TodoContext } from "../state";
 import { LockOutlined } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
+import { Action } from "../common/actions";
 
 
 // template from https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-up
@@ -65,8 +66,8 @@ const SignUp: FC<RouteComponentProps> = () => {
 
     if (response.token) {
       localStorage.setItem("token", response.token);
-      await dispatch({ type: "setUser", payload: { user: response.newUser } });
-      await dispatch({ type: "setAuth", payload: { auth: true } });
+      await dispatch({ type: Action.SETUSER, payload: { user: response.newUser } });
+      await dispatch({ type: Action.SETAUTH, payload: { auth: true } });
       toast.success(`Welcome ${response.newUser.name} !`)
       return;
     }

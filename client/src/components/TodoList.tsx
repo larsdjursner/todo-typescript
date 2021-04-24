@@ -10,22 +10,13 @@ import { TodoContext } from "../state";
 import { getCurrentDate } from "../utils/dateFunctions";
 import { RouteComponentProps } from "react-router-dom";
 import { getTodos } from "../services/TodosService";
+import { Action } from "../common/actions";
 
 const TodoList: FC<RouteComponentProps> = () => {
   const { state, dispatch } = useContext(TodoContext);
   const todos = state.todos;
 
-  useEffect(() => {
-    getTodos()
-      .then((res) => {
-        if (state.refresh) state.refresh = false;
-        dispatch({ type: "fetchTodos", payload: { todos: res } });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-  }, [state.refresh]);
+  
   return (
       <div className="parent-todo">
         <div className="child-todo">
@@ -39,7 +30,7 @@ const TodoList: FC<RouteComponentProps> = () => {
               <div className="completion-button-parent">
                 <div
                   className="completion-button"
-                  onClick={() => dispatch({ type: "completeAllTodos" })}
+                  onClick={() => dispatch({ type: Action.COMPLETEALLTODOS })}
                 >
                   <IconButton>
                     <CheckIcon />
@@ -48,7 +39,7 @@ const TodoList: FC<RouteComponentProps> = () => {
                 </div>
                 <div
                   className="completion-button"
-                  onClick={() => dispatch({ type: "deleteCompleteTodos" })}
+                  onClick={() => dispatch({ type: Action.DELETECOMPLETETODOS })}
                 >
                   <IconButton>
                     <ClearIcon />
@@ -63,7 +54,7 @@ const TodoList: FC<RouteComponentProps> = () => {
             <ul className="todolist">
               <DragDropContext
                 onDragEnd={(res) => {
-                  dispatch({ type: "handleOnDragEnd", payload: { res: res } });
+                  dispatch({ type: Action.HANDLEONDRAGEND, payload: { res: res } });
                 }}
               >
                 <Droppable droppableId="droppable-1">

@@ -4,6 +4,7 @@ import { IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import {TodoContext} from "../state";
 import "../styles/TodoForm.css";
+import { Action } from "../common/actions";
 
 
 
@@ -17,7 +18,7 @@ export const TodoForm: FC = () => {
     e.preventDefault();
     if (!value) return;
 
-    dispatch({ type: "createTodo", payload: { content: value } });
+    dispatch({ type: Action.CREATETODO, payload: { content: value } });
     setValue("");
   };
 

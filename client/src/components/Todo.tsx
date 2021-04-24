@@ -13,6 +13,7 @@ import { Checkbox } from "@material-ui/core";
 import { ITodo } from "../common/types";
 import EventIcon from "@material-ui/icons/Event";
 import { format } from "date-fns";
+import { Action } from "../common/actions";
 
 interface ITodoFunctions extends ITodo {
   dragHandle: DraggableProvidedDragHandleProps | undefined;
@@ -43,7 +44,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
           className="todo-content"
           onClick={() =>
             dispatch({
-              type: "completeTodo",
+              type: Action.COMPLETETODO,
               payload: { id: id, completed: completed },
             })
           }
@@ -58,7 +59,12 @@ export const Todo: React.FC<ITodoFunctions> = ({
         <div className="todo-content-additional">
           <div className="todo-content-additional-icon">
             <EventIcon id="TocIcon" />
-            <p className="date">{format(new Date(date), "dd LLL")}</p>
+            <p className="date">
+              {format(new Date(date), "dd MM yyyy") ===
+              format(Date.now(), "dd MM yyyy")
+                ? "Today"
+                : format(new Date(date), "dd LLL")}
+            </p>
           </div>
           <div className="todo-content-additional-icon">
             {subtodos.length > 0 ? (
@@ -82,7 +88,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
           size="small"
           onClick={() =>
             dispatch({
-              type: "completeTodo",
+              type: Action.COMPLETETODO,
               payload: { id: id, completed: completed },
             })
           }
@@ -97,7 +103,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
         </div>
 
         <div
-          onClick={() => dispatch({ type: "deleteTodo", payload: { id: id } })}
+          onClick={() => dispatch({ type: Action.DELETETODO, payload: { id: id } })}
         >
           <IconButton size="small" className="IconButton">
             <DeleteIcon />
