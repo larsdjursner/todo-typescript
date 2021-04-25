@@ -7,14 +7,14 @@ import { SubTodoForm } from "./SubTodoForm";
 import { TodoContext } from "../state";
 import { getFullDate } from "../utils/dateFunctions";
 import { SubTodo } from "./SubTodo";
-import { IModal } from "../common/types";
+import { IOldModal } from "../common/types";
 import { DatePicker } from "./DatePicker";
 
 import "../styles/Modal.css";
 import { Action } from "../common/actions";
 
 
-export const Modal: FC<IModal> = ({ id, isShown, hide }) => {
+export const Modal: FC<IOldModal> = ({ id, isShown, hide }) => {
   const { state, dispatch } = useContext(TodoContext);
   const todo = state.todos.find((t) => t.id === id);
 

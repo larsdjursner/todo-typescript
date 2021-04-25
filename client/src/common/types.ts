@@ -33,12 +33,15 @@ export interface ITodo {
     refresh: Boolean;
   }
 
-  export interface IModal {
+  export interface IOldModal {
     id: number;
     isShown: boolean;
     hide: () => void;
   }
   
+  export interface IModal {
+    id: number;
+  }
 
   export interface IDatePicker {
     id: number;

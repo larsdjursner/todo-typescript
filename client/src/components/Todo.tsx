@@ -1,19 +1,17 @@
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 import TocIcon from "@material-ui/icons/Toc";
 import React, { useContext } from "react";
 import { useModal } from "../hooks/useModal";
 import { TodoContext } from "../state";
-import { getDate } from "../utils/dateFunctions";
-import { Modal } from "./Modal";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import { Checkbox } from "@material-ui/core";
 import { ITodo } from "../common/types";
 import EventIcon from "@material-ui/icons/Event";
 import { format } from "date-fns";
 import { Action } from "../common/actions";
+import { TransitionModal }from "./TransitionModal";
 
 interface ITodoFunctions extends ITodo {
   dragHandle: DraggableProvidedDragHandleProps | undefined;
@@ -83,7 +81,6 @@ export const Todo: React.FC<ITodoFunctions> = ({
         </div>
       </div>
       <div className="todo-buttons">
-        <Modal id={id} isShown={isShown} hide={toggle} />
         <Checkbox
           size="small"
           onClick={() =>
@@ -96,11 +93,9 @@ export const Todo: React.FC<ITodoFunctions> = ({
           color="default"
         />
 
-        <div onClick={toggle}>
-          <IconButton size="small" className="IconButton">
-            <MoreVertIcon />
-          </IconButton>
-        </div>
+        <TransitionModal id = {id}/>
+
+        
 
         <div
           onClick={() => dispatch({ type: Action.DELETETODO, payload: { id: id } })}

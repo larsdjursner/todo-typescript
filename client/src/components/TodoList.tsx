@@ -16,6 +16,18 @@ const TodoList: FC<RouteComponentProps> = () => {
   const { state, dispatch } = useContext(TodoContext);
   const todos = state.todos;
 
+  useEffect(() => {
+    getTodos()
+      .then((res) => {
+        if (state.refresh) state.refresh = false;
+        dispatch({ type: Action.FETCHTODOS, payload: { todos: res } });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+  }, [state.refresh]);
+
   
   return (
       <div className="parent-todo">

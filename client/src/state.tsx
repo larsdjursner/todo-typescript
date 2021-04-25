@@ -200,17 +200,7 @@ export const TodoProvider = (props: { children: any }) => {
     // }
   }, []);
 
-  useEffect(() => {
-    getTodos()
-      .then((res) => {
-        if (state.refresh) state.refresh = false;
-        dispatch({ type: Action.FETCHTODOS, payload: { todos: res } });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-  }, [state.refresh]);
+  
 
   return (
     <TodoContext.Provider value={{ state, dispatch }}>
