@@ -11,7 +11,7 @@ import { ITodo } from "../common/types";
 import EventIcon from "@material-ui/icons/Event";
 import { format } from "date-fns";
 import { Action } from "../common/actions";
-import { TransitionModal }from "./TransitionModal";
+import { TransitionModal } from "./TransitionModal";
 
 interface ITodoFunctions extends ITodo {
   dragHandle: DraggableProvidedDragHandleProps | undefined;
@@ -29,6 +29,12 @@ export const Todo: React.FC<ITodoFunctions> = ({
   const { state, dispatch } = useContext(TodoContext);
   const { isShown, toggle } = useModal();
 
+  const handleComplete = () => {
+    dispatch({
+      type: Action.COMPLETETODO,
+      payload: { id: id, completed: completed },
+    });
+  };
   return (
     <li className="todo">
       <div>
@@ -40,12 +46,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
       <div className="todo-content-parent">
         <p
           className="todo-content"
-          onClick={() =>
-            dispatch({
-              type: Action.COMPLETETODO,
-              payload: { id: id, completed: completed },
-            })
-          }
+          onClick={handleComplete}
           style={{
             textDecoration: completed ? "line-through" : "",
             color: completed ? "gray" : "",
@@ -83,22 +84,17 @@ export const Todo: React.FC<ITodoFunctions> = ({
       <div className="todo-buttons">
         <Checkbox
           size="small"
-          onClick={() =>
-            dispatch({
-              type: Action.COMPLETETODO,
-              payload: { id: id, completed: completed },
-            })
-          }
+          onClick={handleComplete}
           checked={completed ? true : false}
           color="default"
         />
 
-        <TransitionModal id = {id}/>
-
-        
+        <TransitionModal id={id} />
 
         <div
-          onClick={() => dispatch({ type: Action.DELETETODO, payload: { id: id } })}
+          onClick={() =>
+            dispatch({ type: Action.DELETETODO, payload: { id: id } })
+          }
         >
           <IconButton size="small" className="IconButton">
             <DeleteIcon />

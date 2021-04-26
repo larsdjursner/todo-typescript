@@ -114,5 +114,5 @@ li:hover {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 25px;
-  background-image: linear-gradient( rgb(28, 40, 75), hsl(232, 50%, 52%));
+  background:rgb(73, 73, 73)
 }
