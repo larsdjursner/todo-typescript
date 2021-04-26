@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useContext, useEffect } from "react";
+import React, { FC, useContext, useEffect } from "react";
 import { TodoForm } from "./TodoForm";
 // import "../App.css";
 import { Todo } from "./Todo";
@@ -11,6 +11,7 @@ import { getCurrentDate } from "../utils/dateFunctions";
 import { RouteComponentProps } from "react-router-dom";
 import { getTodos } from "../services/TodosService";
 import { Action } from "../common/actions";
+import MediaCard from "./MediaCard";
 
 const TodoList: FC<RouteComponentProps> = () => {
   const { state, dispatch } = useContext(TodoContext);
@@ -25,11 +26,10 @@ const TodoList: FC<RouteComponentProps> = () => {
       .catch((err) => {
         console.log(err);
       });
-
   }, [state.refresh]);
 
-  
   return (
+    <>
       <div className="parent-todo">
         <div className="child-todo">
           <div className="todoform">
@@ -66,7 +66,10 @@ const TodoList: FC<RouteComponentProps> = () => {
             <ul className="todolist">
               <DragDropContext
                 onDragEnd={(res) => {
-                  dispatch({ type: Action.HANDLEONDRAGEND, payload: { res: res } });
+                  dispatch({
+                    type: Action.HANDLEONDRAGEND,
+                    payload: { res: res },
+                  });
                 }}
               >
                 <Droppable droppableId="droppable-1">
@@ -113,6 +116,8 @@ const TodoList: FC<RouteComponentProps> = () => {
           </div>
         </div>
       </div>
+      {state.todos.length === 0 ? <MediaCard /> : <></>}
+    </>
   );
 };
 

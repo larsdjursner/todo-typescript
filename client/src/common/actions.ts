@@ -3,6 +3,7 @@ export enum Action {
     SETUSER = "setUser",
     DELETETODO = "deleteTodo",
     UPDATEDATETODO = "updateDateTodo",
+    UPDATENAMETODO = "updateNameTodo",
     COMPLETETODO = "completeTodo",
     CREATETODO = "createTodo",
     DELETECOMPLETETODOS = "deleteCompleteTodos",

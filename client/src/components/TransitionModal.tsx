@@ -15,6 +15,7 @@ import { TodoContext } from "../state";
 import { SubTodoForm } from "./SubTodoForm";
 import { SubTodo } from "./SubTodo";
 import { DatePicker } from "./DatePicker";
+import { EditableTextField } from "./EditableTextField";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,34 +24,33 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: "center",
       justifyContent: "center",
     },
-    
+
     styledmodal: {
-        width: "45em",
-        height: "40em",
-        borderRadius: "0.5em",
-        backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "left"
+      width: "45em",
+      height: "40em",
+      borderRadius: "0.5em",
+      backgroundColor: theme.palette.background.paper,
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "left",
     },
     header: {
-        display: "flex",
-        justifyContent: "space-between"
+      display: "flex",
+      justifyContent: "space-between",
     },
     headerChild: {
-        display: "inline-block",
-        wordwrap: "break-word",
-        overflowX: "hidden"
-
+      display: "inline-block",
+      wordwrap: "break-word",
+      overflowX: "hidden",
     },
     static: {
-        borderTop: "1px solid #e0e0e0",
+      borderTop: "1px solid #e0e0e0",
     },
     content: {
-        overflowY: "scroll"
-    }
+      overflowY: "scroll",
+    },
   })
 );
 
@@ -97,7 +97,8 @@ export const TransitionModal: FC<IModal> = ({ id }) => {
         <Fade in={open}>
           <div className={classes.styledmodal}>
             <div className={classes.header}>
-              <h2 className={classes.headerChild}> {header} </h2>
+              <EditableTextField initialContent={header} id={id}/>
+              {/* <h2 className={classes.headerChild}> {header} </h2> */}
               <IconButton className={classes.headerChild} onClick={handleClose}>
                 <CloseIcon />
               </IconButton>

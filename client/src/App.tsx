@@ -13,7 +13,6 @@ import {
 } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import MediaCard from "./components/MediaCard";
 
 toast.configure();
 
@@ -46,7 +45,6 @@ const App: React.FC = () => {
               <div className="app">
                 <Nav {...props} />
                 <TodoList {...props} />
-                {todos.length === 0 ? <MediaCard /> : <></>}
               </div>
             ) : (
               <Redirect to="/signin" />

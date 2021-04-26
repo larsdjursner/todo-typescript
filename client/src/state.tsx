@@ -13,7 +13,8 @@ import {
   getTodos,
   reorderTodos,
   isAuth,
-  UpdateTodo,
+  UpdateDateTodo,
+  UpdateNameTodo,
 } from "./services/TodosService";
 import { RankSort, SubRankSort } from "./utils/ArraySort";
 import { Action } from "./common/actions";
@@ -23,6 +24,7 @@ type ACTIONTYPE =
   | { type: Action.SETUSER; payload: { user: IUser } }
   | { type: Action.DELETETODO; payload: { id: number } }
   | { type: Action.UPDATEDATETODO; payload: { id: number; date: Date } }
+  | { type: Action.UPDATENAMETODO; payload: { id: number; content: string } }
   | { type: Action.COMPLETETODO; payload: { id: number; completed: boolean } }
   | {
       type: Action.CREATETODO;
@@ -101,7 +103,16 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
 
     case  Action.UPDATEDATETODO: {
       const { id, date } = action.payload;
-      UpdateTodo(id, date);
+      UpdateDateTodo(id, date);
+
+      return {
+        ...state,
+        refresh: true,
+      };
+    }
+    case Action.UPDATENAMETODO: {
+      const { id, content } = action.payload;
+      UpdateNameTodo(id, content);
 
       return {
         ...state,
