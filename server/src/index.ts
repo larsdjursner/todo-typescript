@@ -61,7 +61,7 @@ app.post("/todos", auth, async (req, res) => {
   res.status(200).json(todo);
 });
 
-app.put("/todos/:id", auth, async (req, res) => {
+app.patch("/todos/:id", auth, async (req, res) => {
   const { id } = req.params;
   const { completed } = req.body
 
@@ -110,7 +110,7 @@ app.post("/subtodos", auth, async (req, res) => {
   res.status(200).json(subTodo);
 });
 
-app.put("/subtodos/:id", auth, async (req, res) => {
+app.patch("/subtodos/:id", auth, async (req, res) => {
   const { id } = req.params;
   const { completed } = req.body;
   const subTodo = await prisma.subTodo.update({

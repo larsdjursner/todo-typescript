@@ -3,7 +3,6 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 import TocIcon from "@material-ui/icons/Toc";
 import React, { useContext } from "react";
-import { useModal } from "../hooks/useModal";
 import { TodoContext } from "../state";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import { Checkbox } from "@material-ui/core";
@@ -24,11 +23,9 @@ export const Todo: React.FC<ITodoFunctions> = ({
   content,
   date,
   dragHandle,
-  subtodos,
 }) => {
   const { state, dispatch } = useContext(TodoContext);
-  const { isShown, toggle } = useModal();
-
+  const subTodos = state.subTodos.filter(st => st.parentId === id);
   const handleComplete = () => {
     dispatch({
       type: Action.COMPLETETODO,
@@ -66,12 +63,12 @@ export const Todo: React.FC<ITodoFunctions> = ({
             </p>
           </div>
           <div className="todo-content-additional-icon">
-            {subtodos.length > 0 ? (
+            {subTodos.length > 0 ? (
               <>
                 <TocIcon id="TocIcon" />
                 <p className="date">
-                  {`${subtodos.filter((t) => t.completed === true).length}/${
-                    subtodos.length
+                  {`${subTodos.filter((t) => t.completed === true).length}/${
+                    subTodos.length
                   }`}
                 </p>
               </>

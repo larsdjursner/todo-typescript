@@ -83,12 +83,23 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
     }
     case Action.COMPLETETODO: {
       const { id, completed } = action.payload;
-      const newStatus = !completed;
-      CompleteTodo(id, newStatus);
+      const status = !completed;
+      CompleteTodo(id, status);
 
       return {
         ...state,
-        refresh: true,
+        todos: state.todos.map((t) =>
+          t.id === id
+            ? {
+                ...t,
+                completed: status,
+              }
+            : { ...t }
+        ),
+        subTodos: state.subTodos.map((t) =>
+          t.parentId === id ? { ...t, completed: status } : { ...t }
+        ),
+        // refresh: true,
       };
     }
     case Action.DELETETODO: {
@@ -101,7 +112,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
       };
     }
 
-    case  Action.UPDATEDATETODO: {
+    case Action.UPDATEDATETODO: {
       const { id, date } = action.payload;
       UpdateDateTodo(id, date);
 
@@ -134,7 +145,8 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
 
       return {
         ...state,
-        refresh: true,
+        subTodos: state.subTodos.map( (st) => st.id === id ? {...st, completed : newStatus} : {...st})
+        // refresh: true,
       };
     }
     case Action.DELETESUBTODO: {
@@ -170,7 +182,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         refresh: true,
       };
     }
-    case  Action.DELETECOMPLETETODOS: {
+    case Action.DELETECOMPLETETODOS: {
       // refactor
       state.todos
         .filter((t) => t.completed === true)
@@ -202,16 +214,12 @@ export const TodoProvider = (props: { children: any }) => {
       dispatch({ type: Action.SETUSER, payload: { user: res.user } });
     });
 
-    
-
     // return () => {
     //   localStorage.removeItem("token");
     //   dispatch({ type: "setAuth", payload: { auth: false } });
     //   dispatch({ type: "setUser", payload: { user: {} as IUser} });
     // }
   }, []);
-
-  
 
   return (
     <TodoContext.Provider value={{ state, dispatch }}>

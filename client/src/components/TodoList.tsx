@@ -26,7 +26,7 @@ const TodoList: FC<RouteComponentProps> = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [state.refresh]);
+  }, []);
 
   return (
     <>

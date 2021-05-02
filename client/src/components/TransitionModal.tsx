@@ -56,8 +56,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const TransitionModal: FC<IModal> = ({ id }) => {
   const { state, dispatch } = useContext(TodoContext);
-  const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+
+  const classes = useStyles();
   const todo = state.todos.find((t) => t.id === id);
   const header = todo!.content;
   const date = new Date(Date.parse(todo!.date));

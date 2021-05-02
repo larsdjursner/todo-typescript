@@ -60,7 +60,7 @@ p.todo-content {
   margin: 0;
   display: flex;
   justify-content: space-between;
-  width: 8em
+  width: 10em
 }
 
 .todo-content-additional-icon {

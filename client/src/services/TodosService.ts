@@ -79,7 +79,7 @@ export async function AddTodo(content: string, userId: number) {
 
 export async function CompleteTodo(id: number, completed: boolean) {
   await fetch(`${APIRoute}/todos/${id}`, {
-    method: "PUT",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
       token: localStorage.token,
@@ -97,7 +97,7 @@ export async function CompleteTodo(id: number, completed: boolean) {
 
 export async function UpdateDateTodo(id: number, date: Date) {
   await fetch(`${APIRoute}/todos/${id}`, {
-    method: "PUT",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
       token: localStorage.token,
@@ -115,7 +115,7 @@ export async function UpdateDateTodo(id: number, date: Date) {
 
 export async function UpdateNameTodo(id: number, content: string) {
   await fetch(`${APIRoute}/todos/${id}`, {
-    method: "PUT",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
       token: localStorage.token,
@@ -168,7 +168,7 @@ export async function AddSubTodo(
 
 export async function CompleteSubTodo(id: number, completed: boolean) {
   fetch(`${APIRoute}/subtodos/${id}`, {
-    method: "PUT",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
       token: localStorage.token,
@@ -200,7 +200,7 @@ export async function DeleteSubTodo(id: number) {
 
 async function ReorderTodo(id: number, rank: number) {
   fetch(`${APIRoute}/todos/${id}`, {
-    method: "PUT",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
       token: localStorage.token,
