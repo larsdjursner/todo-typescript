@@ -12,6 +12,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { getTodos } from "../services/TodosService";
 import { Action } from "../common/actions";
 import MediaCard from "./MediaCard";
+import { format } from "date-fns";
 
 const TodoList: FC<RouteComponentProps> = () => {
   const { state, dispatch } = useContext(TodoContext);
@@ -26,7 +27,7 @@ const TodoList: FC<RouteComponentProps> = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [state.refresh]);
 
   return (
     <>
@@ -116,7 +117,7 @@ const TodoList: FC<RouteComponentProps> = () => {
           </div>
         </div>
       </div>
-      {state.todos.length === 0 ? <MediaCard /> : <></>}
+      {state.todos.length === 0 && state.loaded ? <MediaCard /> : <></>}
     </>
   );
 };

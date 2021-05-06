@@ -50,6 +50,7 @@ export const initialState: Context = {
   todos: [],
   subTodos: [],
   refresh: false,
+  loaded: false,
 };
 
 export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
@@ -68,6 +69,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
 
       return {
         ...state,
+        loaded: true,
         todos: RankSort(todos),
         subTodos: SubRankSort(subtodos),
       };
@@ -75,7 +77,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
     case Action.CREATETODO: {
       const { content } = action.payload;
       AddTodo(content, state.user.id);
-
+     
       return {
         ...state,
         refresh: true,
@@ -99,7 +101,6 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
         subTodos: state.subTodos.map((t) =>
           t.parentId === id ? { ...t, completed: status } : { ...t }
         ),
-        // refresh: true,
       };
     }
     case Action.DELETETODO: {
@@ -108,7 +109,7 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
 
       return {
         ...state,
-        refresh: true,
+        todos: state.todos.filter((t) => t.id !== id),
       };
     }
 
@@ -118,7 +119,9 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
 
       return {
         ...state,
-        refresh: true,
+        todos: state.todos.map((t) =>
+          t.id === id ? { ...t, date: date.toDateString() } : { ...t }
+        ),
       };
     }
     case Action.UPDATENAMETODO: {
@@ -127,15 +130,18 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
 
       return {
         ...state,
-        refresh: true,
+        todos: state.todos.map((t) =>
+          t.id === id ? { ...t, content: content } : { ...t }
+        ),
       };
     }
     case Action.CREATESUBTODO: {
       const { content, parentId } = action.payload;
       AddSubTodo(content, parentId);
+
       return {
         ...state,
-        refresh: true,
+        refresh: true, //easier for now
       };
     }
     case Action.COMPLETESUBTODO: {
@@ -145,16 +151,18 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
 
       return {
         ...state,
-        subTodos: state.subTodos.map( (st) => st.id === id ? {...st, completed : newStatus} : {...st})
-        // refresh: true,
+        subTodos: state.subTodos.map((st) =>
+          st.id === id ? { ...st, completed: newStatus } : { ...st }
+        ),
       };
     }
     case Action.DELETESUBTODO: {
       const { id } = action.payload;
       DeleteSubTodo(id);
+
       return {
         ...state,
-        refresh: true,
+        subTodos: state.subTodos.filter((s) => s.id !== id),
       };
     }
     case Action.HANDLEONDRAGEND: {
@@ -179,18 +187,23 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
 
       return {
         ...state,
-        refresh: true,
+        todos: state.todos.map((t) => {
+          return { ...t, completed: true };
+        }),
+        subTodos: state.subTodos.map((t) => {
+          return { ...t, completed: true };
+        }),
       };
     }
     case Action.DELETECOMPLETETODOS: {
-      // refactor
       state.todos
         .filter((t) => t.completed === true)
         .forEach((t) => DeleteTodo(t.id));
 
       return {
         ...state,
-        refresh: true,
+        todos: state.todos.filter((t) => t.completed !== true),
+        subTodos: state.subTodos.filter((t) => t.completed !== true),
       };
     }
 
@@ -205,7 +218,6 @@ export const TodoProvider = (props: { children: any }) => {
   const [state, dispatch] = useReducer(TodoReducer, initialState);
 
   useEffect(() => {
-    console.log("ISAUTH()");
     isAuth().then((res) => {
       if (!res.isAuth) {
         return Promise.reject("not auth yet");

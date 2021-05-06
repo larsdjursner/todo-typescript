@@ -40,23 +40,6 @@ export const Nav: FC<RouteComponentProps> = () => {
     setProgress(getProgress());
   }, [state.todos]);
 
-  // const countComplete = () => {
-  //   const count = todos.filter((t) => t.completed).length;
-  //   return todos.length > 0
-  //     ? `${count} / ${todos.length} tasks done!`
-  //     : "Done!";
-  // };
-
-  // const countOldTodos = () => {
-  //   const today = new Date(Date.now());
-  //   today.setHours(0);
-  //   const count = todos.filter(
-  //     (t) => new Date(Date.parse(t.date)) < today && !t.completed
-  //   ).length;
-
-  //   return count > 0 ? count + " overdue todos" : "";
-  // };
-
   return (
     <div className={classes.Nav}>
       <div className={classes.NavItem}>
@@ -73,8 +56,6 @@ export const Nav: FC<RouteComponentProps> = () => {
             value={progress}
           />
         </div>
-
-        {/* <p> {countOldTodos()} </p> */}
       </div>
     </div>
   );

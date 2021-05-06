@@ -73,6 +73,15 @@ p.todo-content {
 #TocIcon {
   color:gray;
 }
+
+#DateIcon {
+  color:gray;
+}
+
+#OverdueDateIcon {
+  color:rgb(161, 14, 14);
+}
+
 #TocIconHidden {
   visibility: hidden;
 }

@@ -34,6 +34,10 @@ export default function ProfileMenu() {
     setAnchorEl(null);
   };
 
+  const handleRoute = () => {
+
+  }
+
   return (
     <div>
       <IconButton
@@ -55,7 +59,7 @@ export default function ProfileMenu() {
           onClose={handleClose}
         >
           <MenuItem onClick={handleClose}>{avatar}</MenuItem>
-          <MenuItem onClick={handleClose}>My account</MenuItem>
+          <MenuItem onClick={handleRoute}>My account</MenuItem>
           <MenuItem onClick={logout}>Logout</MenuItem>
         </Menu>
     </div>

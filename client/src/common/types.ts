@@ -31,6 +31,7 @@ export interface Context {
   todos: ITodo[];
   subTodos: ISubTodo[];
   refresh: Boolean;
+  loaded: Boolean;
 }
 
 export interface IModal {
