@@ -13,16 +13,31 @@ import {
 } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Account } from "./components/Account";
 
 toast.configure();
 
 const App: React.FC = () => {
   const { state, dispatch } = useContext(TodoContext);
-  const { isAuthenticated, todos } = state;
+  const { isAuthenticated } = state;
 
   return (
     <Router>
       <Switch>
+        <Route
+          exact
+          path="/account"
+          render={(props) =>
+            isAuthenticated ? (
+              <div className="app">
+                <Nav {...props} />
+                <Account {...props} />
+              </div>
+            ) : (
+              <Redirect to="/signin" />
+            )
+          }
+        />
         <Route
           exact
           path="/signin"

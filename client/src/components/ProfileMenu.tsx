@@ -6,6 +6,14 @@ import { toast } from "react-toastify";
 import { IUser } from "../common/types";
 import { Avatar, IconButton } from "@material-ui/core";
 import { Action } from "../common/actions";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+  Link,
+  NavLink,
+} from "react-router-dom";
 
 export default function ProfileMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -34,10 +42,6 @@ export default function ProfileMenu() {
     setAnchorEl(null);
   };
 
-  const handleRoute = () => {
-
-  }
-
   return (
     <div>
       <IconButton
@@ -48,20 +52,29 @@ export default function ProfileMenu() {
       >
         <Avatar>{avatar === undefined ? avatar : avatar.charAt(0)}</Avatar>
       </IconButton>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          getContentAnchorEl={null}
-          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-          transformOrigin={{ vertical: "top", horizontal: "left" }}
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-          <MenuItem onClick={handleClose}>{avatar}</MenuItem>
-          <MenuItem onClick={handleRoute}>My account</MenuItem>
-          <MenuItem onClick={logout}>Logout</MenuItem>
-        </Menu>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        getContentAnchorEl={null}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        transformOrigin={{ vertical: "top", horizontal: "left" }}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem disabled={true} >{avatar}</MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Link to="/account" style={{ textDecoration: "none", color: "#000000"}}>
+            {"Account"}
+          </Link>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Link to="/" style={{ textDecoration: "none",color: "#000000"}}>
+            {"Todo"}
+          </Link>
+        </MenuItem>
+        <MenuItem onClick={logout}>Logout</MenuItem>
+      </Menu>
     </div>
   );
 }

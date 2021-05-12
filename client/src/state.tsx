@@ -76,8 +76,8 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
     }
     case Action.CREATETODO: {
       const { content } = action.payload;
-      AddTodo(content, state.user.id);
-     
+      const dto = AddTodo(content, state.user.id);
+
       return {
         ...state,
         refresh: true,
@@ -226,11 +226,11 @@ export const TodoProvider = (props: { children: any }) => {
       dispatch({ type: Action.SETUSER, payload: { user: res.user } });
     });
 
-    // return () => {
-    //   localStorage.removeItem("token");
-    //   dispatch({ type: "setAuth", payload: { auth: false } });
-    //   dispatch({ type: "setUser", payload: { user: {} as IUser} });
-    // }
+    return () => {
+      localStorage.removeItem("token");
+      dispatch({ type: Action.SETAUTH, payload: { auth: false } });
+      dispatch({ type: Action.SETUSER, payload: { user: {} as IUser} });
+    }
   }, []);
 
   return (

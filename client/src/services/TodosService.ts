@@ -49,6 +49,30 @@ export const isAuth = async () => {
   }
 };
 
+export async function DeleteAccount(
+  userId: number,
+  email: string,
+  // password: string
+) {
+  //some sort of relogin validation
+  
+  await fetch(`${APIRoute}/users/${userId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      token: localStorage.token,
+    },
+    // body: JSON.stringify({ userId }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+
 //todos
 export async function getTodos() {
   return await fetch(`${APIRoute}/todos`, {

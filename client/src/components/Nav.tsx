@@ -11,6 +11,7 @@ const useStyles = makeStyles({
     height: "3.5em",
     display: "flex",
     justifyContent: "space-between",
+    boxShadow: "0px 0px 0.3em #666"
   },
   NavItem: {
     display: "flex",
