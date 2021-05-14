@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: "center",
       justifyContent: "center",
     },
-
     styledmodal: {
       width: "45em",
       height: "40em",

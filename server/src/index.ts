@@ -160,12 +160,7 @@ app.put("/users/:id", auth, async (req, res) => {
 });
 
 app.delete(`/users/:id`, auth, async (req, res) => {
-  console.log("delete")
   const { id } = req.params;
-  console.log(typeof id);
-  console.log(id);
-
-
 
   const user = await prisma.user.delete({
     where: { id: Number(id) },

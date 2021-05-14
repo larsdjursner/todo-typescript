@@ -1,12 +1,13 @@
 import { makeStyles } from "@material-ui/core";
 import { SatelliteSharp } from "@material-ui/icons";
-import { FC, useContext } from "react";
+import React, { FC, useContext } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Action } from "../common/actions";
 import { IUser } from "../common/types";
 import { DeleteAccount } from "../services/TodosService";
 import { TodoContext } from "../state";
+import { DeleteModal } from "./DeleteModal";
 
 const useStyles = makeStyles({
   container: {
@@ -31,13 +32,11 @@ const useStyles = makeStyles({
   },
 });
 
-//   export default function MediaCard() {
 export const Account: FC<RouteComponentProps> = () => {
   const { state, dispatch } = useContext(TodoContext);
   const classes = useStyles();
 
   const logout = async () => {
-    toast.success(`Account deleted, bye ${state.user.name}`);
     localStorage.removeItem("token");
     dispatch({ type: Action.SETUSER, payload: { user: {} as IUser } });
     dispatch({ type: Action.SETAUTH, payload: { auth: false } });
@@ -45,7 +44,7 @@ export const Account: FC<RouteComponentProps> = () => {
     state.isAuthenticated = false;
   };
 
-  const deleteuser = () => {
+  const deleteUser = () => {
     DeleteAccount(state.user.id, state.user.email);
     logout();
   };
@@ -76,7 +75,8 @@ export const Account: FC<RouteComponentProps> = () => {
         </div>
         <div className={classes.section}>
             <p>deletion of your account is permanent, along with all of your data attached to the account.</p>
-          <button onClick={deleteuser}>delete account</button>
+          {/* <button onClick={deleteuser}>delete account</button> */}
+          <DeleteModal id={state.user.id} deleteUser={deleteUser}/>
         </div>
       </div>
     </div>

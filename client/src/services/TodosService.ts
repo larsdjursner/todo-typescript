@@ -3,7 +3,7 @@ import { ITodo } from "../common/types";
 const APIRoute = "http://localhost:3001";
 
 //refactor
-//auth
+//auth and user -> move to userservice.ts
 export async function SignUpAPI(name: string, email: string, password: string) {
   try {
     const req = await fetch(`${APIRoute}/auth/signup`, {
@@ -51,18 +51,17 @@ export const isAuth = async () => {
 
 export async function DeleteAccount(
   userId: number,
-  email: string,
+  email: string
   // password: string
 ) {
   //some sort of relogin validation
-  
+
   await fetch(`${APIRoute}/users/${userId}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
       token: localStorage.token,
     },
-    // body: JSON.stringify({ userId }),
   })
     .then((res) => res.json())
     .then((data) => {

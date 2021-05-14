@@ -14,7 +14,7 @@ import { TodoContext } from "../state";
 import { LockOutlined } from "@material-ui/icons";
 import { SignInAPI } from "../services/TodosService";
 import { Link } from "react-router-dom";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import { Action } from "../common/actions";
 
 // template from https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-in/SignIn.js
@@ -63,12 +63,10 @@ const SignIn: FC<RouteComponentProps> = () => {
       localStorage.setItem("token", response.token);
       dispatch({ type: Action.SETUSER, payload: { user: response.newUser } });
       dispatch({ type: Action.SETAUTH, payload: { auth: true } });
-      toast.success("Signed in!")
+      toast.success("Signed in!");
       return;
     }
     toast.error(response);
-
- 
   };
   return (
     <Container component="main" maxWidth="xs">
@@ -80,35 +78,36 @@ const SignIn: FC<RouteComponentProps> = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
+
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          id="email"
+          label="Email Address"
+          name="email"
+          autoComplete="email"
+          // autoFocus
+          onChange={(e) => handleChange(e)}
+        />
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          name="password"
+          label="Password"
+          type="password"
+          id="password"
+          autoComplete="current-password"
+          onChange={(e) => handleChange(e)}
+        />
         <form
           className={classes.form}
           noValidate
           onClick={(e) => handleSubmit(e)}
         >
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            // autoFocus
-            onChange={(e) => handleChange(e)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={(e) => handleChange(e)}
-          />
           <Button
             type="submit"
             fullWidth
@@ -118,20 +117,16 @@ const SignIn: FC<RouteComponentProps> = () => {
           >
             Sign In
           </Button>
-          <Grid container>
-            <Grid item xs>
-              
-              {/* <Link href="#" variant="body2">           implement
-                Forgot password?
-              </Link> */}
-            </Grid>
-            <Grid item>
-              <Link to="/signup">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
         </form>
+
+        <Grid container>
+          <Grid item xs>
+            <Link to="/">{"Forgot password?"}</Link>
+          </Grid>
+          <Grid item>
+            <Link to="/signup">{"Don't have an account? Sign Up"}</Link>
+          </Grid>
+        </Grid>
       </div>
     </Container>
   );

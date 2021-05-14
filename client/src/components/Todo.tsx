@@ -86,7 +86,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
         <Checkbox
           size="small"
           onClick={handleComplete}
-          checked={completed ? true : false}
+          checked={completed}
           color="default"
         />
 
