@@ -150,11 +150,12 @@ app.post("/users", auth, async (req, res) => {
   res.status(200).json(user);
 });
 
-app.put("/users/:id", auth, async (req, res) => {
+app.patch("/users/:id", auth, async (req, res) => {
   const { id } = req.params;
+  const {name, email } = req.body;
   const user = await prisma.user.update({
     where: { id: Number(id) },
-    data: { ...req.body },
+    data: { name: name, email: email },
   });
   res.status(200).json(user);
 });

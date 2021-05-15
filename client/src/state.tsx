@@ -15,6 +15,7 @@ import {
   isAuth,
   UpdateDateTodo,
   UpdateNameTodo,
+  SignInAPI,
 } from "./services/TodosService";
 import { RankSort, SubRankSort } from "./utils/ArraySort";
 import { Action } from "./common/actions";
@@ -42,7 +43,9 @@ type ACTIONTYPE =
       type: Action.COMPLETESUBTODO;
       payload: { id: number; completed: boolean };
     }
-  | { type: Action.FETCHTODOS; payload: { todos: ITodo[] } };
+  | { type: Action.FETCHTODOS; payload: { todos: ITodo[] } }
+  | { type: Action.DELETEACCOUNT; payload: { } }
+  | { type: Action.CHANGEDETAILS; payload: {name:string, email:string } }
 
 export const initialState: Context = {
   user: {} as IUser,
@@ -62,6 +65,11 @@ export const TodoReducer = (state: Context, action: ACTIONTYPE): Context => {
     case Action.SETAUTH: {
       const { auth } = action.payload;
       return { ...state, isAuthenticated: auth };
+    }
+    case Action.CHANGEDETAILS: {
+      const {name, email} = action.payload;
+
+      return {...state, user: { ...state.user, name: name, email: email}}
     }
     case Action.FETCHTODOS: {
       const { todos } = action.payload;

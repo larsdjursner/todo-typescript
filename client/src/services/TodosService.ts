@@ -50,12 +50,8 @@ export const isAuth = async () => {
 };
 
 export async function DeleteAccount(
-  userId: number,
-  email: string
-  // password: string
+  userId: number
 ) {
-  //some sort of relogin validation
-
   await fetch(`${APIRoute}/users/${userId}`, {
     method: "DELETE",
     headers: {
@@ -72,8 +68,30 @@ export async function DeleteAccount(
     });
 }
 
+
+export const ChangeDetails = async (
+  userId: number,
+  name: string,
+  email: string
+) => {
+  await fetch(`${APIRoute}/users/${userId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      token: localStorage.token,
+    },
+    body: JSON.stringify({name, email }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
 //todos
-export async function getTodos() {
+export const getTodos = async () => {
   return await fetch(`${APIRoute}/todos`, {
     method: "GET",
     headers: {

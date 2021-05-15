@@ -98,7 +98,6 @@ export const TransitionModal: FC<IModal> = ({ id }) => {
           <div className={classes.styledmodal}>
             <div className={classes.header}>
               <EditableTextField initialContent={header} id={id}/>
-              {/* <h2 className={classes.headerChild}> {header} </h2> */}
               <IconButton className={classes.headerChild} onClick={handleClose}>
                 <CloseIcon />
               </IconButton>

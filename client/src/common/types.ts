@@ -38,6 +38,18 @@ export interface IModal {
   id: number;
 }
 
+export interface IDeleteModal extends IModal {
+  deleteUser(): void;
+}
+
+export enum DetailsType {
+  Name = "Name",
+  Email ="Email",
+  Password = "Password"
+}
+export interface IChangeModal extends IModal {
+  detailsType : DetailsType
+}
 export interface IDatePicker {
   id: number;
   date: Date;

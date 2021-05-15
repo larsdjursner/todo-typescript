@@ -12,5 +12,7 @@ export enum Action {
     DELETESUBTODO = "deleteSubTodo",
     COMPLETEALLTODOS = "completeAllTodos",
     FETCHTODOS = "fetchTodos",
-    HANDLEONDRAGEND = "handleOnDragEnd"
+    HANDLEONDRAGEND = "handleOnDragEnd",
+    DELETEACCOUNT = "deleteAccount",
+    CHANGEDETAILS = "changeDetails",
 }
