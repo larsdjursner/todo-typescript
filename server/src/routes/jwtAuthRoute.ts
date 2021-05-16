@@ -54,6 +54,46 @@ router.post("/signup", validInfo, async (req: Request, res: Response) => {
   }
 });
 
+router.patch("/changepassword/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { password, newPassword } = req.body;
+    const user = await prisma.user.findFirst({ where: { id: Number(id) } });
+
+    if (!user) {
+      return res.status(404).json("User does not exist");
+    }
+    const validPassword = await compare(password, user!.password);
+    if (!validPassword) {
+      return res.status(404).json("Password or Email is incorrect");
+    }
+
+    const salt = await genSalt(10);
+    const encryptPass = await hash(newPassword, salt);
+
+    const updatedUser = await prisma.user.update({
+      where: { id: Number(id) },
+      data: {
+        password: encryptPass,
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        todos: true,
+      },
+    });
+
+    // pass jwt
+    const token = jwtGenerate(updatedUser!.id);
+    return res.status(200).json({ updatedUser, token });
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json("Server Error");
+  }
+});
+
 //signin
 router.post("/signin", validInfo, async (req, res) => {
   try {
@@ -102,7 +142,7 @@ router.post("/verify", auth, async (req, res) => {
         name: true,
       },
     });
-    res.json({isAuth: true, user: user});
+    res.json({ isAuth: true, user: user });
   } catch (err) {
     console.error(err.message);
     res.status(500).json("Server Error");

@@ -35,6 +35,25 @@ export async function SignInAPI(email: string, password: string) {
     console.error("Error:", error);
   }
 }
+
+export const ChangePasswordAPI = async (userId: number, password: string, newPassword: string) => {
+  try {
+    console.log("inside changepasswordapi")
+    console.log(password, newPassword);
+    const req = await fetch(`${APIRoute}/auth/changepassword/${userId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        token: localStorage.token,
+      },
+      body: JSON.stringify({ password, newPassword }),
+    });
+    return req.json();
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
 export const isAuth = async () => {
   try {
     const req = await fetch(`${APIRoute}/auth/verify`, {
@@ -49,9 +68,7 @@ export const isAuth = async () => {
   }
 };
 
-export async function DeleteAccount(
-  userId: number
-) {
+export async function DeleteAccount(userId: number) {
   await fetch(`${APIRoute}/users/${userId}`, {
     method: "DELETE",
     headers: {
@@ -68,7 +85,6 @@ export async function DeleteAccount(
     });
 }
 
-
 export const ChangeDetails = async (
   userId: number,
   name: string,
@@ -80,7 +96,7 @@ export const ChangeDetails = async (
       "Content-Type": "application/json",
       token: localStorage.token,
     },
-    body: JSON.stringify({name, email }),
+    body: JSON.stringify({ name, email }),
   })
     .then((res) => res.json())
     .then((data) => {
@@ -89,7 +105,8 @@ export const ChangeDetails = async (
     .catch((error) => {
       console.error("Error:", error);
     });
-}
+};
+
 //todos
 export const getTodos = async () => {
   return await fetch(`${APIRoute}/todos`, {
@@ -98,7 +115,7 @@ export const getTodos = async () => {
       token: localStorage.token,
     },
   }).then((data) => data.json());
-}
+};
 
 export async function AddTodo(content: string, userId: number) {
   await fetch(`${APIRoute}/todos`, {

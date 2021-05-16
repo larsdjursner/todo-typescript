@@ -15,7 +15,11 @@ import { DetailsType, IChangeModal, IModal } from "../common/types";
 import CloseIcon from "@material-ui/icons/Close";
 
 import { TodoContext } from "../state";
-import { ChangeDetails, SignInAPI } from "../services/TodosService";
+import {
+  ChangeDetails,
+  ChangePasswordAPI,
+  SignInAPI,
+} from "../services/TodosService";
 import { toast } from "react-toastify";
 import { Action } from "../common/actions";
 
@@ -81,7 +85,6 @@ export const ChangePasswordModal: FC<IChangeModal> = ({ id, detailsType }) => {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setInput({ ...input, [e.target.name]: e.target.value });
-    console.log(input);
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -95,9 +98,6 @@ export const ChangePasswordModal: FC<IChangeModal> = ({ id, detailsType }) => {
       input.confirmNewPassword.length === 0 ||
       input.newPassword !== input.confirmNewPassword
     ) {
-      console.log("struck");
-      console.log(input.newPassword);
-      console.log(input.confirmNewPassword);
       toast.error("Password is not matching");
       return;
     }
@@ -105,14 +105,24 @@ export const ChangePasswordModal: FC<IChangeModal> = ({ id, detailsType }) => {
     const response = await SignInAPI(state.user.email, input.password);
 
     if (response.token) {
-      toast.success(`${detailsType} changed!`);
       try {
-        console.log(input.newPassword);
-        //new token or something
-        // await ChangeDetails(state.user.id, input.name, input.email);
-        // dispatch({ type: Action.CHANGEDETAILS, payload: { name: input.name, email: input.email } });
-
+        const responseToken = await ChangePasswordAPI(
+          state.user.id,
+          input.password,
+          input.newPassword
+        );
         handleClose();
+
+        if (responseToken.token) {
+          localStorage.setItem("token", responseToken.token);
+          dispatch({
+            type: Action.SETUSER,
+            payload: { user: responseToken.updatedUser },
+          });
+          dispatch({ type: Action.SETAUTH, payload: { auth: true } });
+          toast.success(`${detailsType} changed!`);
+          return;
+        }
       } catch (error) {
         toast.error(error);
       }
