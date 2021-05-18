@@ -9,7 +9,7 @@ import { IDeleteModal, IModal } from "../common/types";
 import CloseIcon from "@material-ui/icons/Close";
 
 import { TodoContext } from "../state";
-import { SignInAPI } from "../services/TodosService";
+import { SignInAPI } from "../services/UserService";
 import { toast } from "react-toastify";
 
 const useStyles = makeStyles((theme: Theme) =>

@@ -16,10 +16,9 @@ import CloseIcon from "@material-ui/icons/Close";
 
 import { TodoContext } from "../state";
 import {
-  ChangeDetails,
   ChangePasswordAPI,
   SignInAPI,
-} from "../services/TodosService";
+} from "../services/UserService";
 import { toast } from "react-toastify";
 import { Action } from "../common/actions";
 

@@ -14,7 +14,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Action } from "../common/actions";
 import { DetailsType, IUser } from "../common/types";
-import { DeleteAccount } from "../services/TodosService";
+import { DeleteAccount } from "../services/UserService";
 import { TodoContext } from "../state";
 import { ChangeDetailsModal } from "./ChangeDetailsModal";
 import { ChangePasswordModal } from "./ChangePasswordModal";

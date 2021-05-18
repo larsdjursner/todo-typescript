@@ -15,7 +15,7 @@ import { DetailsType, IChangeModal, IModal } from "../common/types";
 import CloseIcon from "@material-ui/icons/Close";
 
 import { TodoContext } from "../state";
-import { ChangeDetails, SignInAPI } from "../services/TodosService";
+import { ChangeDetails, SignInAPI } from "../services/UserService";
 import { toast } from "react-toastify";
 import { Action } from "../common/actions";
 
