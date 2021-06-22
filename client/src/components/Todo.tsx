@@ -55,7 +55,7 @@ export const Todo: React.FC<ITodoFunctions> = ({
         <div className="todo-content-additional">
           <div className="todo-content-additional-icon">
             <EventIcon id={ 
-              format(new Date(date), "dd MM yyyy") ===
+              format(new Date(date), "dd MM yyyy") >=
               format(Date.now(), "dd MM yyyy") || completed
               ? "DateIcon" 
               : "OverdueDateIcon"}/>
