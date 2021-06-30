@@ -1,7 +1,7 @@
 # todo-typescript
 
-## My first fullstack React project
-
+## simple todolist app inspired by todoist 
+### Frontend
 * React Hooks
 * Context API for state management
 * react-beautiful-dnd for drag and drop
